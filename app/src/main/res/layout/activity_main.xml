@@ -1,18 +1,86 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
+    xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".MainActivity">
+    android:orientation="vertical"
+    android:background="@color/blue"
+    android:fitsSystemWindows="true">
 
-    <TextView
-        android:layout_width="wrap_content"
+    <LinearLayout
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="Hello World!"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        android:padding="@dimen/indent_16">
 
-</androidx.constraintlayout.widget.ConstraintLayout>
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/app_name"
+            android:textColor="@color/white"
+            android:textSize="@dimen/main_title" />
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+        android:padding="@dimen/indent_16"
+        android:layout_marginTop="@dimen/indent_toolbar_main">
+
+        <Button
+            app:icon="@drawable/baseline_search_24"
+            app:iconGravity="textStart"
+            app:iconPadding="@dimen/indent_text_button"
+            app:iconTint="@color/black100"
+            app:cornerRadius="@dimen/indent_16"
+            android:id="@+id/search_button"
+            android:textAllCaps="false"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="1"
+            android:backgroundTint="@color/white"
+            android:text="@string/search_button"
+            android:textColor="@color/black100"
+            android:textSize="@dimen/main_button_text_size">
+        </Button>
+
+        <Button
+            app:icon="@drawable/baseline_library_music_24"
+            app:iconGravity="textStart"
+            app:iconPadding="@dimen/indent_text_button"
+            app:iconTint="@color/black100"
+            app:cornerRadius="@dimen/indent_16"
+            android:textAllCaps="false"
+            android:id="@+id/media_button"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="1"
+            android:backgroundTint="@color/white"
+            android:text="@string/media_button"
+            android:textColor="@color/black100"
+            android:textSize="@dimen/main_button_text_size">
+
+        </Button>
+
+        <Button
+            app:icon="@drawable/baseline_settings_24"
+            app:iconGravity="textStart"
+            app:iconPadding="@dimen/indent_text_button"
+            app:iconTint="@color/black100"
+            app:cornerRadius="@dimen/indent_16"
+            android:textAllCaps="false"
+            android:id="@+id/settings_button"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="1"
+            android:backgroundTint="@color/white"
+            android:text="@string/settings_button"
+            android:textColor="@color/black100"
+            android:textSize="@dimen/main_button_text_size">
+        </Button>
+
+    </LinearLayout>
+
+</LinearLayout>
