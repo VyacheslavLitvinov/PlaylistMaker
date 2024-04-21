@@ -65,7 +65,8 @@
                 android:paddingTop="@dimen/edit_text_padding_top_bot"
                 android:paddingBottom="@dimen/edit_text_padding_top_bot"
                 android:drawablePadding="@dimen/edit_text_padding_icon"
-                android:inputType="text"/>
+                android:inputType="text"
+                android:hint = "@string/search"/>
 
             <ImageView
                 android:id="@+id/clearIconSearch"

@@ -23,15 +23,15 @@ class SettingsActivity : AppCompatActivity() {
         val shareButton = findViewById<FrameLayout>(R.id.shareButton)
         shareButton.setOnClickListener{
             val shareButtonIntent = Intent(Intent.ACTION_SEND)
-            shareButtonIntent.type = "text/plain"
+            shareButtonIntent.type = TYPE_SHARE_BUTTON
             shareButtonIntent.putExtra(Intent.EXTRA_TEXT, getString(R.string.share_link))
-            startActivity(Intent.createChooser(shareButtonIntent, "Share"))
+            startActivity(Intent.createChooser(shareButtonIntent, SHARE_TITTLE))
         }
 
         val helpButton = findViewById<FrameLayout>(R.id.helpButton)
         helpButton.setOnClickListener{
             val helpButtonIntent = Intent(Intent.ACTION_SENDTO)
-            helpButtonIntent.data = Uri.parse("mailto:")
+            helpButtonIntent.data = Uri.parse(DATA_HELP_BUTTON)
             helpButtonIntent.putExtra(Intent.EXTRA_EMAIL, arrayOf(getString(R.string.mail_recipient)))
             helpButtonIntent.putExtra(Intent.EXTRA_SUBJECT, getString(R.string.theme_messege))
             helpButtonIntent.putExtra(Intent.EXTRA_TEXT, getString(R.string.messege))
@@ -44,5 +44,10 @@ class SettingsActivity : AppCompatActivity() {
             val termsButtonIntent = Intent(Intent.ACTION_VIEW, url)
             startActivity(termsButtonIntent)
         }
+    }
+    companion object{
+        const val TYPE_SHARE_BUTTON = "text/plain"
+        const val DATA_HELP_BUTTON = "mailto:"
+        const val SHARE_TITTLE = "Share"
     }
 }

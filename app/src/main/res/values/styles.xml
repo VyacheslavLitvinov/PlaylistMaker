@@ -50,7 +50,6 @@
 
     <style name="SearchField">
         <item name="android:fontFamily">@font/ys_display_regular</item>
-        <item name="android:hint">@string/search</item>
         <item name="android:textColorHint">@color/placeholder_search_string</item>
         <item name="android:drawableStart">@drawable/search_icon_16</item>
         <item name="android:background">@drawable/background_search</item>
