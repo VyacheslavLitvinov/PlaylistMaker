@@ -1,12 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <dimen name="toolbar_settings_indent">4dp</dimen>
+    <dimen name="toolbar_padding_indent">4dp</dimen>
     <dimen name="indent_switch_settings">6dp</dimen>
     <dimen name="medium_padding">8dp</dimen>
     <dimen name="indent_toolbar_main">8dp</dimen>
     <dimen name="indent_text_button">10dp</dimen>
     <dimen name="indent_back_button_settings">10dp</dimen>
-    <dimen name="indent_text_toolbar_settings">12dp</dimen>
+    <dimen name="indent_text_toolbar">12dp</dimen>
     <dimen name="size_icons_settings">12dp</dimen>
     <dimen name="indent_16">16dp</dimen>
     <dimen name="primary_text_size_settings">21</dimen>
@@ -14,6 +14,16 @@
     <dimen name="main_button_text_size">22sp</dimen>
     <dimen name="icon_back_size">24dp</dimen>
     <dimen name="indent_settings_menu">24dp</dimen>
+    <dimen name="linear_back_button">48dp</dimen>
     <dimen name="indent_toolbar_settings">56dp</dimen>
     <dimen name="main_button_size">329dp</dimen>
+    <dimen name="padding_start_search_field">16dp</dimen>
+    <dimen name="padding_end_search_field">16dp</dimen>
+    <dimen name="padding_top_search_field">8dp</dimen>
+    <dimen name="padding_bottom_search_field">8dp</dimen>
+
+    <dimen name="edit_text_padding_start">12dp</dimen>
+    <dimen name="edit_text_padding_top_bot">10dp</dimen>
+    <dimen name="edit_text_padding_icon">8dp</dimen>
+
 </resources>

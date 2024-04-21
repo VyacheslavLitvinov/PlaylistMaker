@@ -4,4 +4,7 @@
     <color name="black100">#1A1B22</color>
     <color name="white">#FFFFFF</color>
     <color name="blue">#3772E7</color>
+    <color name="grey_icon">#AEAFB4</color>
+    <color name="search_string">#E6E8EB</color>
+    <color name="placeholder_search_string">#AEAFB4</color>
 </resources>

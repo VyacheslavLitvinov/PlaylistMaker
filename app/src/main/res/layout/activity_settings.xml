@@ -1,0 +1,116 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:fitsSystemWindows="true">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/indent_toolbar_settings"
+        android:orientation="horizontal"
+        android:padding="@dimen/toolbar_padding_indent">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+            <FrameLayout
+                android:id="@+id/back_button_settings"
+                android:layout_width="@dimen/linear_back_button"
+                android:layout_height="@dimen/linear_back_button">
+
+                <ImageView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:src="@drawable/baseline_arrow_back_24"
+                    android:layout_gravity="center"
+                    style="@style/BackButton"/>
+
+            </FrameLayout>
+
+            <TextView
+                android:text="@string/settings_toolbar"
+                android:layout_marginStart="@dimen/indent_text_toolbar"
+                style="@style/ToolbarText"/>
+
+        </LinearLayout>
+
+    </LinearLayout>
+
+    <LinearLayout
+
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical">
+
+        <FrameLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/indent_settings_menu">
+
+            <TextView
+                android:text="@string/theme"
+                style="@style/SettingsViewButtonText"/>
+
+            <androidx.appcompat.widget.SwitchCompat
+                android:id="@+id/settingsSwitch"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="end|center_vertical"
+                android:layout_marginEnd="@dimen/indent_switch_settings">
+            </androidx.appcompat.widget.SwitchCompat>
+
+        </FrameLayout>
+
+        <FrameLayout
+            android:id="@+id/shareButton"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <TextView
+                android:text="@string/share"
+                style="@style/SettingsViewButtonText"/>
+
+            <ImageView
+                android:src="@drawable/baseline_share_24"
+                style="@style/SettingsViewImageIcon"/>
+
+        </FrameLayout>
+
+        <FrameLayout
+            android:id="@+id/helpButton"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <TextView
+                android:text="@string/support"
+                style="@style/SettingsViewButtonText"/>
+
+            <ImageView
+                android:src="@drawable/baseline_support_agent_24"
+                style="@style/SettingsViewImageIcon"/>
+
+        </FrameLayout>
+
+        <FrameLayout
+            android:id="@+id/termsButton"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <TextView
+                android:text="@string/terms"
+                style="@style/SettingsViewButtonText"/>
+
+            <ImageView
+                android:src="@drawable/baseline_arrow_forward_ios_24"
+                style="@style/SettingsViewImageIcon"/>
+
+        </FrameLayout>
+
+    </LinearLayout>
+
+</LinearLayout>

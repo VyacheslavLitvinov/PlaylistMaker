@@ -5,8 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    android:background="@color/blue"
-    android:fitsSystemWindows="true">
+    android:theme="@style/MainMenu.Theme.PlaylistMaker">
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -14,11 +13,9 @@
         android:padding="@dimen/indent_16">
 
         <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
             android:text="@string/app_name"
             android:textColor="@color/white"
-            android:textSize="@dimen/main_title" />
+            style="@style/ToolbarText"/>
 
     </LinearLayout>
 
@@ -31,54 +28,24 @@
 
         <Button
             app:icon="@drawable/baseline_search_24"
-            app:iconGravity="textStart"
-            app:iconPadding="@dimen/indent_text_button"
-            app:iconTint="@color/black100"
-            app:cornerRadius="@dimen/indent_16"
             android:id="@+id/search_button"
-            android:textAllCaps="false"
-            android:layout_width="match_parent"
-            android:layout_height="0dp"
-            android:layout_weight="1"
-            android:backgroundTint="@color/white"
             android:text="@string/search_button"
-            android:textColor="@color/black100"
-            android:textSize="@dimen/main_button_text_size">
+            style="@style/MainViewButton">
         </Button>
 
         <Button
             app:icon="@drawable/baseline_library_music_24"
-            app:iconGravity="textStart"
-            app:iconPadding="@dimen/indent_text_button"
-            app:iconTint="@color/black100"
-            app:cornerRadius="@dimen/indent_16"
-            android:textAllCaps="false"
             android:id="@+id/media_button"
-            android:layout_width="match_parent"
-            android:layout_height="0dp"
-            android:layout_weight="1"
-            android:backgroundTint="@color/white"
             android:text="@string/media_button"
-            android:textColor="@color/black100"
-            android:textSize="@dimen/main_button_text_size">
+            style="@style/MainViewButton">
 
         </Button>
 
         <Button
             app:icon="@drawable/baseline_settings_24"
-            app:iconGravity="textStart"
-            app:iconPadding="@dimen/indent_text_button"
-            app:iconTint="@color/black100"
-            app:cornerRadius="@dimen/indent_16"
-            android:textAllCaps="false"
             android:id="@+id/settings_button"
-            android:layout_width="match_parent"
-            android:layout_height="0dp"
-            android:layout_weight="1"
-            android:backgroundTint="@color/white"
             android:text="@string/settings_button"
-            android:textColor="@color/black100"
-            android:textSize="@dimen/main_button_text_size">
+            style="@style/MainViewButton">
         </Button>
 
     </LinearLayout>

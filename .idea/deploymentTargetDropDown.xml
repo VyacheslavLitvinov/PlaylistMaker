@@ -5,6 +5,28 @@
       <entry key="MainActivity">
         <State />
       </entry>
+      <entry key="SearchActivity">
+        <State />
+      </entry>
+      <entry key="SettingsActivity">
+        <State />
+      </entry>
+      <entry key="app">
+        <State>
+          <targetSelectedWithDropDown>
+            <Target>
+              <type value="QUICK_BOOT_TARGET" />
+              <deviceKey>
+                <Key>
+                  <type value="VIRTUAL_DEVICE_PATH" />
+                  <value value="C:\Users\user\.android\avd\Pixel_4a_API_30.avd" />
+                </Key>
+              </deviceKey>
+            </Target>
+          </targetSelectedWithDropDown>
+          <timeTargetWasSelectedWithDropDown value="2024-04-21T16:21:32.920151600Z" />
+        </State>
+      </entry>
     </value>
   </component>
 </project>
