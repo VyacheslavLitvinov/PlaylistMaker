@@ -77,7 +77,12 @@
 
             <ImageView
                 android:src="@drawable/baseline_share_24"
-                style="@style/SettingsViewImageIcon"/>
+                style="@style/IconColor"
+                android:layout_width = "@dimen/icon_back_size"
+                android:layout_height = "@dimen/icon_back_size"
+                android:layout_gravity = "end|center_vertical"
+                android:gravity = "center"
+                android:layout_marginRight = "@dimen/size_icons_settings"/>
 
         </FrameLayout>
 
@@ -92,7 +97,12 @@
 
             <ImageView
                 android:src="@drawable/baseline_support_agent_24"
-                style="@style/SettingsViewImageIcon"/>
+                style="@style/IconColor"
+                android:layout_width = "@dimen/icon_back_size"
+                android:layout_height = "@dimen/icon_back_size"
+                android:layout_gravity = "end|center_vertical"
+                android:gravity = "center"
+                android:layout_marginRight = "@dimen/size_icons_settings"/>
 
         </FrameLayout>
 
@@ -106,8 +116,13 @@
                 style="@style/SettingsViewButtonText"/>
 
             <ImageView
+                style="@style/IconColor"
                 android:src="@drawable/baseline_arrow_forward_ios_24"
-                style="@style/SettingsViewImageIcon"/>
+                android:layout_width = "@dimen/icon_back_size"
+                android:layout_height = "@dimen/icon_back_size"
+                android:layout_gravity = "end|center_vertical"
+                android:gravity = "center"
+                android:layout_marginRight = "@dimen/size_icons_settings"/>
 
         </FrameLayout>
 
