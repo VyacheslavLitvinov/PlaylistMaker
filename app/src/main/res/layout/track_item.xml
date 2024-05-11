@@ -29,7 +29,7 @@
             style="@style/NameTrack"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            tools:text="@string/placeholder_track_name"
+            tools:text="Название трека"
             android:textSize="16sp"
             android:maxLines="2"
             android:ellipsize="end">
@@ -48,7 +48,7 @@
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
-                tools:text="@string/placeholder_artist"
+                tools:text="Название артиста"
                 android:textSize="11sp"
                 android:maxLines="2"
                 android:ellipsize="end">
@@ -67,7 +67,7 @@
                 android:id="@+id/duration"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                tools:text="@string/placeholder_duration"
+                tools:text="0:00"
                 android:layout_gravity="center"
                 android:textSize="11sp">
             </TextView>
