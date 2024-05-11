@@ -26,12 +26,7 @@
         <item name="android:fontFamily">@font/ys_display_regular</item>
     </style>
 
-    <style name="SettingsViewImageIcon">
-        <item name="android:layout_width">@dimen/icon_back_size</item>
-        <item name="android:layout_height">@dimen/icon_back_size</item>
-        <item name="android:layout_gravity">end|center_vertical</item>
-        <item name="android:gravity">center</item>
-        <item name="android:layout_marginRight">@dimen/size_icons_settings</item>
+    <style name="IconColor">
         <item name="android:tint">@color/grey_icon</item>
     </style>
 
@@ -59,6 +54,25 @@
     <style name="ClearSearchButton">
         <item name="android:backgroundTint">@color/search_string</item>
         <item name="android:tint">@color/placeholder_search_string</item>
+    </style>
+
+    <style name="NameTrack">
+        <item name="android:textColor">@color/black</item>
+        <item name="android:fontFamily">@font/ys_display_regular</item>
+    </style>
+
+    <style name="ArtistTrack">
+        <item name="android:textColor">@color/grey_icon</item>
+        <item name="android:fontFamily">@font/ys_display_regular</item>
+    </style>
+
+    <style name="DurationTrack">
+        <item name="android:textColor">@color/grey_icon</item>
+        <item name="android:fontFamily">@font/ys_display_regular</item>
+    </style>
+
+    <style name="Ellipse">
+        <item name="tint">@color/grey_icon</item>
     </style>
 
 </resources>
