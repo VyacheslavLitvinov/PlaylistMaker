@@ -14,4 +14,8 @@
     <string name="messege">Спасибо разработчикам и разработчицам за крутое приложение!</string>
     <string name="url_terms">https://yandex.ru/legal/practicum_offer/</string>
     <string name="search">Поиск</string>
+    <string name="nothing_found">Ничего не нашлось</string>
+    <string name="something_went_wrong">Что-то пошло не так</string>
+    <string name="network_problems">Проблемы со связью\n\n Загрузка не удалась. Проверьте подключение к интернету</string>
+    <string name="update">Обновить</string>
 </resources>
