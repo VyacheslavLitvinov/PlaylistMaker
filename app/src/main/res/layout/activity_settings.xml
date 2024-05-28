@@ -1,12 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical"
-    android:fitsSystemWindows="true">
+    android:fitsSystemWindows="true"
+    android:orientation="vertical">
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -24,18 +23,18 @@
                 android:layout_height="@dimen/linear_back_button">
 
                 <ImageView
+                    style="@style/BackButton"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:src="@drawable/baseline_arrow_back_24"
                     android:layout_gravity="center"
-                    style="@style/BackButton"/>
+                    android:src="@drawable/baseline_arrow_back_24" />
 
             </FrameLayout>
 
             <TextView
-                android:text="@string/settings_toolbar"
+                style="@style/ToolbarText"
                 android:layout_marginStart="@dimen/indent_text_toolbar"
-                style="@style/ToolbarText"/>
+                android:text="@string/settings_toolbar" />
 
         </LinearLayout>
 
@@ -53,16 +52,15 @@
             android:layout_marginTop="@dimen/indent_settings_menu">
 
             <TextView
-                android:text="@string/theme"
-                style="@style/SettingsViewButtonText"/>
+                style="@style/SettingsViewButtonText"
+                android:text="@string/theme" />
 
             <androidx.appcompat.widget.SwitchCompat
                 android:id="@+id/settingsSwitch"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="end|center_vertical"
-                android:layout_marginEnd="@dimen/indent_switch_settings">
-            </androidx.appcompat.widget.SwitchCompat>
+                android:layout_marginEnd="@dimen/indent_switch_settings"></androidx.appcompat.widget.SwitchCompat>
 
         </FrameLayout>
 
@@ -72,17 +70,17 @@
             android:layout_height="wrap_content">
 
             <TextView
-                android:text="@string/share"
-                style="@style/SettingsViewButtonText"/>
+                style="@style/SettingsViewButtonText"
+                android:text="@string/share" />
 
             <ImageView
-                android:src="@drawable/baseline_share_24"
                 style="@style/IconColor"
-                android:layout_width = "@dimen/icon_back_size"
-                android:layout_height = "@dimen/icon_back_size"
-                android:layout_gravity = "end|center_vertical"
-                android:gravity = "center"
-                android:layout_marginRight = "@dimen/size_icons_settings"/>
+                android:layout_width="@dimen/icon_back_size"
+                android:layout_height="@dimen/icon_back_size"
+                android:layout_gravity="end|center_vertical"
+                android:layout_marginRight="@dimen/size_icons_settings"
+                android:gravity="center"
+                android:src="@drawable/baseline_share_24" />
 
         </FrameLayout>
 
@@ -92,17 +90,17 @@
             android:layout_height="wrap_content">
 
             <TextView
-                android:text="@string/support"
-                style="@style/SettingsViewButtonText"/>
+                style="@style/SettingsViewButtonText"
+                android:text="@string/support" />
 
             <ImageView
-                android:src="@drawable/baseline_support_agent_24"
                 style="@style/IconColor"
-                android:layout_width = "@dimen/icon_back_size"
-                android:layout_height = "@dimen/icon_back_size"
-                android:layout_gravity = "end|center_vertical"
-                android:gravity = "center"
-                android:layout_marginRight = "@dimen/size_icons_settings"/>
+                android:layout_width="@dimen/icon_back_size"
+                android:layout_height="@dimen/icon_back_size"
+                android:layout_gravity="end|center_vertical"
+                android:layout_marginRight="@dimen/size_icons_settings"
+                android:gravity="center"
+                android:src="@drawable/baseline_support_agent_24" />
 
         </FrameLayout>
 
@@ -112,17 +110,17 @@
             android:layout_height="wrap_content">
 
             <TextView
-                android:text="@string/terms"
-                style="@style/SettingsViewButtonText"/>
+                style="@style/SettingsViewButtonText"
+                android:text="@string/terms" />
 
             <ImageView
                 style="@style/IconColor"
-                android:src="@drawable/baseline_arrow_forward_ios_24"
-                android:layout_width = "@dimen/icon_back_size"
-                android:layout_height = "@dimen/icon_back_size"
-                android:layout_gravity = "end|center_vertical"
-                android:gravity = "center"
-                android:layout_marginRight = "@dimen/size_icons_settings"/>
+                android:layout_width="@dimen/icon_back_size"
+                android:layout_height="@dimen/icon_back_size"
+                android:layout_gravity="end|center_vertical"
+                android:layout_marginRight="@dimen/size_icons_settings"
+                android:gravity="center"
+                android:src="@drawable/baseline_arrow_forward_ios_24" />
 
         </FrameLayout>
 

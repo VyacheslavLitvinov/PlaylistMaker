@@ -6,6 +6,8 @@ import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.bumptech.glide.load.resource.bitmap.RoundedCorners
+import java.text.SimpleDateFormat
+import java.util.Locale
 
 class SearchHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
 
@@ -14,7 +16,7 @@ class SearchHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
     private val artist : TextView = itemView.findViewById(R.id.artist)
     private val duration : TextView = itemView.findViewById(R.id.duration)
 
-    fun bind(item : Track){
+    fun bind(item : Song){
 
         Glide.with(cover)
             .load(item.artworkUrl100)
@@ -24,7 +26,7 @@ class SearchHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
             .into(cover)
         nameTrack.text = item.trackName
         artist.text = item.artistName
-        duration.text = item.trackTime
+        duration.text = SimpleDateFormat("mm:ss", Locale.getDefault()).format(293000L)
 
     }
 }

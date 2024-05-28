@@ -58,8 +58,7 @@
                 style="@style/Ellipse"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:src="@drawable/ellipse"
-                android:layout_gravity="center">
+                android:src="@drawable/ellipse">
             </ImageView>
 
             <TextView
@@ -68,7 +67,6 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 tools:text="0:00"
-                android:layout_gravity="center"
                 android:textSize="11sp">
             </TextView>
 
