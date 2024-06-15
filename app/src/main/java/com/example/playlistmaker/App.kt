@@ -4,6 +4,7 @@ import android.app.Application
 import android.content.Context
 import android.content.SharedPreferences
 import androidx.appcompat.app.AppCompatDelegate
+import androidx.core.content.edit
 
 class App : Application() {
 
@@ -24,11 +25,12 @@ class App : Application() {
                 AppCompatDelegate.MODE_NIGHT_NO
             }
         )
-
-        sharedPreferences.edit().putBoolean(THEME_KEY, darkThemeEnabled).apply()
+        sharedPreferences.edit {
+            putBoolean(THEME_KEY,darkThemeEnabled)
+        }
     }
 
-    companion object {
+    private companion object {
         private const val THEME_STATE = "theme_state"
         private const val THEME_KEY = "theme_key"
     }

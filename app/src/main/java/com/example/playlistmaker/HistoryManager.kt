@@ -1,11 +1,13 @@
 package com.example.playlistmaker
 
 import android.content.Context
+import androidx.core.content.edit
 import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
 
-class HistoryManager(private val context: Context) {
-    private val sharedPreferences = context.getSharedPreferences(HISTORY_SONGS, Context.MODE_PRIVATE)
+class HistoryManager(context: Context) {
+    private val appContext = context.applicationContext
+    private val sharedPreferences = appContext.getSharedPreferences(HISTORY_SONGS, Context.MODE_PRIVATE)
     fun getHistorySongs(): ArrayList<Song> {
         val json = sharedPreferences.getString(HISTORY_SONGS_KEY, null)
         return if (json != null) {
@@ -33,11 +35,11 @@ class HistoryManager(private val context: Context) {
         return saveSongHistory(historyItems)
     }
     fun clearHistory(){
-        sharedPreferences.edit()
-            .remove(HISTORY_SONGS_KEY)
-            .apply()
+        sharedPreferences.edit {
+            remove(HISTORY_SONGS_KEY)
+        }
     }
-    companion object {
+    private companion object {
         const val HISTORY_SONGS_KEY = "history_songs_key"
         const val HISTORY_SONGS = "history_songs"
         const val MAX_ITEM = 10
