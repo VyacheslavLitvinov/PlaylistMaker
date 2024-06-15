@@ -11,9 +11,12 @@ import android.widget.Button
 import android.widget.EditText
 import android.widget.FrameLayout
 import android.widget.ImageView
+import android.widget.LinearLayout
 import android.widget.TextView
 import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.view.isVisible
+import androidx.core.widget.addTextChangedListener
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import retrofit2.Call
@@ -36,6 +39,7 @@ class SearchActivity : AppCompatActivity() {
     private val iTunesService = retrofit.create(ItunesSearchAPI::class.java)
 
     private val songs = ArrayList<Song>()
+    private var historySongs = ArrayList<Song>()
 
     private lateinit var placeholderImageNotResult: ImageView
     private lateinit var placeholderImageNetwork: ImageView
@@ -43,13 +47,20 @@ class SearchActivity : AppCompatActivity() {
     private lateinit var editTextSearch: EditText
     private lateinit var songList: RecyclerView
     private lateinit var updateButton: Button
-
-    private val adapter = SearchAdapter()
+    private lateinit var clearHistoryButton: Button
+    private lateinit var adapter: SearchAdapter
+    private lateinit var historyAdapter: SearchAdapter
+    private lateinit var historyView: LinearLayout
+    private lateinit var historyTracks: RecyclerView
+    private lateinit var historyManager: HistoryManager
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
         setContentView(R.layout.activity_search)
+        adapter = SearchAdapter(clickListener)
+        historyAdapter = SearchAdapter(clickListener)
+        historyManager = HistoryManager(this)
 
         val backButton = findViewById<FrameLayout>(R.id.back_button_search)
         val clearButton = findViewById<ImageView>(R.id.clearIconSearch)
@@ -59,10 +70,18 @@ class SearchActivity : AppCompatActivity() {
         placeholderImageNotResult = findViewById(R.id.placeholderImageNotResult)
         placeholderImageNetwork = findViewById(R.id.placeholderImageNetwork)
         updateButton = findViewById(R.id.updateButton)
+        clearHistoryButton = findViewById(R.id.clearHistoryButton)
+        historyView = findViewById(R.id.historyView)
+        historyTracks = findViewById(R.id.historyTracks)
 
         adapter.songs = songs
         songList.layoutManager = LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false)
+        historyTracks.layoutManager = LinearLayoutManager(this)
         songList.adapter = adapter
+        historyTracks.adapter = historyAdapter
+
+        historySongs = historyManager.getHistorySongs()
+        historyAdapter.updateHistorySongs(historySongs)
 
         clearButton.setOnClickListener {
             editTextSearch.setText("")
@@ -70,10 +89,20 @@ class SearchActivity : AppCompatActivity() {
             editTextSearch.clearFocus()
             songs.clear()
             adapter.notifyDataSetChanged()
-            placeholderMessage.visibility = View.GONE
-            placeholderImageNotResult.visibility = View.GONE
-            placeholderImageNetwork.visibility = View.GONE
-            updateButton.visibility = View.GONE
+            historySongs = historyManager.getHistorySongs()
+            historyAdapter.updateHistorySongs(historySongs)
+            adapter.notifyDataSetChanged()
+            placeholderMessage.isVisible = false
+            placeholderImageNotResult.isVisible = false
+            placeholderImageNetwork.isVisible = false
+            updateButton.isVisible = false
+        }
+
+        clearHistoryButton.setOnClickListener {
+            historyManager.clearHistory()
+            historySongs.clear()
+            historyAdapter.updateHistorySongs(historySongs)
+            historyView.isVisible = false
         }
 
         updateButton.setOnClickListener {
@@ -82,10 +111,27 @@ class SearchActivity : AppCompatActivity() {
 
         editTextSearch.setOnEditorActionListener { _, actionId, _ ->
             if (actionId == EditorInfo.IME_ACTION_DONE) {
+                historyView.isVisible = false
                 search()
             }
             false
         }
+
+        editTextSearch.setOnFocusChangeListener { _, hasFocus ->
+            if (hasFocus && editTextSearch.text.isEmpty() && historySongs.isNotEmpty()) {
+                historyView.isVisible = true
+            } else {
+                historyView.isVisible = false
+            }
+        }
+
+        editTextSearch.addTextChangedListener(
+            beforeTextChanged = { _, _, _, _ ->  },
+            onTextChanged = {text: CharSequence?, _, _, _ ->
+                historyView.isVisible = editTextSearch.hasFocus() && text.isNullOrEmpty() && historySongs.isNotEmpty()
+            },
+            afterTextChanged = {_ ->}
+        )
 
         val textWatcher = object : TextWatcher{
 
@@ -109,6 +155,12 @@ class SearchActivity : AppCompatActivity() {
             finish()
         }
 
+    }
+
+    val clickListener = SearchAdapter.SongClickListener { song, _ ->
+        val checkHistory = historyManager.checkHistory(song)
+        historyManager.saveSongHistory(checkHistory)
+        historyAdapter.updateHistorySongs(checkHistory)
     }
 
     private fun search() {
@@ -151,23 +203,24 @@ class SearchActivity : AppCompatActivity() {
 
     private fun showMessage(text: String) {
         if (text.isNotEmpty()) {
-            placeholderMessage.visibility = View.VISIBLE
+            placeholderMessage.isVisible = true
             songs.clear()
             adapter.notifyDataSetChanged()
             placeholderMessage.text = text
             if (placeholderMessage.text == getString(R.string.network_problems)) {
-                placeholderImageNetwork.visibility = View.VISIBLE
-                placeholderImageNotResult.visibility = View.GONE
-                updateButton.visibility = View.VISIBLE
+                placeholderImageNetwork.isVisible = true
+                placeholderImageNotResult.isVisible = false
+                updateButton.isVisible = true
             } else if (placeholderMessage.text == getString(R.string.nothing_found)) {
-                placeholderImageNotResult.visibility = View.VISIBLE
-                placeholderImageNetwork.visibility = View.GONE
+                placeholderImageNotResult.isVisible = true
+                placeholderImageNetwork.isVisible = false
+                updateButton.isVisible = false
             }
         } else {
-            placeholderMessage.visibility = View.GONE
-            placeholderImageNotResult.visibility = View.GONE
-            placeholderImageNetwork.visibility = View.GONE
-            updateButton.visibility = View.GONE
+            placeholderMessage.isVisible = false
+            placeholderImageNotResult.isVisible = false
+            placeholderImageNetwork.isVisible = false
+            updateButton.isVisible = false
         }
     }
 

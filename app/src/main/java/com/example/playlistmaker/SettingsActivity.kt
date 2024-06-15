@@ -4,9 +4,9 @@ import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
 import android.widget.FrameLayout
-import android.widget.LinearLayout
 import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
+import com.google.android.material.switchmaterial.SwitchMaterial
 
 class SettingsActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -17,6 +17,18 @@ class SettingsActivity : AppCompatActivity() {
         val backButton = findViewById<FrameLayout>(R.id.back_button_settings)
         backButton.setOnClickListener{
             finish()
+        }
+
+        val sharedPrefs = getSharedPreferences(STATE_SWITCH, MODE_PRIVATE)
+        val themeSwitcher = findViewById<SwitchMaterial>(R.id.themeSwitcher)
+        var stateSwitch = sharedPrefs.getBoolean(STATE_SWITCH, false)
+        themeSwitcher.isChecked = stateSwitch
+        themeSwitcher.setOnCheckedChangeListener { switcher, checked ->
+            (applicationContext as App).switchTheme(checked)
+            stateSwitch = !stateSwitch
+            sharedPrefs.edit()
+                .putBoolean(STATE_SWITCH, stateSwitch)
+                .apply()
         }
 
         val shareButton = findViewById<FrameLayout>(R.id.shareButton)
@@ -48,5 +60,6 @@ class SettingsActivity : AppCompatActivity() {
         const val TYPE_SHARE_BUTTON = "text/plain"
         const val DATA_HELP_BUTTON = "mailto:"
         const val SHARE_TITTLE = "Share"
+        const val STATE_SWITCH = "state_switch"
     }
 }

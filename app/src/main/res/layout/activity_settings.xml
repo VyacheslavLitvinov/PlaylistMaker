@@ -55,12 +55,12 @@
                 style="@style/SettingsViewButtonText"
                 android:text="@string/theme" />
 
-            <androidx.appcompat.widget.SwitchCompat
-                android:id="@+id/settingsSwitch"
+            <com.google.android.material.switchmaterial.SwitchMaterial
+                android:id="@+id/themeSwitcher"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="end|center_vertical"
-                android:layout_marginEnd="@dimen/indent_switch_settings"></androidx.appcompat.widget.SwitchCompat>
+                android:layout_marginEnd="@dimen/indent_switch_settings"/>
 
         </FrameLayout>
 
