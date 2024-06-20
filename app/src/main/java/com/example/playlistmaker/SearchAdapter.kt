@@ -4,7 +4,7 @@ import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 
-class SearchAdapter(val clickListener: SongClickListener) : RecyclerView.Adapter<SearchHolder>() {
+class SearchAdapter(private val clickListener: SongClickListener) : RecyclerView.Adapter<SearchHolder>() {
     var songs = ArrayList<Song>()
     private var historySongs = ArrayList<Song>()
 

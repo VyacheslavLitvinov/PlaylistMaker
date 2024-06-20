@@ -3,7 +3,7 @@
     <dimen name="toolbar_padding_indent">4dp</dimen>
     <dimen name="indent_switch_settings">6dp</dimen>
     <dimen name="medium_padding">8dp</dimen>
-    <dimen name="indent_toolbar_main">8dp</dimen>
+    <dimen name="indent_8">8dp</dimen>
     <dimen name="indent_text_button">10dp</dimen>
     <dimen name="indent_back_button_settings">10dp</dimen>
     <dimen name="indent_text_toolbar">12dp</dimen>

@@ -20,4 +20,17 @@
     <string name="update">Обновить</string>
     <string name="clear_history">Очистить историю</string>
     <string name="historyInformText">Вы искали</string>
+    <string name="songNamePlaceholder">Неизвестный трек</string>
+    <string name="artistNamePlaceholder">Неизвестный артист</string>
+    <string name="songTimePlaceholder">00:00</string>
+    <string name="songDurationInfo">Длительность</string>
+    <string name="songAlbumInfo">Альбом</string>
+    <string name="songAlbumValuePlaceholder">Неизвестный альбом</string>
+    <string name="songYearInfo">Год</string>
+    <string name="songYearValuePlaceholder">Неизвестный год</string>
+    <string name="songGenreInfo">Жанр</string>
+    <string name="songGenreValuePlaceholder">Неизвестный жанр</string>
+    <string name="songCountryInfo">Страна</string>
+    <string name="songCountryValuePlaceholder">Неизвестная страна</string>
+    <string name="createPlaylistPlaceholder">Плейлист создан</string>
 </resources>

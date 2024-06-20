@@ -24,7 +24,7 @@
         android:layout_height="match_parent"
         android:orientation="vertical"
         android:padding="@dimen/indent_16"
-        android:layout_marginTop="@dimen/indent_toolbar_main">
+        android:layout_marginTop="@dimen/indent_8">
 
         <Button
             app:icon="@drawable/baseline_search_24"
