@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+
     <style name="MainViewButton" parent="Widget.MaterialComponents.Button.UnelevatedButton">
         <item name="android:layout_width">match_parent</item>
         <item name="android:layout_height">0dp</item>
@@ -27,7 +28,7 @@
     </style>
 
     <style name="IconColor">
-        <item name="android:tint">@color/grey_icon</item>
+        <item name="android:tint">@color/grey</item>
     </style>
 
     <style name="ToolbarText">
@@ -62,17 +63,17 @@
     </style>
 
     <style name="ArtistTrack">
-        <item name="android:textColor">@color/grey_icon</item>
+        <item name="android:textColor">@color/grey</item>
         <item name="android:fontFamily">@font/ys_display_regular</item>
     </style>
 
     <style name="DurationTrack">
-        <item name="android:textColor">@color/grey_icon</item>
+        <item name="android:textColor">@color/grey</item>
         <item name="android:fontFamily">@font/ys_display_regular</item>
     </style>
 
     <style name="Ellipse">
-        <item name="tint">@color/grey_icon</item>
+        <item name="tint">@color/grey</item>
     </style>
 
     <style name="PlaceholderSearchText">
@@ -95,6 +96,30 @@
         <item name="cornerRadius">54dp</item>
         <item name="android:textAllCaps">false</item>
         <item name="android:letterSpacing">0</item>
+    </style>
+
+    <style name="SongsInfo">
+        <item name="android:textColor">@color/grey</item>
+        <item name="android:textSize">13sp</item>
+        <item name="android:fontFamily">@font/ys_display_regular</item>
+    </style>
+
+    <style name="SongsInfoValue">
+        <item name="android:textColor">@color/black100</item>
+        <item name="android:textSize">13sp</item>
+        <item name="android:fontFamily">@font/ys_display_regular</item>
+    </style>
+    
+    <style name="SongsMainInfo">
+        <item name="android:textColor">@color/black100</item>
+        <item name="android:fontFamily">@font/ys_display_medium</item>
+    </style>
+
+    <style name="CreatePlaylistButton">
+        <item name="android:backgroundTint">@color/black100</item>
+        <item name="android:fontFamily">@font/ys_display_regular</item>
+        <item name="android:textColor">@color/white</item>
+        <item name="android:textSize">14sp</item>
     </style>
 
 </resources>

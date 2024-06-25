@@ -1,6 +1,7 @@
 package com.example.playlistmaker
 
 import android.app.Activity
+import android.content.Intent
 import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
@@ -19,6 +20,7 @@ import androidx.core.view.isVisible
 import androidx.core.widget.addTextChangedListener
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.google.gson.Gson
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
@@ -157,10 +159,14 @@ class SearchActivity : AppCompatActivity() {
 
     }
 
-    val clickListener = SearchAdapter.SongClickListener { song, _ ->
+    private val clickListener = SearchAdapter.SongClickListener { song, _ ->
         val checkHistory = historyManager.checkHistory(song)
         historyManager.saveSongHistory(checkHistory)
         historyAdapter.updateHistorySongs(checkHistory)
+        val json = Gson().toJson(song)
+        val playerIntent = Intent(this, PlayerActivity::class.java)
+        playerIntent.putExtra(SONG, json)
+        startActivity(playerIntent)
     }
 
     private fun search() {
@@ -232,9 +238,10 @@ class SearchActivity : AppCompatActivity() {
         super.onRestoreInstanceState(savedInstanceState)
         resultSearch = savedInstanceState.getString(TEXT_VALUE, RESULT_DEF)
     }
-    companion object {
+    private companion object {
         const val TEXT_VALUE = "TEXT_VALUE"
         const val RESULT_DEF = ""
+        const val SONG = "Song"
     }
 
 }
