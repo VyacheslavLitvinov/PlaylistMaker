@@ -112,8 +112,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
-                android:visibility="gone">
-            </ImageView>
+                android:visibility="gone"/>
 
             <ImageView
                 style="@style/PlaceholderImageNetwork"
@@ -121,8 +120,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
-                android:visibility="gone">
-            </ImageView>
+                android:visibility="gone"/>
 
             <TextView
                 android:id="@+id/placeholderMessage"
@@ -145,10 +143,17 @@
                 android:text="@string/update"
                 android:textSize="14sp"
                 android:visibility="gone"
-                android:layout_gravity="center">
-            </Button>
+                android:layout_gravity="center"/>
 
         </LinearLayout>
+
+        <ProgressBar
+            android:id="@+id/progressBar"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:visibility="visible"
+            android:indeterminateTint="@color/blue"/>
 
         <LinearLayout
             android:id="@+id/historyView"
@@ -188,8 +193,7 @@
                 android:text="@string/clear_history"
                 android:textSize="14sp"
                 android:layout_gravity="center"
-                android:layout_marginTop="24dp">
-            </Button>
+                android:layout_marginTop="24dp"/>
 
         </LinearLayout>
 
