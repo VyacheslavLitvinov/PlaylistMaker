@@ -1,10 +1,9 @@
 package com.example.playlistmaker.domain.impl
 
-import com.example.playlistmaker.domain.api.ConsumerData
+import com.example.playlistmaker.domain.models.ConsumerData
 import com.example.playlistmaker.domain.api.SongsInteractor
 import com.example.playlistmaker.domain.api.SongsRepository
 import com.example.playlistmaker.domain.models.Resource
-import com.example.playlistmaker.ui.search.SearchActivity
 import java.util.concurrent.Executors
 
 class SongsInteractorImpl(private val repository: SongsRepository) : SongsInteractor {

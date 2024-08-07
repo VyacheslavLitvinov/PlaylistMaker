@@ -25,7 +25,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.playlistmaker.R
 import com.example.playlistmaker.creator.Creator
-import com.example.playlistmaker.domain.api.ConsumerData
+import com.example.playlistmaker.domain.models.ConsumerData
 import com.example.playlistmaker.domain.api.SongsInteractor
 import com.example.playlistmaker.domain.models.Song
 import com.example.playlistmaker.ui.player.PlayerActivity

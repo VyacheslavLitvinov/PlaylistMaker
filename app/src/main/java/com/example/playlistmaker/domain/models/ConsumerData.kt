@@ -1,4 +1,4 @@
-package com.example.playlistmaker.domain.api
+package com.example.playlistmaker.domain.models
 
 sealed class ConsumerData<T> {
     data class Data<T>(val data: T) : ConsumerData<T>()
