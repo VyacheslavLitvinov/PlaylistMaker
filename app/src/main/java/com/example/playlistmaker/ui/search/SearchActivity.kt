@@ -1,4 +1,4 @@
-package com.example.playlistmaker
+package com.example.playlistmaker.ui.search
 
 import android.app.Activity
 import android.content.Intent
@@ -19,38 +19,32 @@ import android.widget.ProgressBar
 import android.widget.TextView
 import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
-import androidx.core.view.isInvisible
 import androidx.core.view.isVisible
 import androidx.core.widget.addTextChangedListener
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.example.playlistmaker.R
+import com.example.playlistmaker.creator.Creator
+import com.example.playlistmaker.domain.models.ConsumerData
+import com.example.playlistmaker.domain.api.SongsInteractor
+import com.example.playlistmaker.domain.models.Song
+import com.example.playlistmaker.ui.player.PlayerActivity
 import com.google.gson.Gson
-import retrofit2.Call
-import retrofit2.Callback
-import retrofit2.Response
-import retrofit2.Retrofit
-import retrofit2.converter.gson.GsonConverterFactory
 
 class SearchActivity : AppCompatActivity() {
 
     private companion object {
         const val TEXT_VALUE = "TEXT_VALUE"
         const val RESULT_DEF = ""
-        const val SONG = "Song"
+        private const val SONG = "Song"
         private const val SEARCH_DELAY = 2000L
         private const val CLICK_DELAY = 1000L
     }
 
-    var resultSearch : String = RESULT_DEF
+    private val songsInteractor = Creator.provideSongsInteractor()
+    private val searchHistoryInteractor = Creator.provideSearchHistoryInteractor()
 
-    private val iTunesBaseUrl = "https://itunes.apple.com"
-
-    private val retrofit = Retrofit.Builder()
-        .baseUrl(iTunesBaseUrl)
-        .addConverterFactory(GsonConverterFactory.create())
-        .build()
-
-    private val iTunesService = retrofit.create(ItunesSearchAPI::class.java)
+    private var resultSearch: String = RESULT_DEF
 
     private val songs = ArrayList<Song>()
     private var historySongs = ArrayList<Song>()
@@ -68,7 +62,6 @@ class SearchActivity : AppCompatActivity() {
     private lateinit var historyAdapter: SearchAdapter
     private lateinit var historyView: LinearLayout
     private lateinit var historyTracks: RecyclerView
-    private lateinit var historyManager: HistoryManager
     private lateinit var progressBar: ProgressBar
 
     private val handler = Handler(Looper.getMainLooper())
@@ -79,9 +72,9 @@ class SearchActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
         setContentView(R.layout.activity_search)
+
         adapter = SearchAdapter(clickListener)
         historyAdapter = SearchAdapter(clickListener)
-        historyManager = HistoryManager(this)
 
         backButton = findViewById(R.id.back_button_search)
         clearButton = findViewById(R.id.clearIconSearch)
@@ -103,7 +96,7 @@ class SearchActivity : AppCompatActivity() {
         songList.adapter = adapter
         historyTracks.adapter = historyAdapter
 
-        historySongs = historyManager.getHistorySongs()
+        historySongs = searchHistoryInteractor.getSearchHistory()
         historyAdapter.updateHistorySongs(historySongs)
 
         clearButton.setOnClickListener {
@@ -112,14 +105,13 @@ class SearchActivity : AppCompatActivity() {
             editTextSearch.clearFocus()
             songs.clear()
             adapter.notifyDataSetChanged()
-            historySongs = historyManager.getHistorySongs()
+            historySongs = searchHistoryInteractor.getSearchHistory()
             historyAdapter.updateHistorySongs(historySongs)
-            adapter.notifyDataSetChanged()
             hidingPlaceholderView()
         }
 
         clearHistoryButton.setOnClickListener {
-            historyManager.clearHistory()
+            searchHistoryInteractor.clearSearchHistory()
             historySongs.clear()
             historyAdapter.updateHistorySongs(historySongs)
             historyView.isVisible = false
@@ -129,7 +121,6 @@ class SearchActivity : AppCompatActivity() {
             search()
         }
 
-        //выполнение поиска при нажатии на кнопку Done клавиатуры
         editTextSearch.setOnEditorActionListener { _, actionId, _ ->
             if (actionId == EditorInfo.IME_ACTION_DONE) {
                 historyView.isVisible = false
@@ -148,22 +139,21 @@ class SearchActivity : AppCompatActivity() {
 
         editTextSearch.addTextChangedListener(
             beforeTextChanged = { _, _, _, _ ->  },
-            onTextChanged = {text: CharSequence?, _, _, _ ->
+            onTextChanged = { text: CharSequence?, _, _, _ ->
                 historyView.isVisible = editTextSearch.hasFocus() && text.isNullOrEmpty() && historySongs.isNotEmpty()
             },
-            afterTextChanged = {_ ->}
+            afterTextChanged = { _ -> }
         )
 
-        val textWatcher = object : TextWatcher{
+        val textWatcher = object : TextWatcher {
 
-            override fun beforeTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
-            }
+            override fun beforeTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {}
 
             override fun afterTextChanged(s: Editable?) {
                 if (s.isNullOrEmpty()) {
                     songs.clear()
                     adapter.notifyDataSetChanged()
-                    historySongs = historyManager.getHistorySongs()
+                    historySongs = searchHistoryInteractor.getSearchHistory()
                     historyAdapter.updateHistorySongs(historySongs)
                     hidingPlaceholderView()
                 } else {
@@ -181,19 +171,17 @@ class SearchActivity : AppCompatActivity() {
         editTextSearch.addTextChangedListener(textWatcher)
         editTextSearch.setText(resultSearch)
 
-
-        backButton.setOnClickListener{
+        backButton.setOnClickListener {
             finish()
         }
-
     }
-//
+
     private val clickListener = SearchAdapter.SongClickListener { song, _ ->
-        val checkHistory = historyManager.checkHistory(song)
-        historyManager.saveSongHistory(checkHistory)
-        historyAdapter.updateHistorySongs(checkHistory)
+        searchHistoryInteractor.addSongToSearchHistory(song)
+        historySongs = searchHistoryInteractor.getSearchHistory()
+        historyAdapter.updateHistorySongs(historySongs)
         val json = Gson().toJson(song)
-        if(clickDebounce()){
+        if (clickDebounce()) {
             val playerIntent = Intent(this, PlayerActivity::class.java)
             playerIntent.putExtra(SONG, json)
             startActivity(playerIntent)
@@ -201,9 +189,8 @@ class SearchActivity : AppCompatActivity() {
     }
 
     private fun search() {
-
         val searchText = editTextSearch.text.toString()
-        if (searchText.isEmpty()){
+        if (searchText.isEmpty()) {
             progressBar.isVisible = false
             songs.clear()
             adapter.notifyDataSetChanged()
@@ -211,37 +198,37 @@ class SearchActivity : AppCompatActivity() {
         }
 
         progressBar.isVisible = true
-        iTunesService.search(editTextSearch.text.toString()).enqueue(object : Callback<SongsResponse> {
-            override fun onResponse(call: Call<SongsResponse>, response: Response<SongsResponse>) {
-                if (response.code() == 200) {
-                    songs.clear()
-                    if (response.body()?.results?.isNotEmpty() == true) {
-                        songs.addAll(response.body()?.results!!)
-                        adapter.notifyDataSetChanged()
-                        progressBar.isVisible = false
+        songsInteractor.searchSongs(searchText, object : SongsInteractor.SongsConsumer {
+            override fun consume(data: ConsumerData<ArrayList<Song>>) {
+                runOnUiThread {
+                    when (data) {
+                        is ConsumerData.Data -> {
+                            songs.clear()
+                            songs.addAll(data.data)
+                            adapter.notifyDataSetChanged()
+                            progressBar.isVisible = false
+                            if (songs.isEmpty()) {
+                                showMessage(getString(R.string.nothing_found))
+                            } else {
+                                showMessage("")
+                            }
+                        }
+                        is ConsumerData.Error -> {
+                            if (data.message.contains("500")) {
+                                showMessage(getString(R.string.network_problems))
+                            } else {
+                                showMessage(getString(R.string.something_went_wrong))
+                            }
+                            progressBar.isVisible = false
+                        }
                     }
-                    if (songs.isEmpty()) {
-                        showMessage(getString(R.string.nothing_found))
-                        progressBar.isVisible = false
-                    } else {
-                        showMessage("")
-                        progressBar.isVisible = false
-                    }
-                } else {
-                    showMessage(getString(R.string.something_went_wrong))
-                    progressBar.isVisible = false
                 }
-            }
-
-            override fun onFailure(call: Call<SongsResponse>, t: Throwable) {
-                showMessage(getString(R.string.network_problems))
-                progressBar.isVisible = false
             }
         })
     }
 
     private fun clearButtonVisibility(s: CharSequence?): Int {
-        return if (s.isNullOrEmpty()){
+        return if (s.isNullOrEmpty()) {
             View.GONE
         } else {
             View.VISIBLE
