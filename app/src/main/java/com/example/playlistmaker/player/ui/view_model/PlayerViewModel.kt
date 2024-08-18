@@ -1,6 +1,5 @@
 package com.example.playlistmaker.player.ui.view_model
 
-import android.media.MediaPlayer
 import android.os.Handler
 import android.os.Looper
 import androidx.lifecycle.LiveData
@@ -8,13 +7,13 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import com.example.playlistmaker.player.domain.api.MediaPlayerInteractor
-import com.example.playlistmaker.player.ui.state.PlayerState
 import java.text.SimpleDateFormat
 import java.util.Locale
 
 class PlayerViewModel(private val mediaPlayerInteractor: MediaPlayerInteractor) : ViewModel() {
 
     companion object {
+        const val DEFAULT_TIMER = 0
         const val STATE_DEFAULT = 0
         const val STATE_PLAYING = 1
         const val STATE_PAUSED = 2
@@ -54,7 +53,7 @@ class PlayerViewModel(private val mediaPlayerInteractor: MediaPlayerInteractor) 
         }, {
             playerState.value = STATE_COMPLETE
             mainThreadHandler.removeCallbacks(updateTimeRunnable)
-            _currentTime.value = dateFormat.format(0)
+            _currentTime.value = dateFormat.format(DEFAULT_TIMER)
         })
     }
 
@@ -69,10 +68,10 @@ class PlayerViewModel(private val mediaPlayerInteractor: MediaPlayerInteractor) 
     fun releasePlayer() {
         mediaPlayerInteractor.releasePlayer()
         playerState.value = STATE_DEFAULT
-        _currentTime.value = dateFormat.format(0)
+        _currentTime.value = dateFormat.format(DEFAULT_TIMER)
     }
 
-    fun startPlayer() {
+    private fun startPlayer() {
         mediaPlayerInteractor.startPlayer()
         playerState.value = STATE_PLAYING
         mainThreadHandler.post(updateTimeRunnable)
@@ -94,7 +93,7 @@ class PlayerViewModel(private val mediaPlayerInteractor: MediaPlayerInteractor) 
                 mainThreadHandler.postDelayed(this, DELAY)
             } else {
                 playerState.value = STATE_COMPLETE
-                _currentTime.value = dateFormat.format(0)
+                _currentTime.value = dateFormat.format(DEFAULT_TIMER)
                 mainThreadHandler.removeCallbacks(this)
             }
         }

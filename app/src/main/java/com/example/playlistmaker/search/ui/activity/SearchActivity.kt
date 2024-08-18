@@ -33,6 +33,7 @@ class SearchActivity : AppCompatActivity() {
     }
 
     private companion object {
+        const val SONG = "Song"
         const val CLICK_DELAY = 1000L
     }
 
@@ -48,7 +49,7 @@ class SearchActivity : AppCompatActivity() {
         if (clickDebounce()) {
             viewModel.addSongToSearchHistory(song)
             val playerIntent = Intent(this, PlayerActivity::class.java)
-            playerIntent.putExtra("Song", Gson().toJson(song))
+            playerIntent.putExtra(SONG, Gson().toJson(song))
             startActivity(playerIntent)
         }
     }
@@ -128,7 +129,6 @@ class SearchActivity : AppCompatActivity() {
                     binding.progressBar.isVisible = false
                     binding.historyView.isVisible = false
                     binding.tracks.isVisible = false
-                    showMessage(getString(R.string.nothing_found))
                 }
                 is SearchState.Error -> {
                     binding.progressBar.isVisible = false
@@ -136,11 +136,14 @@ class SearchActivity : AppCompatActivity() {
                     binding.tracks.isVisible = false
                     showMessage(getString(R.string.network_problems))
                 }
+                is SearchState.NotFound -> {
+                    binding.progressBar.isVisible = false
+                    binding.historyView.isVisible = false
+                    binding.tracks.isVisible = false
+                    showMessage(getString(R.string.nothing_found))
+                }
             }
         }
-
-
-
 
         viewModel.isClearInputButtonVisibleLiveData.observe(this) {
             binding.clearIconSearch.isVisible = it
@@ -152,12 +155,7 @@ class SearchActivity : AppCompatActivity() {
             binding.inputEditTextSearch.setText("")
             hideKeyboard(binding.inputEditTextSearch)
             binding.inputEditTextSearch.clearFocus()
-            val searchHistory = viewModel.getSearchHistory()
-            if (searchHistory.isNotEmpty()) {
-                viewModel.changeScreenState(SearchState.History(searchHistory))
-            } else {
-                viewModel.changeScreenState(SearchState.Empty)
-            }
+            viewModel.changeScreenState(SearchState.Empty)
         }
 
         binding.clearHistoryButton.setOnClickListener {
@@ -180,7 +178,9 @@ class SearchActivity : AppCompatActivity() {
                 viewModel.onInputStateChanged(binding.inputEditTextSearch.hasFocus(), s)
             }
 
-            override fun afterTextChanged(s: Editable?) {}
+            override fun afterTextChanged(s: Editable?) {
+
+            }
         })
 
         binding.inputEditTextSearch.setOnEditorActionListener { _, actionId, _ ->

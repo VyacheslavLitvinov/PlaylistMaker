@@ -38,7 +38,7 @@ class SearchViewModel(
     val screenStateLiveData: LiveData<SearchState>
         get() = _screenStateLiveData
 
-    private val _isClearInputButtonVisibleLiveData = MutableLiveData<Boolean>(false)
+    private val _isClearInputButtonVisibleLiveData = MutableLiveData(false)
     val isClearInputButtonVisibleLiveData: LiveData<Boolean>
         get() = _isClearInputButtonVisibleLiveData
 
@@ -46,7 +46,6 @@ class SearchViewModel(
         lastSearchText = changedText
         handler.removeCallbacks(searchRunnable)
         handler.postDelayed(searchRunnable, SEARCH_DEBOUNCE_DELAY_MILLIS)
-        //_screenStateLiveData.value = SearchState.Content(ArrayList())
     }
 
     fun onInputStateChanged(hasFocus: Boolean, searchInput: CharSequence?) {
@@ -80,7 +79,7 @@ class SearchViewModel(
         searchHistoryInteractor.addSongToSearchHistory(song)
         if (_screenStateLiveData.value is SearchState.History) {
             _screenStateLiveData.value =
-                SearchState.History(searchHistoryInteractor.getSearchHistory())
+                SearchState.History(getSearchHistory())
         }
     }
 
@@ -104,7 +103,7 @@ class SearchViewModel(
                                 songList.addAll(data.data)
                                 _screenStateLiveData.postValue(SearchState.Content(ArrayList(songList)))
                             } else {
-                                _screenStateLiveData.postValue(SearchState.Empty)
+                                _screenStateLiveData.postValue(SearchState.NotFound)
                             }
                         }
                         is ConsumerData.Error -> {

@@ -25,12 +25,6 @@ class SearchAdapter(private val clickListener: SongClickListener) : RecyclerView
 
     override fun getItemCount(): Int = if (songs.isNotEmpty()) songs.size else historySongs.size
 
-    fun updateHistorySongs(historySongs: ArrayList<Song>) {
-        this.historySongs.clear()
-        this.historySongs.addAll(historySongs)
-        notifyDataSetChanged()
-    }
-
     fun interface SongClickListener {
         fun onSongClick(song: Song, position: Int)
     }

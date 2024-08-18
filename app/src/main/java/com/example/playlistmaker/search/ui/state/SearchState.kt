@@ -12,5 +12,7 @@ sealed interface SearchState {
 
     object Empty : SearchState
 
+    object NotFound : SearchState
+
     object Error : SearchState
 }

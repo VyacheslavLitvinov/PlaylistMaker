@@ -4,10 +4,8 @@ import android.app.Application
 import android.content.Context
 import android.content.SharedPreferences
 import android.media.MediaPlayer
-import com.example.playlistmaker.player.data.PlayerRepositoryImpl
 import com.example.playlistmaker.player.domain.api.MediaPlayerInteractor
 import com.example.playlistmaker.player.domain.interactors.MediaPlayerInteractorImpl
-import com.example.playlistmaker.player.domain.repositories.PlayerRepository
 import com.example.playlistmaker.search.data.repository.SongsRepositoryImpl
 import com.example.playlistmaker.search.data.network.RetrofitNetworkClient
 import com.example.playlistmaker.settings.data.impl.DarkThemeRepositoryImpl
@@ -78,10 +76,6 @@ object Creator {
     fun provideMediaPlayerInteractor(): MediaPlayerInteractor {
         val mediaPlayer = MediaPlayer()
         return MediaPlayerInteractorImpl(mediaPlayer)
-    }
-
-    fun providePlayerRepository(): PlayerRepository {
-        return PlayerRepositoryImpl(provideMediaPlayerInteractor())
     }
 
 }

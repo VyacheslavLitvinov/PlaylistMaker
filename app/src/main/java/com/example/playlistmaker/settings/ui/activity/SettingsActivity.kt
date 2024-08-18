@@ -2,15 +2,15 @@ package com.example.playlistmaker.settings.ui.activity
 
 import android.os.Bundle
 import android.widget.FrameLayout
-import androidx.activity.ComponentActivity
 import androidx.activity.enableEdgeToEdge
+import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.ViewModelProvider
 import com.example.playlistmaker.R
 import com.example.playlistmaker.settings.ui.App
 import com.example.playlistmaker.settings.ui.view_model.SettingsViewModel
 import com.google.android.material.switchmaterial.SwitchMaterial
 
-class SettingsActivity : ComponentActivity() {
+class SettingsActivity : AppCompatActivity() {
 
     private lateinit var viewModel: SettingsViewModel
 
@@ -33,7 +33,6 @@ class SettingsActivity : ComponentActivity() {
         themeSwitcher.setOnCheckedChangeListener { _, checked ->
             (applicationContext as App).switchTheme(checked)
             viewModel.themeSwitch(checked)
-            recreate()
         }
 
         val shareButton = findViewById<FrameLayout>(R.id.shareButton)

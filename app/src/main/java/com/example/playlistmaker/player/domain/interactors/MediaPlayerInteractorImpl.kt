@@ -2,7 +2,6 @@ package com.example.playlistmaker.player.domain.interactors
 
 import android.media.MediaPlayer
 import com.example.playlistmaker.player.domain.api.MediaPlayerInteractor
-import com.example.playlistmaker.player.domain.repositories.PlayerRepository
 
 class MediaPlayerInteractorImpl(private val mediaPlayer: MediaPlayer) : MediaPlayerInteractor {
 

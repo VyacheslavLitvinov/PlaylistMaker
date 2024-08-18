@@ -81,7 +81,6 @@ class PlayerActivity : AppCompatActivity() {
             viewModel.togglePlayback()
         }
 
-
         viewModel.state.observe(this) { state ->
             when (state) {
                 PlayerViewModel.STATE_PLAYING -> {
