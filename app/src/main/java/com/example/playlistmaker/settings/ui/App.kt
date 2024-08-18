@@ -1,7 +1,6 @@
 package com.example.playlistmaker.settings.ui
 
 import android.app.Application
-import android.util.Log
 import androidx.appcompat.app.AppCompatDelegate
 import com.example.playlistmaker.creator.Creator
 
@@ -16,7 +15,6 @@ class App : Application() {
     }
 
     fun switchTheme(isDarkThemeEnabled: Boolean) {
-        Log.d("App", "Switching theme to: $isDarkThemeEnabled")
         AppCompatDelegate.setDefaultNightMode(
             if (isDarkThemeEnabled) AppCompatDelegate.MODE_NIGHT_YES
             else AppCompatDelegate.MODE_NIGHT_NO
