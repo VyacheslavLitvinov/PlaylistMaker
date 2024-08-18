@@ -2,12 +2,14 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/main"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
     android:fitsSystemWindows="true">
 
     <LinearLayout
+        android:id="@+id/toolbar"
         android:layout_width="match_parent"
         android:layout_height="@dimen/indent_toolbar_settings"
         android:padding="@dimen/toolbar_padding_indent">
@@ -34,11 +36,11 @@
                 android:text="@string/search"
                 android:layout_marginStart="@dimen/indent_text_toolbar"
                 style="@style/ToolbarText"/>
-            
+
         </LinearLayout>
 
     </LinearLayout>
-    
+
     <FrameLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -88,7 +90,7 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:orientation="vertical"
-        tools:context = ".ui.search.SearchActivity"
+        tools:context = ".search.ui.activity.SearchActivity"
         android:paddingTop="16dp">
 
         <androidx.recyclerview.widget.RecyclerView
