@@ -10,13 +10,14 @@ import com.bumptech.glide.Glide
 import com.bumptech.glide.load.resource.bitmap.RoundedCorners
 import com.example.playlistmaker.R
 import com.example.playlistmaker.creator.Creator
+import com.example.playlistmaker.player.domain.models.PlayerState
 import com.example.playlistmaker.player.ui.view_model.PlayerViewModel
 import com.example.playlistmaker.search.domain.models.Song
 import com.google.gson.Gson
 
 class PlayerActivity : AppCompatActivity() {
 
-    companion object {
+    private companion object {
         const val SONG = "Song"
         const val CURRENT_POSITION = "CurrentPosition"
         const val IS_PLAYING = "IsPlaying"
@@ -98,12 +99,13 @@ class PlayerActivity : AppCompatActivity() {
 
         viewModel.state.observe(this) { state ->
             when (state) {
-                PlayerViewModel.STATE_PLAYING -> {
+                PlayerState.STATE_PLAYING -> {
                     playButton.setImageResource(R.drawable.pause_button)
                 }
-                PlayerViewModel.STATE_PAUSED, PlayerViewModel.STATE_COMPLETE -> {
+                PlayerState.STATE_PAUSED, PlayerState.STATE_COMPLETE -> {
                     playButton.setImageResource(R.drawable.play_button)
                 }
+                PlayerState.STATE_DEFAULT -> Unit
             }
         }
 

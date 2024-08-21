@@ -7,6 +7,7 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import com.example.playlistmaker.player.domain.api.MediaPlayerInteractor
+import com.example.playlistmaker.player.domain.models.PlayerState
 import java.text.SimpleDateFormat
 import java.util.Locale
 
@@ -14,10 +15,6 @@ class PlayerViewModel(private val mediaPlayerInteractor: MediaPlayerInteractor) 
 
     companion object {
         const val DEFAULT_TIMER = 0
-        const val STATE_DEFAULT = 0
-        const val STATE_PLAYING = 1
-        const val STATE_PAUSED = 2
-        const val STATE_COMPLETE = 3
         const val DELAY = 500L
         const val FORMAT_TIME = "mm:ss"
         const val IMAGE_FORMAT = "512x512bb.jpg"
@@ -39,8 +36,8 @@ class PlayerViewModel(private val mediaPlayerInteractor: MediaPlayerInteractor) 
         SimpleDateFormat(FORMAT_TIME, Locale.getDefault())
     }
 
-    private val playerState = MutableLiveData(STATE_DEFAULT)
-    val state: LiveData<Int> get() = playerState
+    private val playerState = MutableLiveData(PlayerState.STATE_DEFAULT)
+    val state: LiveData<PlayerState> get() = playerState
 
     private val _currentTime = MutableLiveData<String>()
     val currentTime: LiveData<String> = _currentTime
@@ -60,11 +57,11 @@ class PlayerViewModel(private val mediaPlayerInteractor: MediaPlayerInteractor) 
             if (shouldPlay) {
                 startPlayer()
             } else {
-                playerState.value = STATE_PAUSED
+                playerState.value = PlayerState.STATE_PAUSED
             }
         }, {
             isPlayerPrepared = false
-            playerState.value = STATE_COMPLETE
+            playerState.value = PlayerState.STATE_COMPLETE
             stopTimer()
             _currentTime.postValue(formatTime(DEFAULT_TIMER))
         })
@@ -73,7 +70,7 @@ class PlayerViewModel(private val mediaPlayerInteractor: MediaPlayerInteractor) 
     private fun startPlayer() {
         if (isPrepared) {
             mediaPlayerInteractor.startPlayer()
-            playerState.value = STATE_PLAYING
+            playerState.value = PlayerState.STATE_PLAYING
             startTimer()
         } else {
             preparePlayer(songUrl ?: "", startPosition = getCurrentPosition(), shouldPlay = true)
@@ -82,13 +79,13 @@ class PlayerViewModel(private val mediaPlayerInteractor: MediaPlayerInteractor) 
 
     fun pausePlayer() {
         mediaPlayerInteractor.pausePlayer()
-        playerState.value = STATE_PAUSED
+        playerState.value = PlayerState.STATE_PAUSED
         stopTimer()
     }
 
     fun resetPlayer() {
         mediaPlayerInteractor.resetPlayer()
-        playerState.value = STATE_DEFAULT
+        playerState.value = PlayerState.STATE_DEFAULT
         stopTimer()
         _currentTime.postValue(formatTime(DEFAULT_TIMER))
     }
@@ -107,8 +104,10 @@ class PlayerViewModel(private val mediaPlayerInteractor: MediaPlayerInteractor) 
 
     fun togglePlayback() {
         when (playerState.value) {
-            STATE_PLAYING -> pausePlayer()
-            STATE_PAUSED, STATE_COMPLETE -> startPlayer()
+            PlayerState.STATE_PLAYING -> pausePlayer()
+            PlayerState.STATE_PAUSED, PlayerState.STATE_COMPLETE -> startPlayer()
+            PlayerState.STATE_DEFAULT -> Unit
+            null -> Unit
         }
     }
 

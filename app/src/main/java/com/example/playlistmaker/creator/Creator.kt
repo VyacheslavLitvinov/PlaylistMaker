@@ -4,6 +4,7 @@ import android.app.Application
 import android.content.Context
 import android.content.SharedPreferences
 import android.media.MediaPlayer
+import android.net.ConnectivityManager
 import com.example.playlistmaker.player.domain.api.MediaPlayerInteractor
 import com.example.playlistmaker.player.domain.interactors.MediaPlayerInteractorImpl
 import com.example.playlistmaker.search.data.repository.SongsRepositoryImpl
@@ -30,8 +31,12 @@ object Creator {
     private lateinit var application: Application
     private const val APP_PREFERENCES = "playlist_maker_preferences"
 
+    private fun getConnectivityManager(): ConnectivityManager {
+        return application.getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager
+    }
+
     private fun getSongsRepository(): SongsRepository {
-        return SongsRepositoryImpl(RetrofitNetworkClient(application))
+        return SongsRepositoryImpl(RetrofitNetworkClient(getConnectivityManager()))
     }
 
     fun provideSongsInteractor(): SongsInteractor {
