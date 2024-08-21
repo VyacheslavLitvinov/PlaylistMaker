@@ -5,14 +5,24 @@ import com.example.playlistmaker.player.domain.api.MediaPlayerInteractor
 
 class MediaPlayerInteractorImpl(private val mediaPlayer: MediaPlayer) : MediaPlayerInteractor {
 
+    private var isPrepared = false
     override fun prepare(trackUrl: String, onPrepared: () -> Unit, onCompletion: () -> Unit) {
-        mediaPlayer.setDataSource(trackUrl)
-        mediaPlayer.prepareAsync()
-        mediaPlayer.setOnPreparedListener {
-            onPrepared()
-        }
-        mediaPlayer.setOnCompletionListener {
-            onCompletion()
+        try {
+            if (isPrepared) {
+                mediaPlayer.reset()
+            }
+            mediaPlayer.setDataSource(trackUrl)
+            mediaPlayer.setOnPreparedListener {
+                isPrepared = true
+                onPrepared()
+            }
+            mediaPlayer.setOnCompletionListener {
+                onCompletion()
+                mediaPlayer.seekTo(0)
+            }
+            mediaPlayer.prepareAsync()
+        } catch (e: IllegalStateException) {
+            e.printStackTrace()
         }
     }
 
@@ -25,18 +35,30 @@ class MediaPlayerInteractorImpl(private val mediaPlayer: MediaPlayer) : MediaPla
     }
 
     override fun resetPlayer() {
-        mediaPlayer.reset()
+        try {
+            if (isPrepared) {
+                mediaPlayer.reset()
+                isPrepared = false
+            }
+        } catch (e: IllegalStateException) {
+            e.printStackTrace()
+        }
     }
 
     override fun releasePlayer() {
         mediaPlayer.release()
+        isPrepared = false
     }
 
     override fun isPlaying(): Boolean {
-        return mediaPlayer.isPlaying
+        return isPrepared && mediaPlayer.isPlaying
     }
 
     override fun getCurrentPosition(): Int {
-        return mediaPlayer.currentPosition
+        return if (isPrepared) mediaPlayer.currentPosition else 0
+    }
+
+    override fun seekTo(position: Int) {
+        mediaPlayer.seekTo(position)
     }
 }

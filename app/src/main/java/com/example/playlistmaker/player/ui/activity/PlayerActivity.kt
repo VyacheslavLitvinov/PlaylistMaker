@@ -1,5 +1,6 @@
 package com.example.playlistmaker.player.ui.activity
 
+import android.media.MediaPlayer
 import android.os.Bundle
 import android.widget.ImageView
 import android.widget.TextView
@@ -18,6 +19,9 @@ class PlayerActivity : AppCompatActivity() {
 
     companion object {
         const val SONG = "Song"
+        const val CURRENT_POSITION = "CurrentPosition"
+        const val IS_PLAYING = "IsPlaying"
+        const val SONG_URL = "SongUrl"
     }
 
     private lateinit var songImage: ImageView
@@ -31,6 +35,11 @@ class PlayerActivity : AppCompatActivity() {
     private lateinit var playButton: ImageView
     private lateinit var timeView: TextView
     private lateinit var viewModel: PlayerViewModel
+    private var mediaPlayer: MediaPlayer? = null
+    private var songUrl: String? = null
+
+    private var currentPosition = 0
+    private var isPlaying = false
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -39,8 +48,6 @@ class PlayerActivity : AppCompatActivity() {
 
         val mediaPlayerInteractor = Creator.provideMediaPlayerInteractor()
         viewModel = ViewModelProvider(this, PlayerViewModel.Factory(mediaPlayerInteractor))[PlayerViewModel::class.java]
-
-        viewModel = ViewModelProvider(this)[PlayerViewModel::class.java]
 
         songImage = findViewById(R.id.songImage)
         songName = findViewById(R.id.songName)
@@ -56,11 +63,21 @@ class PlayerActivity : AppCompatActivity() {
         val backButton = findViewById<ImageView>(R.id.backButton)
         backButton.setOnClickListener {
             finish()
+            viewModel.resetPlayer()
         }
 
         val songFromJson = intent.getStringExtra(SONG)
         val song = Gson().fromJson(songFromJson, Song::class.java)
-        viewModel.preparePlayer(song.previewUrl)
+
+        if (savedInstanceState != null) {
+            currentPosition = savedInstanceState.getInt(CURRENT_POSITION, 0)
+            isPlaying = savedInstanceState.getBoolean(IS_PLAYING, false)
+            songUrl = savedInstanceState.getString(SONG_URL) ?: song.previewUrl
+            viewModel.preparePlayer(songUrl ?: "", startPosition = currentPosition, shouldPlay = isPlaying)
+        } else {
+            songUrl = song.previewUrl
+            viewModel.preparePlayer(songUrl ?: "", startPosition = currentPosition, shouldPlay = isPlaying)
+        }
 
         Glide.with(this)
             .load(viewModel.formatArtworkUrl(song.artworkUrl100))
@@ -95,17 +112,54 @@ class PlayerActivity : AppCompatActivity() {
         viewModel.currentTime.observe(this) { time ->
             timeView.text = time
         }
+    }
 
+    override fun onSaveInstanceState(outState: Bundle) {
+        super.onSaveInstanceState(outState)
+        outState.putString(SONG_URL, songUrl)
+        outState.putInt(CURRENT_POSITION, viewModel.getCurrentPosition())
+        outState.putBoolean(IS_PLAYING, viewModel.isPlaying())
+    }
+
+    override fun onRestoreInstanceState(savedInstanceState: Bundle) {
+        super.onRestoreInstanceState(savedInstanceState)
+        val songUrl = savedInstanceState.getString("songUrl")
+        val currentPosition = savedInstanceState.getInt("currentPosition", 0)
+        val isPlaying = savedInstanceState.getBoolean("isPlaying", false)
+        if (songUrl != null) {
+            prepareMediaPlayer(songUrl, currentPosition, isPlaying)
+        }
     }
 
     override fun onPause() {
         super.onPause()
-        viewModel.pausePlayer()
+        releaseMediaPlayer()
     }
 
     override fun onDestroy() {
         super.onDestroy()
-        viewModel.releasePlayer()
+        releaseMediaPlayer()
     }
 
+    private fun releaseMediaPlayer() {
+        mediaPlayer?.let {
+            if (it.isPlaying) {
+                it.stop()
+            }
+            it.release()
+            mediaPlayer = null
+        }
+    }
+
+    private fun prepareMediaPlayer(songUrl: String, startPosition: Int, shouldPlay: Boolean) {
+        mediaPlayer = MediaPlayer().apply {
+            setDataSource(songUrl)
+            setOnPreparedListener {
+                seekTo(startPosition)
+                if (shouldPlay) start()
+            }
+            setOnErrorListener { _, _, _ -> true }
+            prepareAsync()
+        }
+    }
 }

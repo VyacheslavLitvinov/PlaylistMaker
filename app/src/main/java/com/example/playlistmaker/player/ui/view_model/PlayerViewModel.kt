@@ -45,57 +45,77 @@ class PlayerViewModel(private val mediaPlayerInteractor: MediaPlayerInteractor) 
     private val _currentTime = MutableLiveData<String>()
     val currentTime: LiveData<String> = _currentTime
 
+    private var isPlayerPrepared = false
+    private val isPrepared: Boolean
+        get() = isPlayerPrepared
 
-    fun preparePlayer(url: String) {
+    private var songUrl: String? = null
 
+    fun preparePlayer(url: String, startPosition: Int = 0, shouldPlay: Boolean = false) {
+        songUrl = url
         mediaPlayerInteractor.prepare(url, {
-            playerState.value = STATE_PAUSED
+            isPlayerPrepared = true
+            seekTo(startPosition)
+            if (shouldPlay) {
+                startPlayer()
+            } else {
+                playerState.value = STATE_PAUSED
+            }
         }, {
+            isPlayerPrepared = false
             playerState.value = STATE_COMPLETE
             mainThreadHandler.removeCallbacks(updateTimeRunnable)
-            _currentTime.value = dateFormat.format(DEFAULT_TIMER)
+            _currentTime.postValue(formatTime(DEFAULT_TIMER))
         })
     }
 
-    fun togglePlayback() {
-        if (mediaPlayerInteractor.isPlaying()) {
-            pausePlayer()
+    private fun startPlayer() {
+        if (isPrepared) {
+            mediaPlayerInteractor.startPlayer()
+            playerState.value = STATE_PLAYING
+            mainThreadHandler.post(updateTimeRunnable)
         } else {
-            startPlayer()
+            preparePlayer(songUrl ?: "", startPosition = getCurrentPosition(), shouldPlay = true)
         }
     }
 
-    fun releasePlayer() {
-        mediaPlayerInteractor.releasePlayer()
+    private fun pausePlayer() {
+        mediaPlayerInteractor.pausePlayer()
+        playerState.value = STATE_PAUSED
+        mainThreadHandler.removeCallbacks(updateTimeRunnable)
+    }
+
+    fun resetPlayer() {
+        mediaPlayerInteractor.resetPlayer()
         playerState.value = STATE_DEFAULT
-        _currentTime.value = dateFormat.format(DEFAULT_TIMER)
+        mainThreadHandler.removeCallbacks(updateTimeRunnable)
+        _currentTime.postValue(formatTime(DEFAULT_TIMER))
     }
 
-    private fun startPlayer() {
-        mediaPlayerInteractor.startPlayer()
-        playerState.value = STATE_PLAYING
-        mainThreadHandler.post(updateTimeRunnable)
+    fun isPlaying(): Boolean {
+        return mediaPlayerInteractor.isPlaying()
     }
 
-    fun pausePlayer() {
-        if (mediaPlayerInteractor.isPlaying()) {
-            mediaPlayerInteractor.pausePlayer()
-            playerState.value = STATE_PAUSED
-            mainThreadHandler.removeCallbacks(updateTimeRunnable)
+    fun getCurrentPosition(): Int {
+        return mediaPlayerInteractor.getCurrentPosition()
+    }
+
+    private fun seekTo(position: Int) {
+        mediaPlayerInteractor.seekTo(position)
+    }
+
+    fun togglePlayback() {
+        when (playerState.value) {
+            STATE_PLAYING -> pausePlayer()
+            STATE_PAUSED, STATE_COMPLETE -> startPlayer()
         }
     }
 
     private val updateTimeRunnable = object : Runnable {
         override fun run() {
-            if (mediaPlayerInteractor.isPlaying()) {
-                val currentPosition = mediaPlayerInteractor.getCurrentPosition()
-                _currentTime.value = dateFormat.format(currentPosition)
-                mainThreadHandler.postDelayed(this, DELAY)
-            } else {
-                playerState.value = STATE_COMPLETE
-                _currentTime.value = dateFormat.format(DEFAULT_TIMER)
-                mainThreadHandler.removeCallbacks(this)
-            }
+            val currentPosition = mediaPlayerInteractor.getCurrentPosition()
+            _currentTime.postValue(formatTime(currentPosition))
+            mainThreadHandler.postDelayed(this, DELAY)
         }
     }
 
