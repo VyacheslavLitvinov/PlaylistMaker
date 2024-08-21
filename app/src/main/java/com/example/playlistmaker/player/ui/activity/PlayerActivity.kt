@@ -1,6 +1,5 @@
 package com.example.playlistmaker.player.ui.activity
 
-import android.media.MediaPlayer
 import android.os.Bundle
 import android.widget.ImageView
 import android.widget.TextView
@@ -35,7 +34,6 @@ class PlayerActivity : AppCompatActivity() {
     private lateinit var playButton: ImageView
     private lateinit var timeView: TextView
     private lateinit var viewModel: PlayerViewModel
-    private var mediaPlayer: MediaPlayer? = null
     private var songUrl: String? = null
 
     private var currentPosition = 0
@@ -123,43 +121,23 @@ class PlayerActivity : AppCompatActivity() {
 
     override fun onRestoreInstanceState(savedInstanceState: Bundle) {
         super.onRestoreInstanceState(savedInstanceState)
-        val songUrl = savedInstanceState.getString("songUrl")
-        val currentPosition = savedInstanceState.getInt("currentPosition", 0)
-        val isPlaying = savedInstanceState.getBoolean("isPlaying", false)
-        if (songUrl != null) {
-            prepareMediaPlayer(songUrl, currentPosition, isPlaying)
-        }
+        val restoredPosition = savedInstanceState.getInt(CURRENT_POSITION, 0)
+        val wasPlaying = savedInstanceState.getBoolean(IS_PLAYING, false)
+        songUrl = savedInstanceState.getString(SONG_URL)
+        viewModel.preparePlayer(songUrl ?: "", startPosition = restoredPosition, shouldPlay = wasPlaying)
+        viewModel.startTimerFromPosition(restoredPosition)
     }
 
     override fun onPause() {
         super.onPause()
-        releaseMediaPlayer()
+        if (viewModel.isPlaying()) {
+            viewModel.pausePlayer()
+        }
     }
 
     override fun onDestroy() {
         super.onDestroy()
-        releaseMediaPlayer()
+        viewModel.resetPlayer()
     }
 
-    private fun releaseMediaPlayer() {
-        mediaPlayer?.let {
-            if (it.isPlaying) {
-                it.stop()
-            }
-            it.release()
-            mediaPlayer = null
-        }
-    }
-
-    private fun prepareMediaPlayer(songUrl: String, startPosition: Int, shouldPlay: Boolean) {
-        mediaPlayer = MediaPlayer().apply {
-            setDataSource(songUrl)
-            setOnPreparedListener {
-                seekTo(startPosition)
-                if (shouldPlay) start()
-            }
-            setOnErrorListener { _, _, _ -> true }
-            prepareAsync()
-        }
-    }
 }

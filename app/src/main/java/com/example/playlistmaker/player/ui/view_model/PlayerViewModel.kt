@@ -50,6 +50,7 @@ class PlayerViewModel(private val mediaPlayerInteractor: MediaPlayerInteractor) 
         get() = isPlayerPrepared
 
     private var songUrl: String? = null
+    private var isTimerRunning = false
 
     fun preparePlayer(url: String, startPosition: Int = 0, shouldPlay: Boolean = false) {
         songUrl = url
@@ -64,7 +65,7 @@ class PlayerViewModel(private val mediaPlayerInteractor: MediaPlayerInteractor) 
         }, {
             isPlayerPrepared = false
             playerState.value = STATE_COMPLETE
-            mainThreadHandler.removeCallbacks(updateTimeRunnable)
+            stopTimer()
             _currentTime.postValue(formatTime(DEFAULT_TIMER))
         })
     }
@@ -73,22 +74,22 @@ class PlayerViewModel(private val mediaPlayerInteractor: MediaPlayerInteractor) 
         if (isPrepared) {
             mediaPlayerInteractor.startPlayer()
             playerState.value = STATE_PLAYING
-            mainThreadHandler.post(updateTimeRunnable)
+            startTimer()
         } else {
             preparePlayer(songUrl ?: "", startPosition = getCurrentPosition(), shouldPlay = true)
         }
     }
 
-    private fun pausePlayer() {
+    fun pausePlayer() {
         mediaPlayerInteractor.pausePlayer()
         playerState.value = STATE_PAUSED
-        mainThreadHandler.removeCallbacks(updateTimeRunnable)
+        stopTimer()
     }
 
     fun resetPlayer() {
         mediaPlayerInteractor.resetPlayer()
         playerState.value = STATE_DEFAULT
-        mainThreadHandler.removeCallbacks(updateTimeRunnable)
+        stopTimer()
         _currentTime.postValue(formatTime(DEFAULT_TIMER))
     }
 
@@ -129,6 +130,25 @@ class PlayerViewModel(private val mediaPlayerInteractor: MediaPlayerInteractor) 
 
     fun formatReleaseDate(releaseDate: String?): String {
         return releaseDate?.substring(0, 4) ?: "Unknown"
+    }
+
+    private fun startTimer() {
+        if (!isTimerRunning) {
+            isTimerRunning = true
+            mainThreadHandler.post(updateTimeRunnable)
+        }
+    }
+
+    private fun stopTimer() {
+        if (isTimerRunning) {
+            isTimerRunning = false
+            mainThreadHandler.removeCallbacks(updateTimeRunnable)
+        }
+    }
+
+    fun startTimerFromPosition(position: Int) {
+        _currentTime.value = position.toString()
+        startTimer()
     }
 
 }
