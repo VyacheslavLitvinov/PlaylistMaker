@@ -16,6 +16,7 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
 import androidx.core.view.isVisible
+import androidx.core.widget.addTextChangedListener
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.playlistmaker.Constants
@@ -128,18 +129,14 @@ class SearchActivity : AppCompatActivity() {
             viewModel.onInputStateChanged(hasFocus, (v as EditText).text)
         }
 
-        binding.inputEditTextSearch.addTextChangedListener(object : TextWatcher {
-            override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {}
-
-            override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
+        binding.inputEditTextSearch.addTextChangedListener(
+            beforeTextChanged = {_, _, _, _ ->},
+            onTextChanged = {s: CharSequence?, _, _, _ ->
                 viewModel.searchDebounce(s.toString())
                 viewModel.onInputStateChanged(binding.inputEditTextSearch.hasFocus(), s)
-            }
-
-            override fun afterTextChanged(s: Editable?) {
-
-            }
-        })
+            },
+            afterTextChanged = {_ ->}
+        )
 
         binding.inputEditTextSearch.setOnEditorActionListener { _, actionId, _ ->
             if (actionId == EditorInfo.IME_ACTION_DONE) {
