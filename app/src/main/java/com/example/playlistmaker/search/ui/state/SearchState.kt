@@ -6,9 +6,9 @@ sealed interface SearchState {
 
     object Loading : SearchState
 
-    data class Content(val songs: ArrayList<Song>) : SearchState
+    data class Content(val songs: List<Song>) : SearchState
 
-    data class History(val songs: ArrayList<Song>) : SearchState
+    data class History(val songs: List<Song>) : SearchState
 
     object Empty : SearchState
 

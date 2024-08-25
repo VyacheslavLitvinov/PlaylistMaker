@@ -83,7 +83,7 @@ class SearchViewModel(
         }
     }
 
-    fun getSearchHistory(): ArrayList<Song> {
+    fun getSearchHistory(): List<Song> {
         return searchHistoryInteractor.getSearchHistory()
     }
 

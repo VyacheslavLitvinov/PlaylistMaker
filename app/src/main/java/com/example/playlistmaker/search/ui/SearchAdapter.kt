@@ -7,7 +7,7 @@ import com.example.playlistmaker.R
 import com.example.playlistmaker.search.domain.models.Song
 
 class SearchAdapter(private val clickListener: SongClickListener) : RecyclerView.Adapter<SearchHolder>() {
-    var songs = ArrayList<Song>()
+    var songs : List<Song> = emptyList()
     private var historySongs = ArrayList<Song>()
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): SearchHolder {
