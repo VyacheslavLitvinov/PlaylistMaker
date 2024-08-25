@@ -18,6 +18,7 @@ import androidx.core.view.WindowInsetsCompat
 import androidx.core.view.isVisible
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.example.playlistmaker.Constants
 import com.example.playlistmaker.R
 import com.example.playlistmaker.databinding.ActivitySearchBinding
 import com.example.playlistmaker.player.ui.activity.PlayerActivity
@@ -33,7 +34,6 @@ class SearchActivity : AppCompatActivity() {
     }
 
     private companion object {
-        const val SONG = "Song"
         const val CLICK_DELAY = 1000L
     }
 
@@ -49,7 +49,7 @@ class SearchActivity : AppCompatActivity() {
         if (clickDebounce()) {
             viewModel.addSongToSearchHistory(song)
             val playerIntent = Intent(this, PlayerActivity::class.java)
-            playerIntent.putExtra(SONG, Gson().toJson(song))
+            playerIntent.putExtra(Constants.SONG, Gson().toJson(song))
             startActivity(playerIntent)
         }
     }

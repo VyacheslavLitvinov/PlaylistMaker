@@ -8,6 +8,7 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.ViewModelProvider
 import com.bumptech.glide.Glide
 import com.bumptech.glide.load.resource.bitmap.RoundedCorners
+import com.example.playlistmaker.Constants
 import com.example.playlistmaker.R
 import com.example.playlistmaker.creator.Creator
 import com.example.playlistmaker.player.domain.models.PlayerState
@@ -18,7 +19,6 @@ import com.google.gson.Gson
 class PlayerActivity : AppCompatActivity() {
 
     private companion object {
-        const val SONG = "Song"
         const val CURRENT_POSITION = "CurrentPosition"
         const val IS_PLAYING = "IsPlaying"
         const val SONG_URL = "SongUrl"
@@ -65,7 +65,7 @@ class PlayerActivity : AppCompatActivity() {
             viewModel.resetPlayer()
         }
 
-        val songFromJson = intent.getStringExtra(SONG)
+        val songFromJson = intent.getStringExtra(Constants.SONG)
         val song = Gson().fromJson(songFromJson, Song::class.java)
 
         if (savedInstanceState != null) {
