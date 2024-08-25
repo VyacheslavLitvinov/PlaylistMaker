@@ -91,10 +91,9 @@ class SearchViewModel(
         if (newSearchText.isNotBlank()) {
             _screenStateLiveData.value = SearchState.Loading
 
-            songsInteractor.searchSongs(newSearchText, object : SongsInteractor.SongsConsumer {
-                override fun consume(data: ConsumerData<ArrayList<Song>>) {
+            songsInteractor.searchSongs(newSearchText) { data ->
                     if (_screenStateLiveData.value != SearchState.Loading) {
-                        return
+                        return@searchSongs
                     }
                     when (data) {
                         is ConsumerData.Data -> {
@@ -111,9 +110,8 @@ class SearchViewModel(
                         }
                     }
                 }
-            })
+            }
         }
-    }
 
     override fun onCleared() {
         super.onCleared()
