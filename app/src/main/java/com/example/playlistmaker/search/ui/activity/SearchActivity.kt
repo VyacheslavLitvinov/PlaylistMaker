@@ -94,54 +94,12 @@ class SearchActivity : AppCompatActivity() {
     private fun setupObservers() {
         viewModel.screenStateLiveData.observe(this) { state ->
             when (state) {
-                is SearchState.Loading -> {
-                    binding.progressBar.isVisible = true
-                    binding.historyView.isVisible = false
-                    binding.tracks.isVisible = false
-                    binding.placeholderMessage.isVisible = false
-                    binding.placeholderImageNetwork.isVisible = false
-                    binding.placeholderImageNotResult.isVisible = false
-                    binding.updateButton.isVisible = false
-                }
-                is SearchState.Content -> {
-                    binding.progressBar.isVisible = false
-                    binding.historyView.isVisible = false
-                    binding.tracks.isVisible = true
-                    binding.placeholderMessage.isVisible = false
-                    binding.placeholderImageNetwork.isVisible = false
-                    binding.placeholderImageNotResult.isVisible = false
-                    binding.updateButton.isVisible = false
-                    adapter.songs = state.songs
-                    adapter.notifyDataSetChanged()
-                }
-                is SearchState.History -> {
-                    binding.progressBar.isVisible = false
-                    binding.historyView.isVisible = true
-                    binding.tracks.isVisible = false
-                    binding.placeholderMessage.isVisible = false
-                    binding.placeholderImageNetwork.isVisible = false
-                    binding.placeholderImageNotResult.isVisible = false
-                    binding.updateButton.isVisible = false
-                    historyAdapter.songs = state.songs
-                    historyAdapter.notifyDataSetChanged()
-                }
-                is SearchState.Empty -> {
-                    binding.progressBar.isVisible = false
-                    binding.historyView.isVisible = false
-                    binding.tracks.isVisible = false
-                }
-                is SearchState.Error -> {
-                    binding.progressBar.isVisible = false
-                    binding.historyView.isVisible = false
-                    binding.tracks.isVisible = false
-                    showMessage(getString(R.string.network_problems))
-                }
-                is SearchState.NotFound -> {
-                    binding.progressBar.isVisible = false
-                    binding.historyView.isVisible = false
-                    binding.tracks.isVisible = false
-                    showMessage(getString(R.string.nothing_found))
-                }
+                is SearchState.Loading -> showLoading()
+                is SearchState.Content -> showContent(state)
+                is SearchState.History -> showHistory(state)
+                is SearchState.Empty -> showEmpty()
+                is SearchState.Error -> showError()
+                is SearchState.NotFound -> showNotFound()
             }
         }
 
@@ -226,4 +184,71 @@ class SearchActivity : AppCompatActivity() {
         }
         return current
     }
+
+    private fun showLoading(){
+        with(binding){
+            progressBar.isVisible = true
+            historyView.isVisible = false
+            tracks.isVisible = false
+            placeholderMessage.isVisible = false
+            placeholderImageNetwork.isVisible = false
+            placeholderImageNotResult.isVisible = false
+            updateButton.isVisible = false
+        }
+    }
+
+    private fun showContent(state: SearchState.Content){
+        with(binding){
+            progressBar.isVisible = false
+            historyView.isVisible = false
+            tracks.isVisible = true
+            placeholderMessage.isVisible = false
+            placeholderImageNetwork.isVisible = false
+            placeholderImageNotResult.isVisible = false
+            updateButton.isVisible = false
+        }
+        adapter.songs = state.songs
+        adapter.notifyDataSetChanged()
+    }
+
+    private fun showHistory(state: SearchState.History){
+        with(binding){
+            progressBar.isVisible = false
+            historyView.isVisible = true
+            tracks.isVisible = false
+            placeholderMessage.isVisible = false
+            placeholderImageNetwork.isVisible = false
+            placeholderImageNotResult.isVisible = false
+            updateButton.isVisible = false
+        }
+        historyAdapter.songs = state.songs
+        historyAdapter.notifyDataSetChanged()
+    }
+
+    private fun showEmpty(){
+        with(binding){
+            progressBar.isVisible = false
+            historyView.isVisible = false
+            tracks.isVisible = false
+        }
+    }
+
+    private fun showError(){
+        with(binding){
+            progressBar.isVisible = false
+            historyView.isVisible = false
+            tracks.isVisible = false
+        }
+        showMessage(getString(R.string.network_problems))
+    }
+
+    private fun showNotFound(){
+        with(binding){
+            progressBar.isVisible = false
+            historyView.isVisible = false
+            tracks.isVisible = false
+        }
+        showMessage(getString(R.string.nothing_found))
+    }
+
 }
