@@ -24,6 +24,7 @@ import com.example.playlistmaker.R
 import com.example.playlistmaker.databinding.ActivitySearchBinding
 import com.example.playlistmaker.player.ui.activity.PlayerActivity
 import com.example.playlistmaker.search.ui.SearchAdapter
+import com.example.playlistmaker.search.ui.state.MessageState
 import com.example.playlistmaker.search.ui.state.SearchState
 import com.example.playlistmaker.search.ui.view_model.SearchViewModel
 import com.google.gson.Gson
@@ -148,22 +149,24 @@ class SearchActivity : AppCompatActivity() {
         }
     }
 
-    private fun showMessage(text: String) {
+    private fun showMessage(messageState: MessageState) {
         with(binding) {
-            placeholderMessage.isVisible = text.isNotEmpty()
-            placeholderMessage.text = text
+            placeholderMessage.isVisible = true
             placeholderImageNetwork.isVisible = false
             placeholderImageNotResult.isVisible = false
             updateButton.isVisible = false
 
-            when (text) {
-                getString(R.string.network_problems) -> {
+            when (messageState) {
+                MessageState.NETWORK_PROBLEMS -> {
                     placeholderImageNetwork.isVisible = true
                     updateButton.isVisible = true
+                    placeholderMessage.text = getString(R.string.network_problems)
                 }
-                getString(R.string.nothing_found) -> {
+                MessageState.NOTHING_FOUND -> {
                     placeholderImageNotResult.isVisible = true
+                    placeholderMessage.text = getString(R.string.nothing_found)
                 }
+                MessageState.OTHER -> placeholderMessage.text = ""
             }
         }
     }
@@ -236,7 +239,7 @@ class SearchActivity : AppCompatActivity() {
             historyView.isVisible = false
             tracks.isVisible = false
         }
-        showMessage(getString(R.string.network_problems))
+        showMessage(MessageState.NETWORK_PROBLEMS)
     }
 
     private fun showNotFound(){
@@ -245,7 +248,7 @@ class SearchActivity : AppCompatActivity() {
             historyView.isVisible = false
             tracks.isVisible = false
         }
-        showMessage(getString(R.string.nothing_found))
+        showMessage(MessageState.NOTHING_FOUND)
     }
 
 }
