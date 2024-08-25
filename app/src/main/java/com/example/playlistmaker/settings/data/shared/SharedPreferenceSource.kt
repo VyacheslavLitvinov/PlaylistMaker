@@ -12,7 +12,7 @@ class SharedPreferenceSource(private val sharedPreferences: SharedPreferences) {
     }
 
     private companion object {
-        private const val THEME_KEY = "theme_key"
+        const val THEME_KEY = "theme_key"
     }
 
 }

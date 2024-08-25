@@ -9,7 +9,7 @@ import com.example.playlistmaker.sharing.data.ExternalNavigator
 
 class ExternalNavigatorImpl(private val context: Context) : ExternalNavigator {
 
-    companion object {
+    private companion object {
         const val TYPE_SHARE_BUTTON = "text/plain"
         const val DATA_HELP_BUTTON = "mailto:"
         const val SHARE_TITTLE = "Share"

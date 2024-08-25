@@ -71,7 +71,7 @@ object Creator {
         return ExternalNavigatorImpl(context = application)
     }
     fun provideSharingInteractor(): SharingInteractor {
-        return SharingInteractorImpl(provideExternalNavigator())
+        return SharingInteractorImpl(provideExternalNavigator(), application)
     }
 
     fun provideSettingsInteractor() : SettingsInteractor {
