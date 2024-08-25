@@ -26,17 +26,17 @@ class RetrofitNetworkClient(private val connectivityManager: ConnectivityManager
     override fun doRequest(dto: Any): Response {
         return try {
             if (!isConnected()){
-                return Response().apply { resultCode = 500 }
+                return Response(resultCode = 500)
             }
             if (dto is SongsSearchRequest) {
                 val resp = iTunesService.search(dto.expression).execute()
                 val body = resp.body() ?: Response()
                 body.apply { resultCode = resp.code() }
             } else {
-                Response().apply { resultCode = 400 }
+                Response(resultCode = 400)
             }
         } catch (e: IOException) {
-            Response().apply { resultCode = 500 }
+            Response(resultCode = 500)
         }
     }
 
