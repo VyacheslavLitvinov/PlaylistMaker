@@ -5,8 +5,6 @@ import android.content.Intent
 import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
-import android.text.Editable
-import android.text.TextWatcher
 import android.view.View
 import android.view.inputmethod.EditorInfo
 import android.view.inputmethod.InputMethodManager
@@ -17,7 +15,6 @@ import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
 import androidx.core.view.isVisible
 import androidx.core.widget.addTextChangedListener
-import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.playlistmaker.Constants
 import com.example.playlistmaker.R
@@ -28,6 +25,7 @@ import com.example.playlistmaker.search.ui.state.MessageState
 import com.example.playlistmaker.search.ui.state.SearchState
 import com.example.playlistmaker.search.ui.view_model.SearchViewModel
 import com.google.gson.Gson
+import org.koin.androidx.viewmodel.ext.android.viewModel
 
 class SearchActivity : AppCompatActivity() {
 
@@ -39,7 +37,7 @@ class SearchActivity : AppCompatActivity() {
         const val CLICK_DELAY = 1000L
     }
 
-    private lateinit var viewModel: SearchViewModel
+    private val viewModel by viewModel<SearchViewModel>()
 
     private lateinit var adapter: SearchAdapter
     private lateinit var historyAdapter: SearchAdapter
@@ -60,9 +58,6 @@ class SearchActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
         setContentView(binding.root)
-
-        viewModel = ViewModelProvider(this, SearchViewModel.getViewModelFactory()).get(SearchViewModel::class.java)
-
         initViews()
 
         adapter = SearchAdapter(clickListener)

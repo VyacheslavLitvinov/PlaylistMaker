@@ -1,18 +1,14 @@
 package com.example.playlistmaker.settings.ui.view_model
 
 import androidx.lifecycle.ViewModel
-import androidx.lifecycle.ViewModelProvider
-import androidx.lifecycle.viewmodel.initializer
-import androidx.lifecycle.viewmodel.viewModelFactory
-import com.example.playlistmaker.creator.Creator
+import com.example.playlistmaker.settings.domain.interactor.SettingsInteractor
 import com.example.playlistmaker.settings.domain.model.ThemeSettings
+import com.example.playlistmaker.sharing.domain.impl.SharingInteractor
 
-class SettingsViewModel : ViewModel() {
-
-
-    private val sharingInteractor = Creator.provideSharingInteractor()
-    private val settingsInteractor = Creator.provideSettingsInteractor()
-
+class SettingsViewModel(
+    private val sharingInteractor: SharingInteractor,
+    private val settingsInteractor: SettingsInteractor,
+) : ViewModel() {
 
     fun darkTheme() : Boolean {
         return settingsInteractor.getThemeSettings().darkTheme
@@ -33,13 +29,4 @@ class SettingsViewModel : ViewModel() {
     fun supportApp(){
         sharingInteractor.openSupport()
     }
-
-    companion object {
-        fun getSettingsViewModelFactory() : ViewModelProvider.Factory = viewModelFactory {
-            initializer {
-                SettingsViewModel()
-            }
-        }
-    }
-
 }

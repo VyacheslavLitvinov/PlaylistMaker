@@ -2,14 +2,26 @@ package com.example.playlistmaker.settings.ui
 
 import android.app.Application
 import androidx.appcompat.app.AppCompatDelegate
-import com.example.playlistmaker.creator.Creator
+import com.example.playlistmaker.di.appModule
+import com.example.playlistmaker.di.dataModule
+import com.example.playlistmaker.di.interactorModule
+import com.example.playlistmaker.di.repositoryModule
+import com.example.playlistmaker.di.viewModelModule
+import com.example.playlistmaker.settings.domain.interactor.SettingsInteractor
+import org.koin.android.ext.android.getKoin
+import org.koin.android.ext.koin.androidContext
+import org.koin.core.context.startKoin
 
 class App : Application() {
 
     override fun onCreate() {
         super.onCreate()
-        Creator.initApplication(this)
-        switchTheme(Creator.provideSettingsInteractor().getThemeSettings().darkTheme)
+        startKoin{
+            androidContext(this@App)
+            modules(dataModule, interactorModule, repositoryModule, viewModelModule, appModule)
+        }
+        val settingsInteractor : SettingsInteractor = getKoin().get()
+        switchTheme(settingsInteractor.getThemeSettings().darkTheme)
     }
 
     fun switchTheme(isDarkThemeEnabled: Boolean) {

@@ -5,7 +5,6 @@ import android.os.Looper
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
-import androidx.lifecycle.ViewModelProvider
 import com.example.playlistmaker.player.domain.api.MediaPlayerInteractor
 import com.example.playlistmaker.player.domain.models.PlayerState
 import java.text.SimpleDateFormat
@@ -18,16 +17,6 @@ class PlayerViewModel(private val mediaPlayerInteractor: MediaPlayerInteractor) 
         const val DELAY = 500L
         const val FORMAT_TIME = "mm:ss"
         const val IMAGE_FORMAT = "512x512bb.jpg"
-    }
-
-    class Factory(private val mediaPlayerInteractor: MediaPlayerInteractor) : ViewModelProvider.Factory {
-        override fun <T : ViewModel> create(modelClass: Class<T>): T {
-            if (modelClass.isAssignableFrom(PlayerViewModel::class.java)) {
-                @Suppress("UNCHECKED_CAST")
-                return PlayerViewModel(mediaPlayerInteractor) as T
-            }
-            throw IllegalArgumentException("Unknown ViewModel class")
-        }
     }
 
     private val mainThreadHandler = Handler(Looper.getMainLooper())

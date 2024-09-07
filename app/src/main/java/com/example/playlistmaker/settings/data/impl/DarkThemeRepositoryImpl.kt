@@ -1,9 +1,9 @@
 package com.example.playlistmaker.settings.data.impl
 
-import com.example.playlistmaker.settings.data.shared.SharedPreferenceSource
+import com.example.playlistmaker.settings.data.shared.ThemeRepository
 import com.example.playlistmaker.settings.domain.repository.DarkThemeRepository
 
-class DarkThemeRepositoryImpl(private val sharedPreferencesSource: SharedPreferenceSource) :
+class DarkThemeRepositoryImpl(private val sharedPreferencesSource: ThemeRepository) :
     DarkThemeRepository {
 
     override fun getDarkTheme(): Boolean {

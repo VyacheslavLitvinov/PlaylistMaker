@@ -5,16 +5,15 @@ import android.widget.ImageView
 import android.widget.TextView
 import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
-import androidx.lifecycle.ViewModelProvider
 import com.bumptech.glide.Glide
 import com.bumptech.glide.load.resource.bitmap.RoundedCorners
 import com.example.playlistmaker.Constants
 import com.example.playlistmaker.R
-import com.example.playlistmaker.creator.Creator
 import com.example.playlistmaker.player.domain.models.PlayerState
 import com.example.playlistmaker.player.ui.view_model.PlayerViewModel
 import com.example.playlistmaker.search.domain.models.Song
 import com.google.gson.Gson
+import org.koin.androidx.viewmodel.ext.android.viewModel
 
 class PlayerActivity : AppCompatActivity() {
 
@@ -34,7 +33,7 @@ class PlayerActivity : AppCompatActivity() {
     private lateinit var countryInfoValue: TextView
     private lateinit var playButton: ImageView
     private lateinit var timeView: TextView
-    private lateinit var viewModel: PlayerViewModel
+    private val viewModel by viewModel<PlayerViewModel>()
     private var songUrl: String? = null
 
     private var currentPosition = 0
@@ -44,9 +43,6 @@ class PlayerActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
         setContentView(R.layout.activity_player)
-
-        val mediaPlayerInteractor = Creator.provideMediaPlayerInteractor()
-        viewModel = ViewModelProvider(this, PlayerViewModel.Factory(mediaPlayerInteractor))[PlayerViewModel::class.java]
 
         songImage = findViewById(R.id.songImage)
         songName = findViewById(R.id.songName)
@@ -65,8 +61,7 @@ class PlayerActivity : AppCompatActivity() {
             viewModel.resetPlayer()
         }
 
-        val songFromJson = intent.getStringExtra(Constants.SONG)
-        val song = Gson().fromJson(songFromJson, Song::class.java)
+        val song = Gson().fromJson(intent.getStringExtra(Constants.SONG), Song::class.java)
 
         if (savedInstanceState != null) {
             currentPosition = savedInstanceState.getInt(CURRENT_POSITION, 0)
