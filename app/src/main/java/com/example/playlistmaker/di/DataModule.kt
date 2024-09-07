@@ -9,7 +9,7 @@ import com.example.playlistmaker.search.data.network.ItunesSearchAPI
 import com.example.playlistmaker.search.data.network.RetrofitNetworkClient
 import com.example.playlistmaker.search.data.repository.SearchHistoryRepositoryImpl
 import com.example.playlistmaker.search.domain.api.SearchHistoryRepository
-import com.example.playlistmaker.settings.data.shared.SharedPreferenceSource
+import com.example.playlistmaker.settings.data.shared.ThemeRepository
 import com.google.gson.Gson
 import org.koin.android.ext.koin.androidContext
 import org.koin.dsl.module
@@ -18,9 +18,12 @@ import retrofit2.converter.gson.GsonConverterFactory
 
 val dataModule = module {
 
+    val baseUrl = "https://itunes.apple.com"
+    val appPreferences = "playlist_maker_preferences"
+
     single<ItunesSearchAPI> {
         Retrofit.Builder()
-            .baseUrl(Constants.ITUNES_BASE_URL)
+            .baseUrl(baseUrl)
             .addConverterFactory(GsonConverterFactory.create())
             .build()
             .create(ItunesSearchAPI::class.java)
@@ -28,11 +31,11 @@ val dataModule = module {
 
     single<SharedPreferences> {
         androidContext()
-            .getSharedPreferences(Constants.APP_PREFERENCES, Context.MODE_PRIVATE)
+            .getSharedPreferences(appPreferences, Context.MODE_PRIVATE)
     }
 
-    single<SharedPreferenceSource> {
-        SharedPreferenceSource(get())
+    single<ThemeRepository> {
+        ThemeRepository(get())
     }
 
     factory { Gson() }
