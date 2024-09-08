@@ -122,4 +122,22 @@
         <item name="android:textSize">14sp</item>
     </style>
 
+    <style name="MediaButton" parent="Widget.MaterialComponents.Button.UnelevatedButton">
+        <item name="android:textSize">@dimen/media_button_text_size</item>
+        <item name="android:textColor">@color/black100</item>
+        <item name="android:backgroundTint">@color/white</item>
+        <item name="android:textAllCaps">false</item>
+        <item name="fontFamily">@font/ys_display_medium</item>
+        <item name="tabIndicatorColor">@color/black100</item>
+        <item name="tabTextColor">@color/black100</item>
+    </style>
+
+    <style name="CustomTabLayout" parent="Widget.Design.TabLayout">
+        <item name="tabTextAppearance">@style/CustomTabTextAppearance</item>
+    </style>
+
+    <style name="CustomTabTextAppearance" parent="TextAppearance.Design.Tab">
+        <item name="textAllCaps">false</item>
+    </style>
+
 </resources>

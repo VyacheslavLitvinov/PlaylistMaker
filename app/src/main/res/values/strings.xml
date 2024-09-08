@@ -2,6 +2,7 @@
     <string name="app_name">Playlist Maker</string>
     <string name="search_button">Поиск</string>
     <string name="media_button">Медиатека</string>
+    <string name="media_toolbar">Медиатека</string>
     <string name="settings_button">Настройки</string>
     <string name="settings_toolbar">Настройки</string>
     <string name="share">Поделиться приложением</string>
@@ -33,4 +34,6 @@
     <string name="songCountryInfo">Страна</string>
     <string name="songCountryValuePlaceholder">Неизвестная страна</string>
     <string name="createPlaylistPlaceholder">Плейлист создан</string>
+    <string name="favoritesTracksMedia">Избранные треки</string>
+    <string name="playlistsMedia">Плейлисты</string>
 </resources>

@@ -8,6 +8,7 @@
     <dimen name="indent_back_button_settings">10dp</dimen>
     <dimen name="indent_text_toolbar">12dp</dimen>
     <dimen name="size_icons_settings">12dp</dimen>
+    <dimen name="media_button_text_size">14dp</dimen>
     <dimen name="indent_16">16dp</dimen>
     <dimen name="primary_text_size_settings">21</dimen>
     <dimen name="main_title">22sp</dimen>
@@ -25,5 +26,7 @@
     <dimen name="edit_text_padding_start">12dp</dimen>
     <dimen name="edit_text_padding_top_bot">10dp</dimen>
     <dimen name="edit_text_padding_icon">8dp</dimen>
+
+    <dimen name="height_toolbar_guideline">56dp</dimen>
 
 </resources>

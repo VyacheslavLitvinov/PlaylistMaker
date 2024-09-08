@@ -1,10 +1,69 @@
-<?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/main"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".media.ui.MediaActivity">
+    android:fitsSystemWindows="true"
+    tools:context=".media.ui.activity.MediaActivity">
+
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/toolbarGuideTop"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        app:layout_constraintGuide_begin="@dimen/height_toolbar_guideline" />
+
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/toolbarGuideStart"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        app:layout_constraintGuide_begin="4dp" />
+
+    <ImageView
+        android:id="@+id/back_button_media"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:src="@drawable/baseline_arrow_back_24"
+        app:layout_constraintBottom_toTopOf="@id/toolbarGuideTop"
+        app:layout_constraintStart_toStartOf="@id/toolbarGuideStart"
+        app:layout_constraintTop_toTopOf="parent"
+        android:padding="12dp"
+        style="@style/BackButton"/>
+
+    <TextView
+        android:id="@+id/textViewMedia"
+        style="@style/ToolbarText"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/media_toolbar"
+        app:layout_constraintBottom_toTopOf="@id/tabLayout"
+        app:layout_constraintStart_toEndOf="@id/back_button_media"
+        app:layout_constraintTop_toTopOf="parent"
+        android:paddingStart="12dp"/>
+
+    <com.google.android.material.tabs.TabLayout
+        android:id="@+id/tabLayout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/toolbarGuideTop"
+        android:background="@color/white"
+        app:tabRippleColor="@color/grey"
+        app:tabTextColor="@color/black100"
+        app:tabIndicatorColor="@color/black100"
+        app:tabIndicatorHeight="4dp"
+        style="@style/CustomTabLayout" />
+
+    <androidx.viewpager2.widget.ViewPager2
+        android:id="@+id/viewPager"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/tabLayout"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"/>
 
 </androidx.constraintlayout.widget.ConstraintLayout>
