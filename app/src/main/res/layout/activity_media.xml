@@ -6,7 +6,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:fitsSystemWindows="true"
-    tools:context=".media.ui.activity.MediaActivity">
+    tools:context=".media.ui.MediaActivity">
 
     <androidx.constraintlayout.widget.Guideline
         android:id="@+id/toolbarGuideTop"
@@ -50,12 +50,7 @@
         android:layout_height="wrap_content"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/toolbarGuideTop"
-        android:background="@color/white"
-        app:tabRippleColor="@color/grey"
-        app:tabTextColor="@color/black100"
-        app:tabIndicatorColor="@color/black100"
-        app:tabIndicatorHeight="4dp"
-        style="@style/CustomTabLayout" />
+        style="@style/CustomTabLayout"/>
 
     <androidx.viewpager2.widget.ViewPager2
         android:id="@+id/viewPager"

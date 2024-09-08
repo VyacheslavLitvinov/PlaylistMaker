@@ -34,6 +34,9 @@
     <string name="songCountryInfo">Страна</string>
     <string name="songCountryValuePlaceholder">Неизвестная страна</string>
     <string name="createPlaylistPlaceholder">Плейлист создан</string>
-    <string name="favoritesTracksMedia">Избранные треки</string>
-    <string name="playlistsMedia">Плейлисты</string>
+    <string name="favorites_tracks_media">Избранные треки</string>
+    <string name="playlists_media">Плейлисты</string>
+    <string name="empty_playlists">Вы не создали \nни одного плейлиста</string>
+    <string name="empty_media">Ваша медиатека пуста</string>
+    <string name="new_playlist_button">Новый плейлист</string>
 </resources>
