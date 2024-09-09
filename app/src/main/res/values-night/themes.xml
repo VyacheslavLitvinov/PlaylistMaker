@@ -128,7 +128,7 @@
         <item name="android:textSize">14sp</item>
     </style>
 
-    <style name="CustomTabLayout" >
+    <style name="CustomTabLayout">
         <item name="tabIndicatorColor">@color/white</item>
         <item name="android:background">@color/black100</item>
         <item name="tabTextColor">@color/white</item>
