@@ -42,7 +42,7 @@ android {
 dependencies {
     implementation ("io.insert-koin:koin-android:3.3.0")
     implementation("androidx.core:core-ktx:1.9.0")
-    implementation("androidx.fragment:fragment-ktx:1.5.5")
+    implementation("androidx.fragment:fragment-ktx:1.8.3")
     implementation("androidx.viewpager2:viewpager2:1.1.0")
     implementation("androidx.appcompat:appcompat:1.6.1")
     implementation("com.google.android.material:material:1.11.0")

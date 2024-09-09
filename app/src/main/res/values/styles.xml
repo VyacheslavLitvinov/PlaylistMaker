@@ -126,13 +126,19 @@
         <item name="tabIndicatorColor">@color/black100</item>
         <item name="android:background">@color/white</item>
         <item name="tabTextColor">@color/black100</item>
-        <item name="textAllCaps">false</item>
     </style>
 
-    <style name="NotFoundMediaPlaceholderStyle">
+    <style name="NotFoundMediaPlaceholderStyle" parent="PlaceholderImageNotResult">
         <item name="android:drawablePadding">16dp</item>
         <item name="android:gravity">center</item>
         <item name="android:textColor">@color/black100</item>
+        <item name="android:drawableTop">@drawable/placeholder_not_found_light</item>
+    </style>
+
+    <style name="TabLayoutTextAppearance">
+        <item name="fontFamily">@font/ys_display_medium</item>
+        <item name="android:textSize">14sp</item>
+        <item name="android:textFontWeight">500</item>
     </style>
 
 </resources>
