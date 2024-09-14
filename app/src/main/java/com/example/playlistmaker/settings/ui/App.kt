@@ -5,6 +5,7 @@ import androidx.appcompat.app.AppCompatDelegate
 import com.example.playlistmaker.di.appModule
 import com.example.playlistmaker.di.dataModule
 import com.example.playlistmaker.di.interactorModule
+import com.example.playlistmaker.di.mediaModule
 import com.example.playlistmaker.di.repositoryModule
 import com.example.playlistmaker.di.viewModelModule
 import com.example.playlistmaker.settings.domain.interactor.SettingsInteractor
@@ -18,7 +19,7 @@ class App : Application() {
         super.onCreate()
         startKoin{
             androidContext(this@App)
-            modules(dataModule, interactorModule, repositoryModule, viewModelModule, appModule)
+            modules(dataModule, interactorModule, repositoryModule, viewModelModule, appModule, mediaModule)
         }
         val settingsInteractor : SettingsInteractor = getKoin().get()
         switchTheme(settingsInteractor.getThemeSettings().darkTheme)
