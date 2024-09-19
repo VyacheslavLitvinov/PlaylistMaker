@@ -6,7 +6,8 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    android:fitsSystemWindows="true">
+    android:fitsSystemWindows="true"
+    tools:context= ".search.ui.fragment.SearchFragment">
 
     <LinearLayout
         android:id="@+id/toolbar"
@@ -18,19 +19,6 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:orientation="horizontal">
-
-            <FrameLayout
-                android:id="@+id/back_button_search"
-                android:layout_width="@dimen/linear_back_button"
-                android:layout_height="@dimen/linear_back_button">
-
-                <ImageView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:src="@drawable/baseline_arrow_back_24"
-                    android:layout_gravity="center"
-                    style="@style/BackButton"/>
-            </FrameLayout>
 
             <TextView
                 android:text="@string/search"
@@ -90,7 +78,7 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:orientation="vertical"
-        tools:context = ".search.ui.activity.SearchActivity"
+        tools:context = ".search.ui.fragment.SearchFragment"
         android:paddingTop="16dp">
 
         <androidx.recyclerview.widget.RecyclerView
