@@ -151,6 +151,7 @@
             android:layout_height="wrap_content"
             android:orientation="vertical"
             android:layout_gravity="center|top"
+            android:layout_marginBottom="@dimen/margin_bottom_history_view"
             android:visibility="gone">
 
             <TextView

@@ -22,6 +22,7 @@
     <dimen name="padding_end_search_field">16dp</dimen>
     <dimen name="padding_top_search_field">8dp</dimen>
     <dimen name="padding_bottom_search_field">8dp</dimen>
+    <dimen name="margin_bottom_history_view">76dp</dimen>
 
     <dimen name="edit_text_padding_start">12dp</dimen>
     <dimen name="edit_text_padding_top_bot">10dp</dimen>
