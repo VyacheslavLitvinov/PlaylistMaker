@@ -23,6 +23,7 @@
         <item name="itemTextColor">@color/navigation_item_color</item>
         <item name="itemIconTint">@color/navigation_item_color</item>
         <item name="itemRippleColor">@color/transparent</item>
+        <item name="itemBackground">@color/transparent</item>
     </style>
 
 </resources>
