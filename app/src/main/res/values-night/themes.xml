@@ -141,4 +141,16 @@
         <item name="android:drawableTop">@drawable/placeholder_not_found_dark</item>
     </style>
 
+    <style name="CustomSwitch" parent="Widget.MaterialComponents.CompoundButton.Switch">
+        <item name="thumbTint">@color/blue</item>
+        <item name="trackTint">@color/blueSwitch</item>
+    </style>
+
+    <style name="CustomBottomNavigationView" parent="Widget.MaterialComponents.BottomNavigationView">
+        <item name="itemTextColor">@color/navigation_item_color_night</item>
+        <item name="itemIconTint">@color/navigation_item_color_night</item>
+        <item name="itemRippleColor">@color/transparent</item>
+        <item name="itemBackground">@color/transparent</item>
+    </style>
+
 </resources>

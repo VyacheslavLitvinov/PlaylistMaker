@@ -5,7 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:fitsSystemWindows="true"
-    tools:context=".media.ui.MediaActivity">
+    tools:context=".media.ui.MediaFragment">
 
     <androidx.constraintlayout.widget.Guideline
         android:id="@+id/toolbarGuideTop"
@@ -21,26 +21,15 @@
         android:orientation="vertical"
         app:layout_constraintGuide_begin="4dp" />
 
-    <ImageView
-        android:id="@+id/back_button_media"
-        style="@style/BackButton"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:padding="12dp"
-        android:src="@drawable/baseline_arrow_back_24"
-        app:layout_constraintBottom_toTopOf="@id/toolbarGuideTop"
-        app:layout_constraintStart_toStartOf="@id/toolbarGuideStart"
-        app:layout_constraintTop_toTopOf="parent" />
-
     <TextView
         android:id="@+id/textViewMedia"
         style="@style/ToolbarText"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:paddingStart="12dp"
+        android:layout_marginStart="16dp"
         android:text="@string/media_toolbar"
         app:layout_constraintBottom_toTopOf="@id/tabLayout"
-        app:layout_constraintStart_toEndOf="@id/back_button_media"
+        app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
     <com.google.android.material.tabs.TabLayout
