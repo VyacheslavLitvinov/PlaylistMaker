@@ -5,30 +5,24 @@ import android.os.Looper
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
 import com.example.playlistmaker.search.domain.api.SearchHistoryInteractor
 import com.example.playlistmaker.search.domain.api.SongsInteractor
 import com.example.playlistmaker.search.domain.models.ConsumerData
 import com.example.playlistmaker.search.domain.models.Song
 import com.example.playlistmaker.search.ui.state.SearchState
+import kotlinx.coroutines.Job
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.launch
 
 class SearchViewModel(
     private val songsInteractor: SongsInteractor,
     private val searchHistoryInteractor: SearchHistoryInteractor
 ) : ViewModel() {
 
-    private val handler = Handler(Looper.getMainLooper())
-
-    private val searchRunnable by lazy {
-        Runnable {
-            val newSearchText = lastSearchText
-            sendQuery(newSearchText)
-        }
-    }
-
+    private var searchJob: Job? = null
     private var lastSearchText = ""
-
     private val songList = mutableListOf<Song>()
-
     private val _screenStateLiveData = MutableLiveData<SearchState>()
 
     val screenStateLiveData: LiveData<SearchState>
@@ -39,9 +33,15 @@ class SearchViewModel(
         get() = _isClearInputButtonVisibleLiveData
 
     fun searchDebounce(changedText: String) {
+        if (lastSearchText == changedText){
+            return
+        }
         lastSearchText = changedText
-        handler.removeCallbacks(searchRunnable)
-        handler.postDelayed(searchRunnable, SEARCH_DEBOUNCE_DELAY_MILLIS)
+        searchJob?.cancel()
+        searchJob = viewModelScope.launch {
+            delay(SEARCH_DEBOUNCE_DELAY_MILLIS)
+            sendQuery(changedText)
+        }
     }
 
     fun onInputStateChanged(hasFocus: Boolean, searchInput: CharSequence?) {
@@ -50,7 +50,6 @@ class SearchViewModel(
         _isClearInputButtonVisibleLiveData.value = searchInput.toString().isNotEmpty()
 
         if (hasFocus && searchInput.toString().isEmpty() && searchHistory.isNotEmpty()) {
-            handler.removeCallbacks(searchRunnable)
             _screenStateLiveData.value = SearchState.History(searchHistory)
         } else if (!hasFocus || searchInput.toString().isNotEmpty()) {
             searchDebounce(searchInput.toString())
@@ -108,11 +107,6 @@ class SearchViewModel(
                 }
             }
         }
-
-    override fun onCleared() {
-        super.onCleared()
-        handler.removeCallbacks(searchRunnable)
-    }
 
     companion object {
         private const val SEARCH_DEBOUNCE_DELAY_MILLIS = 2000L
