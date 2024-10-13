@@ -1,23 +1,24 @@
 package com.example.playlistmaker.search.domain.impl
 
-import com.example.playlistmaker.search.domain.models.ConsumerData
 import com.example.playlistmaker.search.domain.api.SongsInteractor
 import com.example.playlistmaker.search.domain.api.SongsRepository
 import com.example.playlistmaker.search.domain.models.Resource
+import com.example.playlistmaker.search.domain.models.Song
+import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.map
 
 class SongsInteractorImpl(private val repository: SongsRepository) : SongsInteractor {
 
-    override fun searchSongs(expression: String, consumer: SongsInteractor.SongsConsumer) {
-        Thread {
-            val response = repository.searchSongs(expression)
-            when (response) {
+    override fun searchSongs(expression: String): Flow<Pair<List<Song>?, Int?>> {
+        return repository.searchSongs(expression).map { result ->
+            when(result) {
                 is Resource.Success -> {
-                    consumer.consume(ConsumerData.Data(response.data))
+                    Pair(result.data, null)
                 }
                 is Resource.Error -> {
-                    consumer.consume(ConsumerData.Error(response.message.toString()))
+                    Pair(null, result.message)
                 }
             }
-        }.start()
+        }
     }
 }

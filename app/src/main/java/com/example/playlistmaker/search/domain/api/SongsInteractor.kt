@@ -1,11 +1,8 @@
 package com.example.playlistmaker.search.domain.api
 
-import com.example.playlistmaker.search.domain.models.ConsumerData
 import com.example.playlistmaker.search.domain.models.Song
+import kotlinx.coroutines.flow.Flow
 
 interface SongsInteractor {
-    fun searchSongs(expression: String, consumer: SongsConsumer)
-    fun interface SongsConsumer {
-        fun consume(data: ConsumerData<ArrayList<Song>>)
-    }
+    fun searchSongs(expression: String): Flow<Pair<List<Song>?, Int?>>
 }

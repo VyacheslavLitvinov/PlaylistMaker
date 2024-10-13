@@ -1,14 +1,11 @@
 package com.example.playlistmaker.search.ui.view_model
 
-import android.os.Handler
-import android.os.Looper
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.playlistmaker.search.domain.api.SearchHistoryInteractor
 import com.example.playlistmaker.search.domain.api.SongsInteractor
-import com.example.playlistmaker.search.domain.models.ConsumerData
 import com.example.playlistmaker.search.domain.models.Song
 import com.example.playlistmaker.search.ui.state.SearchState
 import kotlinx.coroutines.Job
@@ -22,7 +19,6 @@ class SearchViewModel(
 
     private var searchJob: Job? = null
     private var lastSearchText = ""
-    private val songList = mutableListOf<Song>()
     private val _screenStateLiveData = MutableLiveData<SearchState>()
 
     val screenStateLiveData: LiveData<SearchState>
@@ -40,7 +36,7 @@ class SearchViewModel(
         searchJob?.cancel()
         searchJob = viewModelScope.launch {
             delay(SEARCH_DEBOUNCE_DELAY_MILLIS)
-            sendQuery(changedText)
+            searchRequest(changedText)
         }
     }
 
@@ -67,7 +63,7 @@ class SearchViewModel(
 
     fun repeatLastRequest() {
         _screenStateLiveData.value = SearchState.Loading
-        sendQuery(lastSearchText)
+        searchRequest(lastSearchText)
     }
 
     fun addSongToSearchHistory(song: Song) {
@@ -82,31 +78,40 @@ class SearchViewModel(
         return searchHistoryInteractor.getSearchHistory()
     }
 
-    private fun sendQuery(newSearchText: String) {
+    private fun searchRequest(newSearchText: String) {
         if (newSearchText.isNotBlank()) {
+
             _screenStateLiveData.value = SearchState.Loading
 
-            songsInteractor.searchSongs(newSearchText) { data ->
-                    if (_screenStateLiveData.value != SearchState.Loading) {
-                        return@searchSongs
-                    }
-                    when (data) {
-                        is ConsumerData.Data -> {
-                            if (!data.data.isNullOrEmpty()) {
-                                songList.clear()
-                                songList.addAll(data.data)
-                                _screenStateLiveData.postValue(SearchState.Content(ArrayList(songList)))
-                            } else {
-                                _screenStateLiveData.postValue(SearchState.NotFound)
-                            }
-                        }
-                        is ConsumerData.Error -> {
-                            _screenStateLiveData.postValue(SearchState.Error)
-                        }
-                    }
+            viewModelScope.launch {
+                songsInteractor
+                    .searchSongs(newSearchText)
+                    .collect { pair ->
+                    processResult(pair.first, pair.second)
                 }
             }
         }
+    }
+
+    private fun processResult(data: List<Song>?, error: Int?) {
+        val songList = mutableListOf<Song>()
+        if (data != null) {
+            songList.addAll(data)
+        }
+        when {
+            error != null -> {
+                renderState(SearchState.Error)
+            }
+            songList.isEmpty() -> {
+                renderState(SearchState.NotFound)
+            }
+            else -> renderState(SearchState.Content(songList))
+        }
+    }
+
+    private fun renderState(state: SearchState) {
+        _screenStateLiveData.postValue(state)
+    }
 
     companion object {
         private const val SEARCH_DEBOUNCE_DELAY_MILLIS = 2000L

@@ -6,28 +6,38 @@ import com.example.playlistmaker.search.data.dto.SongsSearchRequest
 import com.example.playlistmaker.search.domain.api.SongsRepository
 import com.example.playlistmaker.search.domain.models.Resource
 import com.example.playlistmaker.search.domain.models.Song
+import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.flow
 
 class SongsRepositoryImpl(private val networkClient: NetworkClient) : SongsRepository {
-    override fun searchSongs(expression: String): Resource<ArrayList<Song>> {
+    override fun searchSongs(expression: String): Flow<Resource<List<Song>>> = flow{
         val response = networkClient.doRequest(SongsSearchRequest(expression))
-        return if (response is SongsSearchResponse) {
-            val songList = response.results.map { songDto ->
-                Song(
-                    trackId = songDto.trackId,
-                    trackName = songDto.trackName,
-                    artistName = songDto.artistName,
-                    trackTimeMillis = songDto.trackTimeMillis,
-                    artworkUrl100 = songDto.artworkUrl100,
-                    collectionName = songDto.collectionName,
-                    releaseDate = songDto.releaseDate,
-                    primaryGenreName = songDto.primaryGenreName,
-                    country = songDto.country,
-                    previewUrl = songDto.previewUrl
-                )
+        when (response.resultCode) {
+            -1 -> {
+                emit(Resource.Error(response.resultCode))
             }
-            Resource.Success(ArrayList(songList))
-        } else {
-            Resource.Error(response.resultCode)
+            200 -> {
+                with(response as SongsSearchResponse) {
+                    val data = results.map {
+                        Song(
+                            trackId = it.trackId,
+                            trackName = it.trackName,
+                            artistName = it.artistName,
+                            trackTimeMillis = it.trackTimeMillis,
+                            artworkUrl100 = it.artworkUrl100,
+                            collectionName = it.collectionName,
+                            releaseDate = it.releaseDate,
+                            primaryGenreName = it.primaryGenreName,
+                            country = it.country,
+                            previewUrl = it.previewUrl
+                        )
+                    }
+                    emit(Resource.Success(data))
+                }
+            }
+            else -> {
+                emit(Resource.Error(response.resultCode))
+            }
         }
     }
 }
