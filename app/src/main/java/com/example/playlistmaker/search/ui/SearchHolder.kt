@@ -28,7 +28,7 @@ class SearchHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
             .into(cover)
         nameTrack.text = item.trackName
         artist.text = item.artistName
-        duration.text = SimpleDateFormat("mm:ss", Locale.getDefault()).format(293000L)
+        duration.text = SimpleDateFormat("mm:ss", Locale.getDefault()).format(item.trackTimeMillis)
         artist.requestLayout()
     }
 }
