@@ -1,34 +1,24 @@
 package com.example.playlistmaker.search.ui.view_model
 
-import android.os.Handler
-import android.os.Looper
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
 import com.example.playlistmaker.search.domain.api.SearchHistoryInteractor
 import com.example.playlistmaker.search.domain.api.SongsInteractor
-import com.example.playlistmaker.search.domain.models.ConsumerData
 import com.example.playlistmaker.search.domain.models.Song
 import com.example.playlistmaker.search.ui.state.SearchState
+import kotlinx.coroutines.Job
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.launch
 
 class SearchViewModel(
     private val songsInteractor: SongsInteractor,
     private val searchHistoryInteractor: SearchHistoryInteractor
 ) : ViewModel() {
 
-    private val handler = Handler(Looper.getMainLooper())
-
-    private val searchRunnable by lazy {
-        Runnable {
-            val newSearchText = lastSearchText
-            sendQuery(newSearchText)
-        }
-    }
-
+    private var searchJob: Job? = null
     private var lastSearchText = ""
-
-    private val songList = mutableListOf<Song>()
-
     private val _screenStateLiveData = MutableLiveData<SearchState>()
 
     val screenStateLiveData: LiveData<SearchState>
@@ -39,9 +29,15 @@ class SearchViewModel(
         get() = _isClearInputButtonVisibleLiveData
 
     fun searchDebounce(changedText: String) {
+        if (lastSearchText == changedText){
+            return
+        }
         lastSearchText = changedText
-        handler.removeCallbacks(searchRunnable)
-        handler.postDelayed(searchRunnable, SEARCH_DEBOUNCE_DELAY_MILLIS)
+        searchJob?.cancel()
+        searchJob = viewModelScope.launch {
+            delay(SEARCH_DEBOUNCE_DELAY_MILLIS)
+            searchRequest(changedText)
+        }
     }
 
     fun onInputStateChanged(hasFocus: Boolean, searchInput: CharSequence?) {
@@ -50,7 +46,6 @@ class SearchViewModel(
         _isClearInputButtonVisibleLiveData.value = searchInput.toString().isNotEmpty()
 
         if (hasFocus && searchInput.toString().isEmpty() && searchHistory.isNotEmpty()) {
-            handler.removeCallbacks(searchRunnable)
             _screenStateLiveData.value = SearchState.History(searchHistory)
         } else if (!hasFocus || searchInput.toString().isNotEmpty()) {
             searchDebounce(searchInput.toString())
@@ -68,7 +63,7 @@ class SearchViewModel(
 
     fun repeatLastRequest() {
         _screenStateLiveData.value = SearchState.Loading
-        sendQuery(lastSearchText)
+        searchRequest(lastSearchText)
     }
 
     fun addSongToSearchHistory(song: Song) {
@@ -83,35 +78,39 @@ class SearchViewModel(
         return searchHistoryInteractor.getSearchHistory()
     }
 
-    private fun sendQuery(newSearchText: String) {
+    private fun searchRequest(newSearchText: String) {
         if (newSearchText.isNotBlank()) {
+
             _screenStateLiveData.value = SearchState.Loading
 
-            songsInteractor.searchSongs(newSearchText) { data ->
-                    if (_screenStateLiveData.value != SearchState.Loading) {
-                        return@searchSongs
-                    }
-                    when (data) {
-                        is ConsumerData.Data -> {
-                            if (!data.data.isNullOrEmpty()) {
-                                songList.clear()
-                                songList.addAll(data.data)
-                                _screenStateLiveData.postValue(SearchState.Content(ArrayList(songList)))
-                            } else {
-                                _screenStateLiveData.postValue(SearchState.NotFound)
-                            }
-                        }
-                        is ConsumerData.Error -> {
-                            _screenStateLiveData.postValue(SearchState.Error)
-                        }
-                    }
+            viewModelScope.launch {
+                songsInteractor
+                    .searchSongs(newSearchText)
+                    .collect { pair ->
+                    processResult(pair.first, pair.second)
                 }
             }
         }
+    }
 
-    override fun onCleared() {
-        super.onCleared()
-        handler.removeCallbacks(searchRunnable)
+    private fun processResult(data: List<Song>?, error: Int?) {
+        val songList = mutableListOf<Song>()
+        if (data != null) {
+            songList.addAll(data)
+        }
+        when {
+            error != null -> {
+                renderState(SearchState.Error)
+            }
+            songList.isEmpty() -> {
+                renderState(SearchState.NotFound)
+            }
+            else -> renderState(SearchState.Content(songList))
+        }
+    }
+
+    private fun renderState(state: SearchState) {
+        _screenStateLiveData.postValue(state)
     }
 
     companion object {

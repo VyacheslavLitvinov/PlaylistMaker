@@ -5,8 +5,12 @@ import android.os.Looper
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
 import com.example.playlistmaker.player.domain.api.MediaPlayerInteractor
 import com.example.playlistmaker.player.domain.models.PlayerState
+import kotlinx.coroutines.Job
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.launch
 import java.text.SimpleDateFormat
 import java.util.Locale
 
@@ -14,17 +18,13 @@ class PlayerViewModel(private val mediaPlayerInteractor: MediaPlayerInteractor) 
 
     companion object {
         const val DEFAULT_TIMER = 0
-        const val DELAY = 500L
+        const val DELAY = 300L
         const val FORMAT_TIME = "mm:ss"
         const val IMAGE_FORMAT = "512x512bb.jpg"
     }
 
-    private val mainThreadHandler = Handler(Looper.getMainLooper())
-
-    private val dateFormat by lazy {
-        SimpleDateFormat(FORMAT_TIME, Locale.getDefault())
-    }
-
+    private var timerJob: Job? = null
+    private val dateFormat = SimpleDateFormat(FORMAT_TIME, Locale.getDefault())
     private val playerState = MutableLiveData(PlayerState.STATE_DEFAULT)
     val state: LiveData<PlayerState> get() = playerState
 
@@ -36,13 +36,13 @@ class PlayerViewModel(private val mediaPlayerInteractor: MediaPlayerInteractor) 
         get() = isPlayerPrepared
 
     private var songUrl: String? = null
-    private var isTimerRunning = false
 
     fun preparePlayer(url: String, startPosition: Int = 0, shouldPlay: Boolean = false) {
         songUrl = url
         mediaPlayerInteractor.prepare(url, {
             isPlayerPrepared = true
             seekTo(startPosition)
+            _currentTime.postValue(formatTime(startPosition))
             if (shouldPlay) {
                 startPlayer()
             } else {
@@ -51,7 +51,7 @@ class PlayerViewModel(private val mediaPlayerInteractor: MediaPlayerInteractor) 
         }, {
             isPlayerPrepared = false
             playerState.value = PlayerState.STATE_COMPLETE
-            stopTimer()
+            timerJob?.cancel()
             _currentTime.postValue(formatTime(DEFAULT_TIMER))
         })
     }
@@ -68,14 +68,14 @@ class PlayerViewModel(private val mediaPlayerInteractor: MediaPlayerInteractor) 
 
     fun pausePlayer() {
         mediaPlayerInteractor.pausePlayer()
+        timerJob?.cancel()
         playerState.value = PlayerState.STATE_PAUSED
-        stopTimer()
     }
 
     fun resetPlayer() {
         mediaPlayerInteractor.resetPlayer()
         playerState.value = PlayerState.STATE_DEFAULT
-        stopTimer()
+        timerJob?.cancel()
         _currentTime.postValue(formatTime(DEFAULT_TIMER))
     }
 
@@ -100,14 +100,6 @@ class PlayerViewModel(private val mediaPlayerInteractor: MediaPlayerInteractor) 
         }
     }
 
-    private val updateTimeRunnable = object : Runnable {
-        override fun run() {
-            val currentPosition = mediaPlayerInteractor.getCurrentPosition()
-            _currentTime.postValue(formatTime(currentPosition))
-            mainThreadHandler.postDelayed(this, DELAY)
-        }
-    }
-
     fun formatArtworkUrl(artworkUrl: String?): String? {
         return artworkUrl?.replaceAfterLast("/", IMAGE_FORMAT)
     }
@@ -121,22 +113,14 @@ class PlayerViewModel(private val mediaPlayerInteractor: MediaPlayerInteractor) 
     }
 
     private fun startTimer() {
-        if (!isTimerRunning) {
-            isTimerRunning = true
-            mainThreadHandler.post(updateTimeRunnable)
+        timerJob = viewModelScope.launch {
+            while (mediaPlayerInteractor.isPlaying()){
+                delay(DELAY)
+                val currentPosition = mediaPlayerInteractor.getCurrentPosition()
+                _currentTime.postValue(formatTime(currentPosition))
+                playerState.postValue(PlayerState.STATE_PLAYING)
+            }
         }
-    }
-
-    private fun stopTimer() {
-        if (isTimerRunning) {
-            isTimerRunning = false
-            mainThreadHandler.removeCallbacks(updateTimeRunnable)
-        }
-    }
-
-    fun startTimerFromPosition(position: Int) {
-        _currentTime.value = position.toString()
-        startTimer()
     }
 
 }

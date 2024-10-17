@@ -9,6 +9,7 @@ import com.bumptech.glide.Glide
 import com.bumptech.glide.load.resource.bitmap.RoundedCorners
 import com.example.playlistmaker.Constants
 import com.example.playlistmaker.R
+import com.example.playlistmaker.databinding.ActivityPlayerBinding
 import com.example.playlistmaker.player.domain.models.PlayerState
 import com.example.playlistmaker.player.ui.view_model.PlayerViewModel
 import com.example.playlistmaker.search.domain.models.Song
@@ -23,40 +24,19 @@ class PlayerActivity : AppCompatActivity() {
         const val SONG_URL = "SongUrl"
     }
 
-    private lateinit var songImage: ImageView
-    private lateinit var songName: TextView
-    private lateinit var songArtist: TextView
-    private lateinit var durationInfoValue: TextView
-    private lateinit var albumInfoValue: TextView
-    private lateinit var yearInfoValue: TextView
-    private lateinit var genreInfoValue: TextView
-    private lateinit var countryInfoValue: TextView
-    private lateinit var playButton: ImageView
-    private lateinit var timeView: TextView
+    private lateinit var binding: ActivityPlayerBinding
     private val viewModel by viewModel<PlayerViewModel>()
     private var songUrl: String? = null
-
     private var currentPosition = 0
     private var isPlaying = false
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
-        setContentView(R.layout.activity_player)
+        binding = ActivityPlayerBinding.inflate(layoutInflater)
+        setContentView(binding.root)
 
-        songImage = findViewById(R.id.songImage)
-        songName = findViewById(R.id.songName)
-        songArtist = findViewById(R.id.songArtist)
-        durationInfoValue = findViewById(R.id.durationInfoValue)
-        albumInfoValue = findViewById(R.id.albumInfoValue)
-        yearInfoValue = findViewById(R.id.yearInfoValue)
-        genreInfoValue = findViewById(R.id.genreInfoValue)
-        countryInfoValue = findViewById(R.id.countryInfoValue)
-        playButton = findViewById(R.id.playButton)
-        timeView = findViewById(R.id.timeView)
-
-        val backButton = findViewById<ImageView>(R.id.backButton)
-        backButton.setOnClickListener {
+        binding.backButton.setOnClickListener {
             finish()
             viewModel.resetPlayer()
         }
@@ -78,34 +58,34 @@ class PlayerActivity : AppCompatActivity() {
             .fitCenter()
             .placeholder(R.drawable.album_placeholder_player)
             .transform(RoundedCorners(10))
-            .into(songImage)
+            .into(binding.songImage)
 
-        songName.text = song.trackName
-        songArtist.text = song.artistName
-        durationInfoValue.text = viewModel.formatTime(song.trackTimeMillis)
-        albumInfoValue.text = song.collectionName
-        yearInfoValue.text = viewModel.formatReleaseDate(song.releaseDate)
-        genreInfoValue.text = song.primaryGenreName
-        countryInfoValue.text = song.country
+        binding.songName.text = song.trackName
+        binding.songArtist.text = song.artistName
+        binding.durationInfoValue.text = viewModel.formatTime(song.trackTimeMillis)
+        binding.albumInfoValue.text = song.collectionName
+        binding.yearInfoValue.text = viewModel.formatReleaseDate(song.releaseDate)
+        binding.genreInfoValue.text = song.primaryGenreName
+        binding.countryInfoValue.text = song.country
 
-        playButton.setOnClickListener {
+        binding.playButton.setOnClickListener {
             viewModel.togglePlayback()
         }
 
         viewModel.state.observe(this) { state ->
             when (state) {
                 PlayerState.STATE_PLAYING -> {
-                    playButton.setImageResource(R.drawable.pause_button)
+                    binding.playButton.setImageResource(R.drawable.pause_button)
                 }
                 PlayerState.STATE_PAUSED, PlayerState.STATE_COMPLETE -> {
-                    playButton.setImageResource(R.drawable.play_button)
+                    binding.playButton.setImageResource(R.drawable.play_button)
                 }
                 PlayerState.STATE_DEFAULT -> Unit
             }
         }
 
         viewModel.currentTime.observe(this) { time ->
-            timeView.text = time
+            binding.timeView.text = time
         }
     }
 
@@ -122,7 +102,6 @@ class PlayerActivity : AppCompatActivity() {
         val wasPlaying = savedInstanceState.getBoolean(IS_PLAYING, false)
         songUrl = savedInstanceState.getString(SONG_URL)
         viewModel.preparePlayer(songUrl ?: "", startPosition = restoredPosition, shouldPlay = wasPlaying)
-        viewModel.startTimerFromPosition(restoredPosition)
     }
 
     override fun onPause() {

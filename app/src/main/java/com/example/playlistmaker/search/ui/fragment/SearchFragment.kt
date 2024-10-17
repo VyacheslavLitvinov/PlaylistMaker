@@ -16,6 +16,7 @@ import androidx.core.view.WindowInsetsCompat
 import androidx.core.view.isVisible
 import androidx.core.widget.addTextChangedListener
 import androidx.fragment.app.Fragment
+import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.playlistmaker.Constants
 import com.example.playlistmaker.R
@@ -26,6 +27,8 @@ import com.example.playlistmaker.search.ui.state.MessageState
 import com.example.playlistmaker.search.ui.state.SearchState
 import com.example.playlistmaker.search.ui.view_model.SearchViewModel
 import com.google.gson.Gson
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.launch
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
 class SearchFragment : Fragment() {
@@ -41,8 +44,6 @@ class SearchFragment : Fragment() {
 
     private lateinit var adapter: SearchAdapter
     private lateinit var historyAdapter: SearchAdapter
-
-    private val handler = Handler(Looper.getMainLooper())
     private var isClickAllowed = true
 
     private val clickListener = SearchAdapter.SongClickListener { song, _ ->
@@ -183,7 +184,10 @@ class SearchFragment : Fragment() {
         val current = isClickAllowed
         if (isClickAllowed) {
             isClickAllowed = false
-            handler.postDelayed({ isClickAllowed = true }, CLICK_DELAY)
+            viewLifecycleOwner.lifecycleScope.launch {
+                delay(CLICK_DELAY)
+                isClickAllowed = true
+            }
         }
         return current
     }
