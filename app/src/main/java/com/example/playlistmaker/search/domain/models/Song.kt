@@ -11,4 +11,5 @@ data class Song (
     val primaryGenreName: String?,
     val country: String?,
     val previewUrl: String?,
+    var isFavorite: Boolean = false,
 )

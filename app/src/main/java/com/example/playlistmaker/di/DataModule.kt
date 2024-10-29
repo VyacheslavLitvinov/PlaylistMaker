@@ -3,7 +3,9 @@ package com.example.playlistmaker.di
 import android.content.Context
 import android.content.SharedPreferences
 import android.net.ConnectivityManager
+import androidx.room.Room
 import com.example.playlistmaker.Constants
+import com.example.playlistmaker.search.data.db.AppDatabase
 import com.example.playlistmaker.search.data.NetworkClient
 import com.example.playlistmaker.search.data.network.ItunesSearchAPI
 import com.example.playlistmaker.search.data.network.RetrofitNetworkClient
@@ -50,6 +52,11 @@ val dataModule = module {
 
     single<ConnectivityManager> {
         androidContext().getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager
+    }
+
+    single {
+        Room.databaseBuilder(androidContext(), AppDatabase::class.java, "database.db")
+            .build()
     }
 
 }
