@@ -1,9 +1,6 @@
 package com.example.playlistmaker.search.data.repository
 
 import com.example.playlistmaker.search.data.NetworkClient
-import com.example.playlistmaker.search.data.db.AppDatabase
-import com.example.playlistmaker.search.data.db.converter.SongDbConvertor
-import com.example.playlistmaker.search.data.dto.SongDto
 import com.example.playlistmaker.search.data.dto.SongsSearchResponse
 import com.example.playlistmaker.search.data.dto.SongsSearchRequest
 import com.example.playlistmaker.search.domain.api.SongsRepository
@@ -13,9 +10,7 @@ import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
 
 class SongsRepositoryImpl(
-    private val networkClient: NetworkClient,
-    private val appDatabase: AppDatabase,
-    private val songDbConvertor: SongDbConvertor,
+    private val networkClient: NetworkClient
 ) : SongsRepository {
     override fun searchSongs(expression: String): Flow<Resource<List<Song>>> = flow{
         val response = networkClient.doRequest(SongsSearchRequest(expression))
@@ -39,7 +34,6 @@ class SongsRepositoryImpl(
                             previewUrl = it.previewUrl
                         )
                     }
-                    saveSong(results)
                     emit(Resource.Success(data))
                 }
             }
@@ -48,10 +42,4 @@ class SongsRepositoryImpl(
             }
         }
     }
-
-    private suspend fun saveSong(songs: List<SongDto>){
-        val songsEntitys = songs.map { song -> songDbConvertor.map(song) }
-        appDatabase.songDao().insertSongIntoFavorites(songsEntitys)
-    }
-
 }

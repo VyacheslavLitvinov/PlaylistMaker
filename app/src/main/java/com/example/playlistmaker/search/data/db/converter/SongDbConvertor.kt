@@ -1,12 +1,10 @@
 package com.example.playlistmaker.search.data.db.converter
 
-import com.example.playlistmaker.search.data.db.dao.SongDao
 import com.example.playlistmaker.search.data.db.entity.SongEntity
-import com.example.playlistmaker.search.data.dto.SongDto
 import com.example.playlistmaker.search.domain.models.Song
 
 class SongDbConvertor {
-    fun map(song: SongDto): SongEntity {
+    fun map(song: Song): SongEntity {
         return SongEntity(song.trackId, song.trackName, song.artistName, song.trackTimeMillis,
         song.artworkUrl100, song.collectionName, song.releaseDate, song.primaryGenreName,
         song.country, song.previewUrl

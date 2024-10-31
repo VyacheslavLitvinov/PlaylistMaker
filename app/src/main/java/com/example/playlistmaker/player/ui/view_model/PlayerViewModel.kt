@@ -1,20 +1,24 @@
 package com.example.playlistmaker.player.ui.view_model
 
-import android.os.Handler
-import android.os.Looper
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.playlistmaker.player.domain.api.MediaPlayerInteractor
 import com.example.playlistmaker.player.domain.models.PlayerState
+import com.example.playlistmaker.search.data.db.interactor.FavoritesInteractor
+import com.example.playlistmaker.search.domain.models.Song
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import java.text.SimpleDateFormat
 import java.util.Locale
 
-class PlayerViewModel(private val mediaPlayerInteractor: MediaPlayerInteractor) : ViewModel() {
+class PlayerViewModel(
+    private val mediaPlayerInteractor: MediaPlayerInteractor,
+    private val favoritesInteractor: FavoritesInteractor,
+) : ViewModel() {
 
     companion object {
         const val DEFAULT_TIMER = 0
@@ -36,6 +40,29 @@ class PlayerViewModel(private val mediaPlayerInteractor: MediaPlayerInteractor) 
         get() = isPlayerPrepared
 
     private var songUrl: String? = null
+
+    private val _isFavorite = MutableLiveData<Boolean>()
+    val isFavorite: LiveData<Boolean>
+        get() = _isFavorite
+
+    fun onFavoriteClicked(song: Song){
+        viewModelScope.launch(Dispatchers.IO) {
+            if (song.isFavorite) {
+                favoritesInteractor.deleteFavoritesSong(song.trackId)
+            } else {
+                favoritesInteractor.addFavoritesSongs(song)
+            }
+            song.isFavorite = !song.isFavorite
+            _isFavorite.postValue(song.isFavorite)
+        }
+    }
+
+    fun loadFavoriteState(trackId: Long) {
+        viewModelScope.launch(Dispatchers.IO) {
+            val isFavorite = favoritesInteractor.isFavorite(trackId)
+            _isFavorite.postValue(isFavorite)
+        }
+    }
 
     fun preparePlayer(url: String, startPosition: Int = 0, shouldPlay: Boolean = false) {
         songUrl = url

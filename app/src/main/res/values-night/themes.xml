@@ -121,6 +121,10 @@
         <item name="android:tint">@color/white</item>
     </style>
 
+    <style name="FavoriteButton">
+        <item name="android:tint">@color/white</item>
+    </style>
+
     <style name="CreatePlaylistButton">
         <item name="android:backgroundTint">@color/white</item>
         <item name="android:fontFamily">@font/ys_display_regular</item>

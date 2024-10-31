@@ -1,8 +1,6 @@
 package com.example.playlistmaker.player.ui.activity
 
 import android.os.Bundle
-import android.widget.ImageView
-import android.widget.TextView
 import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
 import com.bumptech.glide.Glide
@@ -42,6 +40,8 @@ class PlayerActivity : AppCompatActivity() {
         }
 
         val song = Gson().fromJson(intent.getStringExtra(Constants.SONG), Song::class.java)
+
+        viewModel.loadFavoriteState(song.trackId)
 
         if (savedInstanceState != null) {
             currentPosition = savedInstanceState.getInt(CURRENT_POSITION, 0)
@@ -87,6 +87,19 @@ class PlayerActivity : AppCompatActivity() {
         viewModel.currentTime.observe(this) { time ->
             binding.timeView.text = time
         }
+
+        binding.favoriteBorder.setOnClickListener {
+            viewModel.onFavoriteClicked(song)
+        }
+
+        viewModel.isFavorite.observe(this) {isFavorite ->
+            if (isFavorite){
+                binding.favoriteBorder.setImageResource(R.drawable.favorite_active)
+            } else {
+                binding.favoriteBorder.setImageResource(R.drawable.favorite_border)
+            }
+        }
+
     }
 
     override fun onSaveInstanceState(outState: Bundle) {

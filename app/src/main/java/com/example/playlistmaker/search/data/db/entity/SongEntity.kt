@@ -6,7 +6,7 @@ import androidx.room.PrimaryKey
 @Entity(tableName = "song_table")
 data class SongEntity(
     @PrimaryKey
-    val trackId: Int,
+    val trackId: Long,
     val trackName: String,
     val artistName: String,
     val trackTimeMillis: Int,
