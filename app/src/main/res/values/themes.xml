@@ -7,13 +7,6 @@
         <!-- <item name="colorPrimary">@color/my_dark_primary</item> -->
     </style>
 
-    <style name="MainMenu.Theme.PlaylistMaker" parent="Theme.MaterialComponents.DayNight.NoActionBar">
-        <!-- Customize your dark theme here. -->
-        <item name="android:statusBarColor">@color/blue</item>
-        <item name="android:background">@color/blue</item>
-        <!-- <item name="colorPrimary">@color/my_dark_primary</item> -->
-    </style>
-
     <style name="CustomSwitch" parent="Widget.MaterialComponents.CompoundButton.Switch">
         <item name="thumbTint">@color/grey</item>
         <item name="trackTint">@color/search_string</item>

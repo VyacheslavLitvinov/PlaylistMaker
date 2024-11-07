@@ -7,13 +7,6 @@
         <!-- <item name="colorPrimary">@color/my_dark_primary</item> -->
     </style>
 
-    <style name="MainMenu.Theme.PlaylistMaker" parent="Theme.MaterialComponents.DayNight.NoActionBar">
-        <!-- Customize your dark theme here. -->
-        <item name="android:statusBarColor">@color/black100</item>
-        <item name="android:background">@color/black100</item>
-        <!-- <item name="colorPrimary">@color/my_dark_primary</item> -->
-    </style>
-
     <style name="SettingsViewButtonText">
         <item name="android:layout_marginTop">@dimen/primary_text_size_settings</item>
         <item name="android:layout_marginBottom">@dimen/primary_text_size_settings</item>

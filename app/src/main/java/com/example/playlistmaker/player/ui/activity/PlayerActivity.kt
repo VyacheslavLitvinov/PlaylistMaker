@@ -1,10 +1,9 @@
 package com.example.playlistmaker.player.ui.activity
 
 import android.os.Bundle
-import android.widget.ImageView
-import android.widget.TextView
 import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
+import androidx.lifecycle.lifecycleScope
 import com.bumptech.glide.Glide
 import com.bumptech.glide.load.resource.bitmap.RoundedCorners
 import com.example.playlistmaker.Constants
@@ -14,6 +13,7 @@ import com.example.playlistmaker.player.domain.models.PlayerState
 import com.example.playlistmaker.player.ui.view_model.PlayerViewModel
 import com.example.playlistmaker.search.domain.models.Song
 import com.google.gson.Gson
+import kotlinx.coroutines.launch
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
 class PlayerActivity : AppCompatActivity() {
@@ -42,6 +42,8 @@ class PlayerActivity : AppCompatActivity() {
         }
 
         val song = Gson().fromJson(intent.getStringExtra(Constants.SONG), Song::class.java)
+
+        viewModel.loadFavoriteState(song.trackId)
 
         if (savedInstanceState != null) {
             currentPosition = savedInstanceState.getInt(CURRENT_POSITION, 0)
@@ -87,6 +89,21 @@ class PlayerActivity : AppCompatActivity() {
         viewModel.currentTime.observe(this) { time ->
             binding.timeView.text = time
         }
+
+        binding.favoriteBorder.setOnClickListener {
+            viewModel.onFavoriteClicked(song)
+        }
+
+        lifecycleScope.launch {
+            viewModel.isFavorite.collect { isFavorite ->
+                if (isFavorite) {
+                    binding.favoriteBorder.setImageResource(R.drawable.favorite_active)
+                } else {
+                    binding.favoriteBorder.setImageResource(R.drawable.favorite_border)
+                }
+            }
+        }
+
     }
 
     override fun onSaveInstanceState(outState: Bundle) {

@@ -1,6 +1,8 @@
 package com.example.playlistmaker.di
 
 import android.media.MediaPlayer
+import com.example.playlistmaker.search.data.db.interactor.FavoritesInteractor
+import com.example.playlistmaker.search.domain.impl.FavoritesInteractorImpl
 import com.example.playlistmaker.player.domain.api.MediaPlayerInteractor
 import com.example.playlistmaker.player.domain.interactors.MediaPlayerInteractorImpl
 import com.example.playlistmaker.search.domain.api.SearchHistoryInteractor
@@ -37,5 +39,9 @@ val interactorModule = module {
     }
 
     single<MediaPlayer> { MediaPlayer() }
+
+    single<FavoritesInteractor> {
+        FavoritesInteractorImpl(get())
+    }
 
 }

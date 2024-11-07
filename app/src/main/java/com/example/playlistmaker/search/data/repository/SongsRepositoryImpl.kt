@@ -9,7 +9,9 @@ import com.example.playlistmaker.search.domain.models.Song
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
 
-class SongsRepositoryImpl(private val networkClient: NetworkClient) : SongsRepository {
+class SongsRepositoryImpl(
+    private val networkClient: NetworkClient
+) : SongsRepository {
     override fun searchSongs(expression: String): Flow<Resource<List<Song>>> = flow{
         val response = networkClient.doRequest(SongsSearchRequest(expression))
         when (response.resultCode) {

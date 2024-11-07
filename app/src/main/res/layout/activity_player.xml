@@ -90,18 +90,6 @@
                 app:layout_constraintTop_toBottomOf="@id/songName" />
 
             <ImageView
-                android:id="@+id/queueButton"
-                style="@style/PlayButton"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:src="@drawable/queue_button"
-                app:layout_constraintBottom_toBottomOf="@id/playButton"
-                app:layout_constraintEnd_toStartOf="@id/playButton"
-                app:layout_constraintHorizontal_chainStyle="spread"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="@id/playButton" />
-
-            <ImageView
                 android:id="@+id/playButton"
                 style="@style/PlayButton"
                 android:layout_width="wrap_content"
@@ -115,13 +103,23 @@
 
             <ImageView
                 android:id="@+id/favoriteBorder"
-                style="@style/PlayButton"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:src="@drawable/favorite_border"
                 app:layout_constraintBottom_toBottomOf="@id/playButton"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toEndOf="@id/playButton"
+                app:layout_constraintTop_toTopOf="@id/playButton"
+                app:layout_constraintVertical_bias="0.612"/>
+
+            <ImageView
+                android:id="@+id/queueButton"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:src="@drawable/queue_button"
+                app:layout_constraintBottom_toBottomOf="@id/playButton"
+                app:layout_constraintEnd_toStartOf="@id/playButton"
+                app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="@id/playButton" />
 
             <TextView

@@ -17,7 +17,11 @@
         android:id="@+id/playerActivity"
         android:name="com.example.playlistmaker.player.ui.activity.PlayerActivity"
         android:label="activity_player"
-        tools:layout="@layout/activity_player" />
+        tools:layout="@layout/activity_player">
+        <argument
+            android:name="songId"
+            app:argType="long" />
+    </activity>
     <fragment
         android:id="@+id/mediaFragment"
         android:name="com.example.playlistmaker.media.ui.MediaFragment"
@@ -30,7 +34,7 @@
         tools:layout="@layout/fragment_settings" />
     <fragment
         android:id="@+id/favoritesFragment"
-        android:name="com.example.playlistmaker.media.ui.FavoritesFragment"
+        android:name="com.example.playlistmaker.media.ui.favorites.FavoritesFragment"
         android:label="fragment_favorites"
         tools:layout="@layout/fragment_favorites" />
     <fragment

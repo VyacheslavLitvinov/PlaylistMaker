@@ -1,5 +1,8 @@
 package com.example.playlistmaker.di
 
+import com.example.playlistmaker.search.data.db.converter.SongDbConvertor
+import com.example.playlistmaker.search.data.repository.FavoritesRepositoryImpl
+import com.example.playlistmaker.search.domain.FavoritesRepository
 import com.example.playlistmaker.search.data.repository.SearchHistoryRepositoryImpl
 import com.example.playlistmaker.search.data.repository.SongsRepositoryImpl
 import com.example.playlistmaker.search.domain.api.SearchHistoryRepository
@@ -20,6 +23,12 @@ val repositoryModule = module {
 
     single<DarkThemeRepository> {
         DarkThemeRepositoryImpl(get())
+    }
+
+    factory { SongDbConvertor() }
+
+    single<FavoritesRepository> {
+        FavoritesRepositoryImpl(get(), get())
     }
 
 }
