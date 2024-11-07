@@ -34,7 +34,7 @@ class FavoritesRepositoryImpl(
     }
 
     private fun convertFromSongEntity(songs: List<SongEntity>): List<Song>{
-        return songs.map { song -> songDbConvertor.map(song) }
+        return songs.map(songDbConvertor::map)
     }
 
 }

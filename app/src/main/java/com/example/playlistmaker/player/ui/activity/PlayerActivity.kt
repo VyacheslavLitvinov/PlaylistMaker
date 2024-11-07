@@ -3,6 +3,7 @@ package com.example.playlistmaker.player.ui.activity
 import android.os.Bundle
 import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
+import androidx.lifecycle.lifecycleScope
 import com.bumptech.glide.Glide
 import com.bumptech.glide.load.resource.bitmap.RoundedCorners
 import com.example.playlistmaker.Constants
@@ -12,6 +13,7 @@ import com.example.playlistmaker.player.domain.models.PlayerState
 import com.example.playlistmaker.player.ui.view_model.PlayerViewModel
 import com.example.playlistmaker.search.domain.models.Song
 import com.google.gson.Gson
+import kotlinx.coroutines.launch
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
 class PlayerActivity : AppCompatActivity() {
@@ -92,11 +94,13 @@ class PlayerActivity : AppCompatActivity() {
             viewModel.onFavoriteClicked(song)
         }
 
-        viewModel.isFavorite.observe(this) {isFavorite ->
-            if (isFavorite){
-                binding.favoriteBorder.setImageResource(R.drawable.favorite_active)
-            } else {
-                binding.favoriteBorder.setImageResource(R.drawable.favorite_border)
+        lifecycleScope.launch {
+            viewModel.isFavorite.collect { isFavorite ->
+                if (isFavorite) {
+                    binding.favoriteBorder.setImageResource(R.drawable.favorite_active)
+                } else {
+                    binding.favoriteBorder.setImageResource(R.drawable.favorite_border)
+                }
             }
         }
 

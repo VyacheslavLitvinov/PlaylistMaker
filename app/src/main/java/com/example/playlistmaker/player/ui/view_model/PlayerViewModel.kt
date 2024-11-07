@@ -11,6 +11,8 @@ import com.example.playlistmaker.search.domain.models.Song
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.delay
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.launch
 import java.text.SimpleDateFormat
 import java.util.Locale
@@ -41,8 +43,8 @@ class PlayerViewModel(
 
     private var songUrl: String? = null
 
-    private val _isFavorite = MutableLiveData<Boolean>()
-    val isFavorite: LiveData<Boolean>
+    private val _isFavorite = MutableStateFlow<Boolean>(false)
+    val isFavorite: StateFlow<Boolean>
         get() = _isFavorite
 
     fun onFavoriteClicked(song: Song){
@@ -53,14 +55,14 @@ class PlayerViewModel(
                 favoritesInteractor.addFavoritesSongs(song)
             }
             song.isFavorite = !song.isFavorite
-            _isFavorite.postValue(song.isFavorite)
+            _isFavorite.emit(song.isFavorite)
         }
     }
 
     fun loadFavoriteState(trackId: Long) {
         viewModelScope.launch(Dispatchers.IO) {
             val isFavorite = favoritesInteractor.isFavorite(trackId)
-            _isFavorite.postValue(isFavorite)
+            _isFavorite.emit(isFavorite)
         }
     }
 
