@@ -3,6 +3,7 @@ package com.example.playlistmaker.ui.root
 import android.os.Bundle
 import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.view.isVisible
 import androidx.navigation.fragment.NavHostFragment
 import androidx.navigation.ui.setupWithNavController
 import com.example.playlistmaker.R
@@ -22,5 +23,11 @@ class RootActivity: AppCompatActivity() {
         val navController = navHostFragment.navController
 
         binding.bottomNavigationView.setupWithNavController(navController)
+
+        navController.addOnDestinationChangedListener { _, destination, _ ->
+            binding.bottomNavigationView.isVisible = destination.id != R.id.createPlaylistFragment && destination.id != R.id.playerFragment
+            binding.dividerView.isVisible = destination.id != R.id.createPlaylistFragment && destination.id != R.id.playerFragment
+        }
+
     }
 }

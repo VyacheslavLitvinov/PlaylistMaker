@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_gravity="center_horizontal"
+    android:foreground="?attr/selectableItemBackground">
+
+    <androidx.cardview.widget.CardView
+        android:layout_marginTop="@dimen/indent_16"
+        android:id="@+id/playlistCover"
+        android:layout_width="@dimen/layout_playlist_grid"
+        android:layout_height="@dimen/layout_playlist_grid"
+        app:cardCornerRadius="8dp"
+        app:cardElevation="0dp"
+        app:cardUseCompatPadding="false"
+        app:layout_constraintBottom_toTopOf="@id/playlistName"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
+
+        <ImageView
+            android:id="@+id/playlistImage"
+            android:layout_width="@dimen/layout_playlist_grid"
+            android:layout_height="@dimen/layout_playlist_grid"
+            android:layout_marginBottom="8dp"
+            android:scaleType="centerCrop"
+            tools:src="@drawable/placeholder_without_cover"/>
+
+    </androidx.cardview.widget.CardView>
+
+    <com.google.android.material.textview.MaterialTextView
+        android:id="@+id/playlistName"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:ellipsize="end"
+        android:maxLines="1"
+        android:textColor="?attr/colorSecondary"
+        app:layout_constrainedWidth="true"
+        app:layout_constraintBottom_toTopOf="@id/playlistCounterSongs"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0"
+        app:layout_constraintStart_toStartOf="@id/playlistCover"
+        app:layout_constraintTop_toBottomOf="@id/playlistCover"
+        app:layout_constraintVertical_chainStyle="packed"
+        tools:text="Название плейлиста"
+        android:textAppearance="@style/FontYSDisplayRegularSize12Weight400"/>
+
+    <com.google.android.material.textview.MaterialTextView
+        android:id="@+id/playlistCounterSongs"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:ellipsize="end"
+        android:maxLines="1"
+        android:textColor="?attr/colorSecondary"
+        app:layout_constrainedWidth="true"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0"
+        app:layout_constraintHorizontal_chainStyle="packed"
+        app:layout_constraintStart_toStartOf="@id/playlistCover"
+        app:layout_constraintTop_toBottomOf="@id/playlistName"
+        tools:text="Количество треков"
+        android:textAppearance="@style/FontYSDisplayRegularSize12Weight400"/>
+
+</androidx.constraintlayout.widget.ConstraintLayout>

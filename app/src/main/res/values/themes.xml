@@ -1,15 +1,18 @@
 <resources xmlns:tools="http://schemas.android.com/tools">
     <!-- Base application theme. -->
     <style name="Base.Theme.PlaylistMaker" parent="Theme.MaterialComponents.DayNight.NoActionBar">
-        <!-- Customize your dark theme here. -->
-        <item name="android:statusBarColor">@color/blue</item>
+        <item name="colorPrimary">@color/white</item>
+        <item name="colorSecondary">@color/black100</item>
         <item name="android:background">@color/white</item>
-        <!-- <item name="colorPrimary">@color/my_dark_primary</item> -->
+        <item name="main_activity_background">@color/blue</item>
+        <item name="settings_activity_ic_tint">@color/grey</item>
+        <item name="search_string_background_color">@color/grey100</item>
+        <item name="search_string_item_color">@color/grey</item>
     </style>
 
     <style name="CustomSwitch" parent="Widget.MaterialComponents.CompoundButton.Switch">
         <item name="thumbTint">@color/grey</item>
-        <item name="trackTint">@color/search_string</item>
+        <item name="trackTint">@color/grey100</item>
     </style>
 
     <style name="CustomBottomNavigationView" parent="Widget.MaterialComponents.BottomNavigationView">

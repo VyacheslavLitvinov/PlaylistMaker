@@ -1,10 +1,7 @@
 package com.example.playlistmaker.search.ui.fragment
 
 import android.app.Activity
-import android.content.Intent
 import android.os.Bundle
-import android.os.Handler
-import android.os.Looper
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -17,11 +14,12 @@ import androidx.core.view.isVisible
 import androidx.core.widget.addTextChangedListener
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.lifecycleScope
+import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.playlistmaker.Constants
 import com.example.playlistmaker.R
 import com.example.playlistmaker.databinding.FragmentSearchBinding
-import com.example.playlistmaker.player.ui.activity.PlayerActivity
+import com.example.playlistmaker.search.domain.models.Song
 import com.example.playlistmaker.search.ui.SearchAdapter
 import com.example.playlistmaker.search.ui.state.MessageState
 import com.example.playlistmaker.search.ui.state.SearchState
@@ -49,9 +47,7 @@ class SearchFragment : Fragment() {
     private val clickListener = SearchAdapter.SongClickListener { song, _ ->
         if (clickDebounce()) {
             viewModel.addSongToSearchHistory(song)
-            val playerIntent = Intent(requireContext(), PlayerActivity::class.java)
-            playerIntent.putExtra(Constants.SONG, Gson().toJson(song))
-            startActivity(playerIntent)
+            navigateToPlayer(song)
         }
     }
 
@@ -181,15 +177,17 @@ class SearchFragment : Fragment() {
     }
 
     private fun clickDebounce(): Boolean {
-        val current = isClickAllowed
-        if (isClickAllowed) {
-            isClickAllowed = false
-            viewLifecycleOwner.lifecycleScope.launch {
+        if (!isClickAllowed) return false
+        isClickAllowed = false
+
+        viewLifecycleOwner.lifecycleScope.launch {
+            try {
                 delay(CLICK_DELAY)
+            } finally {
                 isClickAllowed = true
             }
         }
-        return current
+        return true
     }
 
     private fun showLoading(){
@@ -258,4 +256,10 @@ class SearchFragment : Fragment() {
         showMessage(MessageState.NOTHING_FOUND)
     }
 
+    private fun navigateToPlayer(song: Song) {
+        val bundle = Bundle().apply {
+            putString(Constants.SONG, Gson().toJson(song))
+        }
+        findNavController().navigate(R.id.action_searchFragment_to_playerFragment, bundle)
+    }
 }

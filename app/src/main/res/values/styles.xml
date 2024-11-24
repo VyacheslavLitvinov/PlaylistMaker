@@ -53,7 +53,7 @@
     </style>
 
     <style name="ClearSearchButton">
-        <item name="android:backgroundTint">@color/search_string</item>
+        <item name="android:backgroundTint">@color/grey100</item>
         <item name="android:tint">@color/placeholder_search_string</item>
     </style>
 
@@ -98,6 +98,17 @@
         <item name="android:letterSpacing">0</item>
     </style>
 
+    <style name="CreateButton">
+        <item name="android:textColor">@color/white</item>
+        <item name="android:fontFamily">@font/ys_display_medium</item>
+        <item name="cornerRadius">8dp</item>
+        <item name="android:textAllCaps">false</item>
+        <item name="android:letterSpacing">0</item>
+        <item name="android:textSize">@dimen/indent_16</item>
+        <item name="android:padding">12dp</item>
+        <item name="backgroundTint">@null</item>
+    </style>
+
     <style name="SongsInfo">
         <item name="android:textColor">@color/grey</item>
         <item name="android:textSize">13sp</item>
@@ -139,6 +150,52 @@
         <item name="fontFamily">@font/ys_display_medium</item>
         <item name="android:textSize">14sp</item>
         <item name="android:textFontWeight">500</item>
+    </style>
+
+    <style name="BottomSheetPlaylists">
+        <item name="android:background">@drawable/rounded_rectangle_day</item>
+    </style>
+
+    <style name="RectangleBottomSheet">
+        <item name="android:background">@color/grey</item>
+    </style>
+
+    <style name="AddToPlaylist">
+        <item name="android:background">@color/transparent</item>
+        <item name="android:textColor">@color/black100</item>
+        <item name="android:textSize">19sp</item>
+        <item name="fontFamily">@font/ys_display_medium</item>
+    </style>
+
+    <style name="CustomOutlineBox" parent="Widget.MaterialComponents.TextInputLayout.OutlinedBox">
+        <item name="boxStrokeColor">@color/text_input_layout_stroke_color</item>
+        <item name="boxStrokeWidth">1dp</item>
+        <item name="boxStrokeWidthFocused">1dp</item>
+        <item name="android:textColorHint">?attr/colorSecondary</item>
+        <item name="hintTextColor">@color/blue</item>
+        <item name="hintTextAppearance">@style/FontYSDisplayRegularSize12Weight400</item>
+    </style>
+
+    <style name="FontYSDisplayRegularSize12Weight400">
+        <item name="fontFamily">@font/ys_display_regular</item>
+        <item name="android:textSize">12sp</item>
+        <item name="android:textFontWeight">400</item>
+    </style>
+
+    <style name="FontYSDisplayRegularSize16Weight400">
+        <item name="fontFamily">@font/ys_display_regular</item>
+        <item name="android:textSize">16sp</item>
+        <item name="android:textFontWeight">400</item>
+    </style>
+
+    <style name="MaterialAlertDialog_Center" parent="@style/ThemeOverlay.MaterialComponents.MaterialAlertDialog">
+        <item name="buttonBarPositiveButtonStyle">@style/DialogButtonStyle</item>
+        <item name="buttonBarNegativeButtonStyle">@style/DialogButtonStyle</item>
+    </style>
+
+    <style name="DialogButtonStyle" parent="@style/Widget.MaterialComponents.Button.TextButton.Dialog">
+        <item name="android:textColor">@color/blue</item>
+
     </style>
 
 </resources>
