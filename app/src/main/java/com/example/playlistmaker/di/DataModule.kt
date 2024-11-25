@@ -4,7 +4,6 @@ import android.content.Context
 import android.content.SharedPreferences
 import android.net.ConnectivityManager
 import androidx.room.Room
-import com.example.playlistmaker.Constants
 import com.example.playlistmaker.search.data.db.AppDatabase
 import com.example.playlistmaker.search.data.NetworkClient
 import com.example.playlistmaker.search.data.network.ItunesSearchAPI
@@ -59,4 +58,10 @@ val dataModule = module {
             .build()
     }
 
+    single {
+        get<AppDatabase>().songDao()
+    }
+    single {
+        get<AppDatabase>().playlistDao()
+    }
 }

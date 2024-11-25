@@ -29,5 +29,8 @@
     <dimen name="edit_text_padding_icon">8dp</dimen>
 
     <dimen name="height_toolbar_guideline">56dp</dimen>
+    <dimen name="indent_with_bottom_navigation_panel">64dp</dimen>
+    <dimen name="layout_playlist_grid">160dp</dimen>
+    <dimen name="layout_playlist_player">45dp</dimen>
 
 </resources>

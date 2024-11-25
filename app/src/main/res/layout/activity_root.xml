@@ -23,7 +23,7 @@
         android:id="@+id/divider_view"
         android:layout_width="match_parent"
         android:layout_height="0.5dp"
-        android:background="@color/search_string"
+        android:background="@color/grey100"
         app:layout_constraintBottom_toTopOf="@id/bottomNavigationView"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent" />

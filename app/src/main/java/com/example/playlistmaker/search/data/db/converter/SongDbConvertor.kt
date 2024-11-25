@@ -7,15 +7,15 @@ class SongDbConvertor {
     fun map(song: Song): SongEntity {
         return SongEntity(
             song.trackId,
-            song.trackName,
-            song.artistName,
+            song.trackName?:"",
+            song.artistName?:"",
             song.trackTimeMillis,
-            song.artworkUrl100,
-            song.collectionName,
-            song.releaseDate,
-            song.primaryGenreName,
-            song.country,
-            song.previewUrl
+            song.artworkUrl100?:"",
+            song.collectionName?:"",
+            song.releaseDate?:"",
+            song.primaryGenreName?:"",
+            song.country?:"",
+            song.previewUrl?:""
         )
     }
 

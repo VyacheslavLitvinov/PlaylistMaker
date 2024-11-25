@@ -4,6 +4,8 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.example.playlistmaker.media.domain.entity.Playlist
+import com.example.playlistmaker.media.domain.repository.PlaylistRepository
 import com.example.playlistmaker.player.domain.api.MediaPlayerInteractor
 import com.example.playlistmaker.player.domain.models.PlayerState
 import com.example.playlistmaker.search.data.db.interactor.FavoritesInteractor
@@ -14,12 +16,14 @@ import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 import java.text.SimpleDateFormat
 import java.util.Locale
 
 class PlayerViewModel(
     private val mediaPlayerInteractor: MediaPlayerInteractor,
     private val favoritesInteractor: FavoritesInteractor,
+    private val playlistRepository: PlaylistRepository
 ) : ViewModel() {
 
     companion object {
@@ -47,7 +51,17 @@ class PlayerViewModel(
     val isFavorite: StateFlow<Boolean>
         get() = _isFavorite
 
-    fun onFavoriteClicked(song: Song){
+    private val _playlists = MutableLiveData<List<Playlist>>()
+    val playlists: LiveData<List<Playlist>> get() = _playlists
+
+    fun loadPlaylists() {
+        viewModelScope.launch {
+            val playlistsList = playlistRepository.getAllPlaylists()
+            _playlists.postValue(playlistsList)
+        }
+    }
+
+    fun onFavoriteClicked(song: Song) {
         viewModelScope.launch(Dispatchers.IO) {
             if (song.isFavorite) {
                 favoritesInteractor.deleteFavoritesSong(song.trackId)
@@ -152,4 +166,18 @@ class PlayerViewModel(
         }
     }
 
+    fun isTrackInPlaylist(playlistId: Long, trackId: Long, callback: (Boolean) -> Unit) {
+        viewModelScope.launch(Dispatchers.IO) {
+            val result = playlistRepository.isTrackInPlaylist(playlistId, trackId)
+            withContext(Dispatchers.Main) {
+                callback(result)
+            }
+        }
+    }
+
+    fun addTrackToPlaylist(playlistId: Long, trackId: Long) {
+        viewModelScope.launch(Dispatchers.IO) {
+            playlistRepository.addTrackToPlaylist(playlistId, trackId)
+        }
+    }
 }
