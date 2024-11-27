@@ -5,6 +5,7 @@ import com.example.playlistmaker.media.data.db.dao.PlaylistDao
 import com.example.playlistmaker.media.data.db.entity.PlaylistTrackEntity
 import com.example.playlistmaker.media.domain.entity.Playlist
 import com.example.playlistmaker.media.domain.repository.PlaylistRepository
+import com.example.playlistmaker.search.domain.models.Song
 
 class PlaylistRepositoryImpl(
     private val dao: PlaylistDao,
@@ -35,4 +36,11 @@ class PlaylistRepositoryImpl(
         return dao.getTrackCountInPlaylist(playlistId)
     }
 
+    override suspend fun getPlaylistById(playlistId: Long): Playlist {
+        return convertor.map(dao.getPlaylistById(playlistId))
+    }
+
+    override suspend fun getTracksByPlaylistId(playlistId: Long): List<Song> {
+        return dao.getTracksByPlaylistId(playlistId).map { convertor.map(it) }
+    }
 }

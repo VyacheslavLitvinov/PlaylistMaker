@@ -11,10 +11,22 @@ import com.example.playlistmaker.R
 import com.example.playlistmaker.databinding.FragmentPlaylistBinding
 import org.koin.androidx.viewmodel.ext.android.viewModel
 import androidx.lifecycle.Observer
+import androidx.lifecycle.lifecycleScope
+import com.example.playlistmaker.Constants
+import com.example.playlistmaker.media.domain.entity.Playlist
+import com.example.playlistmaker.media.ui.favorites.FavoritesFragment
+import com.example.playlistmaker.search.domain.models.Song
+import com.example.playlistmaker.search.ui.SearchAdapter
+import com.google.gson.Gson
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.launch
 
 class PlaylistFragment : Fragment() {
 
+    private var isClickAllowed = true
     companion object {
+        const val CLICK_DELAY = 1000L
+
         fun newInstance(): PlaylistFragment {
             return PlaylistFragment()
         }
@@ -24,6 +36,12 @@ class PlaylistFragment : Fragment() {
     private val binding get() = _binding!!
     private val viewModel: PlaylistsViewModel by viewModel()
     private lateinit var playlistsAdapter: PlaylistsAdapter
+
+    private val clickListener = { playlistId: Long ->
+        if (clickDebounce()) {
+            navigateToPlaylistInfo(playlistId)
+        }
+    }
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -45,7 +63,7 @@ class PlaylistFragment : Fragment() {
 
     private fun setupRecyclerView() {
         binding.recyclerviewGrid.layoutManager = GridLayoutManager(requireContext(), 2)
-        playlistsAdapter = PlaylistsAdapter()
+        playlistsAdapter = PlaylistsAdapter(clickListener)
         binding.recyclerviewGrid.adapter = playlistsAdapter
     }
 
@@ -71,5 +89,26 @@ class PlaylistFragment : Fragment() {
     override fun onDestroyView() {
         super.onDestroyView()
         _binding = null
+    }
+
+    private fun clickDebounce(): Boolean {
+        if (!isClickAllowed) return false
+        isClickAllowed = false
+
+        viewLifecycleOwner.lifecycleScope.launch {
+            try {
+                delay(CLICK_DELAY)
+            } finally {
+                isClickAllowed = true
+            }
+        }
+        return true
+    }
+
+    private fun navigateToPlaylistInfo(playlistId: Long) {
+        val bundle = Bundle().apply {
+            putLong("playlistId", playlistId)
+        }
+        findNavController().navigate(R.id.action_mediaFragment_to_playlistInfoFragment, bundle)
     }
 }
