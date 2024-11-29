@@ -87,7 +87,7 @@
             android:name="playlistId"
             app:argType="long" />
         <action
-            android:id="@+id/action_playlistInfoFragment_to_redactorPlayListFragment"
-            app:destination="@id/createPlaylistFragment" />
+            android:id="@+id/action_playlistInfoFragment_to_playerFragment"
+            app:destination="@id/playerFragment" />
     </fragment>
 </navigation>

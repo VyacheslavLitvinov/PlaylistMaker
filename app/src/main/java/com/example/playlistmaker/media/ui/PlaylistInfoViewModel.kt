@@ -1,16 +1,13 @@
 package com.example.playlistmaker.media.ui
 
-import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.example.playlistmaker.media.data.db.entity.PlaylistEntity
-import com.example.playlistmaker.media.data.db.entity.PlaylistTrackEntity
 import com.example.playlistmaker.media.domain.interactor.PlaylistsInteractor
 import com.example.playlistmaker.media.ui.playlists.PlaylistInfo
+import com.example.playlistmaker.search.domain.models.Song
 import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import java.text.SimpleDateFormat
@@ -22,6 +19,9 @@ class PlaylistInfoViewModel(
 
     private val _playlistInfo = MutableLiveData<PlaylistInfo>()
     val playlistInfo: LiveData<PlaylistInfo> get() = _playlistInfo
+
+    private val _tracks = MutableLiveData<List<Song>>()
+    val tracks: LiveData<List<Song>> get() = _tracks
 
     fun loadPlaylistInfo(playlistId: Long) {
         viewModelScope.launch {
@@ -43,6 +43,16 @@ class PlaylistInfoViewModel(
                     totalDuration = formattedDuration
                 )
             )
+            _tracks.postValue(tracks)
+        }
+    }
+
+    fun removeTrackFromPlaylist(playlistId: Long, trackId: Long) {
+        viewModelScope.launch {
+            withContext(Dispatchers.IO) {
+                playlistsInteractor.deleteTrackFromPlaylist(playlistId, trackId)
+                loadPlaylistInfo(playlistId)
+            }
         }
     }
 }

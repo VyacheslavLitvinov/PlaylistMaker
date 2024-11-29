@@ -1,40 +1,27 @@
 package com.example.playlistmaker.media.ui
 
-import android.content.Intent
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Toast
 import androidx.fragment.app.Fragment
-import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.bumptech.glide.Glide
 import com.example.playlistmaker.Constants
 import com.example.playlistmaker.R
-import com.example.playlistmaker.databinding.FragmentFavoritesBinding
 import com.example.playlistmaker.databinding.FragmentInfoPlaylistBinding
-import com.example.playlistmaker.media.domain.FavouriteSongState
-import com.example.playlistmaker.media.ui.favorites.FavoritesFragment
-import com.example.playlistmaker.media.ui.favorites.FavouriteSongsViewModel
-import com.example.playlistmaker.search.domain.models.Song
-import com.example.playlistmaker.search.ui.SearchAdapter
 import com.google.android.material.bottomsheet.BottomSheetBehavior
-import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.google.gson.Gson
-import com.google.gson.reflect.TypeToken
-import kotlinx.coroutines.delay
-import kotlinx.coroutines.launch
 import org.koin.androidx.viewmodel.ext.android.viewModel
-import java.text.SimpleDateFormat
-import java.util.Locale
 
 class PlaylistInfoFragment : Fragment() {
 
     private var _binding: FragmentInfoPlaylistBinding? = null
     private val binding get() = _binding!!
     private val viewModel: PlaylistInfoViewModel by viewModel()
+    private lateinit var adapter: PlaylistInfoAdapter
+    private var playlistId: Long = 0
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -47,7 +34,7 @@ class PlaylistInfoFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        val playlistId = arguments?.getLong("playlistId") ?: 0
+        playlistId = arguments?.getLong("playlistId") ?: 0
         viewModel.loadPlaylistInfo(playlistId)
 
         viewModel.playlistInfo.observe(viewLifecycleOwner) { playlistInfo ->
@@ -67,8 +54,45 @@ class PlaylistInfoFragment : Fragment() {
             }
         }
 
+        viewModel.tracks.observe(viewLifecycleOwner) { tracks ->
+            adapter.updateTracks(tracks)
+        }
+
         binding.backButton.setOnClickListener {
             findNavController().navigateUp()
+        }
+
+        setupBottomSheet()
+        setupRecyclerView()
+    }
+
+    private fun setupBottomSheet() {
+        val bottomSheet = binding.playlistsBottomSheet
+        val behavior = BottomSheetBehavior.from(bottomSheet)
+        behavior.isHideable = false
+        behavior.state = BottomSheetBehavior.STATE_COLLAPSED
+    }
+
+    private fun setupRecyclerView() {
+        adapter = PlaylistInfoAdapter(
+            clickListener = { trackId ->
+                navigateToPlayer(trackId)
+            },
+            deleteClickListener = { trackId ->
+                viewModel.removeTrackFromPlaylist(playlistId, trackId)
+            }
+        )
+        binding.recyclerviewTracksPlaylist.adapter = adapter
+        binding.recyclerviewTracksPlaylist.layoutManager = LinearLayoutManager(context)
+    }
+
+    private fun navigateToPlayer(trackId: Long) {
+        val track = adapter.getTrackById(trackId)
+        track?.let {
+            val bundle = Bundle().apply {
+                putString(Constants.SONG, Gson().toJson(it))
+            }
+            findNavController().navigate(R.id.action_playlistInfoFragment_to_playerFragment, bundle)
         }
     }
 
