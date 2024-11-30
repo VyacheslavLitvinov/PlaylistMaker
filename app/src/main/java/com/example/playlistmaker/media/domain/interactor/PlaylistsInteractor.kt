@@ -26,4 +26,7 @@ interface PlaylistsInteractor {
         country: String,
         previewUrl: String
     )
+
+    suspend fun deletePlaylist(playlistId: Long)
+
 }

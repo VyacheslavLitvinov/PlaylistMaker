@@ -32,5 +32,6 @@
     <dimen name="indent_with_bottom_navigation_panel">64dp</dimen>
     <dimen name="layout_playlist_grid">160dp</dimen>
     <dimen name="layout_playlist_player">45dp</dimen>
+    <dimen name="bottom_sheet_peek_height">266dp</dimen>
 
 </resources>

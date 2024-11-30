@@ -55,4 +55,10 @@ class PlaylistInfoViewModel(
             }
         }
     }
+
+    fun deletePlaylist(playlistId: Long) {
+        viewModelScope.launch {
+            playlistsInteractor.deletePlaylist(playlistId)
+        }
+    }
 }

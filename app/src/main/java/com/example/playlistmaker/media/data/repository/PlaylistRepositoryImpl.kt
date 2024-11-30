@@ -67,7 +67,14 @@ class PlaylistRepositoryImpl(
     override suspend fun deleteTrackFromPlaylist(playlistId: Long, trackId: Long) {
         appDatabase.playlistSongDao().deletePlaylistTrack(playlistId, trackId)
         appDatabase.playlistDao().updateSongCount(playlistId)
-        cleanUpUnusedTracks(trackId)
+
+        val playlists = appDatabase.playlistDao().getAllPlaylistsWithTrackCounts()
+        val trackInAnyPlaylist = playlists.any { playlist ->
+            appDatabase.playlistSongDao().isTrackInPlaylist(playlist.id, trackId)
+        }
+        if (!trackInAnyPlaylist) {
+            appDatabase.songDao().deleteSong(trackId)
+        }
     }
 
     private suspend fun cleanUpUnusedTracks(trackId: Long) {
@@ -84,5 +91,16 @@ class PlaylistRepositoryImpl(
         val playlistTracks = appDatabase.playlistSongDao().getPlaylistTracks(playlistId)
         val tracks = playlistTracks.map { convertor.map(it) }
         return tracks
+    }
+
+    override suspend fun deletePlaylist(playlistId: Long) {
+        appDatabase.playlistDao().deletePlaylist(playlistId)
+        appDatabase.playlistDao().deletePlaylistTracks(playlistId)
+        val allTracks = appDatabase.songDao().getAllSongs()
+        val usedTracks = appDatabase.playlistSongDao().getAllPlaylistTracks().map { it.trackId }
+        val unusedTracks = allTracks.filter { it.trackId !in usedTracks }
+        unusedTracks.forEach {
+            appDatabase.songDao().deleteSong(it.trackId)
+        }
     }
 }

@@ -5,6 +5,8 @@ import android.widget.ImageView
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
+import com.bumptech.glide.load.resource.bitmap.CenterCrop
+import com.bumptech.glide.load.resource.bitmap.RoundedCorners
 import com.example.playlistmaker.R
 import com.example.playlistmaker.search.domain.models.Song
 import java.text.SimpleDateFormat
@@ -26,6 +28,7 @@ class PlaylistInfoViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView)
         } else {
             Glide.with(itemView.context)
                 .load(item.artworkUrl100)
+                .transform(CenterCrop(), RoundedCorners(10))
                 .placeholder(R.drawable.placeholder_without_cover)
                 .into(coverImageView)
         }

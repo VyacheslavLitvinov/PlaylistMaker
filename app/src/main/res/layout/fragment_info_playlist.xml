@@ -153,6 +153,7 @@
                         />
 
                     <ImageView
+                        android:id="@+id/menuButton"
                         app:tint="@color/black100"
                         android:backgroundTint="@color/grey100"
                         android:layout_width="wrap_content"
@@ -163,7 +164,6 @@
                         android:layout_marginTop="@dimen/indent_16"
                         android:layout_marginStart="@dimen/indent_16"
                         />
-
 
                 </androidx.constraintlayout.widget.ConstraintLayout>
 
@@ -187,43 +187,135 @@
     </androidx.constraintlayout.widget.ConstraintLayout>
 
     <LinearLayout
-        android:id="@+id/playlists_bottom_sheet"
+        style="@style/BottomSheetPlaylists"
+        android:id="@+id/playlistBottomSheet"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:background="@color/transparent"
-        android:orientation="horizontal"
-        app:behavior_hideable="true"
-        app:behavior_peekHeight="330dp"
+        android:orientation="vertical"
+        app:behavior_peekHeight="@dimen/bottom_sheet_peek_height"
+        android:paddingHorizontal="16dp"
+        app:behavior_hideable="false"
         app:layout_behavior="com.google.android.material.bottomsheet.BottomSheetBehavior">
 
-        <LinearLayout
-            style="@style/BottomSheetPlaylists"
-            android:id="@+id/standard_bottom_sheet"
+        <View
+            style="@style/RectangleBottomSheet"
+            android:id="@+id/rectangleBottomSheetPlaylist"
+            android:layout_width="50dp"
+            android:layout_height="4dp"
+            android:layout_gravity="center"
+            android:layout_marginTop="8dp" />
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:background="@color/transparent"
+            android:id="@+id/recyclerviewSongsPlaylist"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:orientation="vertical"
-            android:paddingHorizontal="16dp"
-            app:behavior_hideable="false"
-            app:layout_behavior="com.google.android.material.bottomsheet.BottomSheetBehavior">
+            android:layout_marginTop="24dp"
+            tools:listitem="@layout/track_item"
+            android:layout_marginBottom="@dimen/indent_with_bottom_navigation_panel"/>
 
-            <View
-                style="@style/RectangleBottomSheet"
-                android:id="@+id/rectangle_bottom_sheet"
-                android:layout_width="50dp"
-                android:layout_height="4dp"
-                android:layout_gravity="center"
-                android:layout_marginTop="8dp" />
+    </LinearLayout>
 
-            <androidx.recyclerview.widget.RecyclerView
-                android:background="@color/transparent"
-                android:id="@+id/recyclerview_tracks_playlist"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:layout_marginTop="24dp"
-                tools:listitem="@layout/track_item"
-                android:layout_marginBottom="@dimen/indent_with_bottom_navigation_panel"/>
+    <View android:id="@+id/overlay"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@color/overlay"
+        android:clickable="true"
+        android:focusable="true"
+        android:visibility="gone"/>
 
-        </LinearLayout>
+    <LinearLayout
+        style="@style/BottomSheetPlaylists"
+        android:id="@+id/menuBottomSheet"
+        android:layout_width="match_parent"
+        android:layout_height="383dp"
+        android:orientation="vertical"
+        android:paddingHorizontal="16dp"
+        app:behavior_hideable="true"
+        android:visibility="gone"
+        app:layout_behavior="com.google.android.material.bottomsheet.BottomSheetBehavior">
+
+        <View
+            style="@style/RectangleBottomSheet"
+            android:id="@+id/rectangleBottomSheetMenu"
+            android:layout_width="50dp"
+            android:layout_height="4dp"
+            android:layout_gravity="center"
+            android:layout_marginTop="8dp" />
+        
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="20dp">
+
+            <ImageView
+                android:id="@+id/imageMenuBottomSheet"
+                android:layout_width="45dp"
+                android:layout_height="45dp"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                android:src="@drawable/placeholder_without_cover" />
+
+            <TextView
+                android:id="@+id/nameMenuBottomSheet"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textSize="16sp"
+                android:fontFamily="@font/ys_display_regular"
+                android:layout_marginTop="6dp"
+                android:layout_marginStart="@dimen/indent_8"
+                app:layout_constraintStart_toEndOf="@id/imageMenuBottomSheet"
+                app:layout_constraintTop_toTopOf="@id/imageMenuBottomSheet"
+                android:text="@string/namePlaylist"
+                />
+
+            <TextView
+                android:id="@+id/countMenuBottomSheet"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textSize="11sp"
+                android:fontFamily="@font/ys_display_medium"
+                android:layout_marginStart="@dimen/indent_8"
+                app:layout_constraintStart_toEndOf="@id/imageMenuBottomSheet"
+                app:layout_constraintTop_toBottomOf="@id/nameMenuBottomSheet"
+                android:text="@string/empty_songs"
+                />
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+        <TextView
+            android:textColor="@color/black100"
+            android:fontFamily="@font/ys_display_regular"
+            android:id="@+id/menuShare"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Поделиться"
+            android:textSize="16sp"
+            android:layout_marginBottom="21dp"
+            android:layout_marginTop="37dp"
+            />
+
+        <TextView
+            android:textColor="@color/black100"
+            android:fontFamily="@font/ys_display_regular"
+            android:id="@+id/menuEdit"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Редактировать информацию"
+            android:textSize="16sp"
+            android:layout_marginBottom="21dp"
+            android:layout_marginTop="21dp"/>
+
+        <TextView
+            android:textColor="@color/black100"
+            android:fontFamily="@font/ys_display_regular"
+            android:id="@+id/menuDelete"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Удалить плейлист"
+            android:textSize="16sp"
+            android:layout_marginBottom="21dp"
+            android:layout_marginTop="21dp"/>
 
     </LinearLayout>
 
