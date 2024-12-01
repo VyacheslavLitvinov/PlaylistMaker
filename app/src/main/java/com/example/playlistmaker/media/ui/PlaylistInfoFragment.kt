@@ -22,6 +22,7 @@ import com.google.android.material.bottomsheet.BottomSheetBehavior
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.google.gson.Gson
 import org.koin.androidx.viewmodel.ext.android.viewModel
+import java.io.File
 
 class PlaylistInfoFragment : Fragment() {
 
@@ -51,21 +52,28 @@ class PlaylistInfoFragment : Fragment() {
             playlistInfo?.let {
                 binding.playlistName.text = it.name
                 binding.playlistContext.text = it.description ?: ""
-                binding.playlistDuration.text = it.totalDuration
-                binding.quantitySongs.text = "${it.songCount} треков"
+                binding.playlistDuration.text = formatDurationInMinutes(it.totalDuration)
+                binding.quantitySongs.text = formatTrackCount(it.songCount)
 
                 if (it.coverImagePath.isNullOrEmpty()) {
                     binding.songImage.setImageResource(R.drawable.placeholder_without_cover)
                 } else {
-                    Glide.with(this)
-                        .load(it.coverImagePath)
-                        .into(binding.songImage)
+                    val file = File(it.coverImagePath)
+                    if (file.exists()) {
+                        Glide.with(this)
+                            .load(it.coverImagePath)
+                            .placeholder(R.drawable.placeholder_without_cover)
+                            .into(binding.songImage)
+                    } else {
+                        binding.songImage.setImageResource(R.drawable.placeholder_without_cover)
+                    }
                 }
             }
         }
 
         viewModel.tracks.observe(viewLifecycleOwner) { tracks ->
             adapter.updateTracks(tracks)
+            emptyPlaylist()
         }
 
         binding.backButton.setOnClickListener {
@@ -108,6 +116,13 @@ class PlaylistInfoFragment : Fragment() {
 
         binding.menuDelete.setOnClickListener {
             showDeletePlaylistDialog()
+        }
+
+        binding.menuEdit.setOnClickListener {
+            val bundle = Bundle().apply {
+                putLong("playlistId", playlistId)
+            }
+            findNavController().navigate(R.id.action_playlistInfoFragment_to_editPlaylistFragment, bundle)
         }
     }
 
@@ -176,8 +191,10 @@ class PlaylistInfoFragment : Fragment() {
     private fun sharePlaylist() {
         viewModel.tracks.value?.let { tracks ->
             if (tracks.isEmpty()) {
+                menuBottomSheetBehavior.state = BottomSheetBehavior.STATE_HIDDEN
                 Toast.makeText(requireContext(), "В этом плейлисте нет списка треков, которым можно поделиться", Toast.LENGTH_SHORT).show()
             } else {
+                menuBottomSheetBehavior.state = BottomSheetBehavior.STATE_HIDDEN
                 val playlistInfo = viewModel.playlistInfo.value
                 val message = buildPlaylistShareMessage(playlistInfo, tracks)
                 val intent = Intent(Intent.ACTION_SEND).apply {
@@ -185,6 +202,17 @@ class PlaylistInfoFragment : Fragment() {
                     putExtra(Intent.EXTRA_TEXT, message)
                 }
                 startActivity(Intent.createChooser(intent, "Поделиться плейлистом"))
+            }
+        }
+    }
+
+    private fun emptyPlaylist() {
+        viewModel.tracks.value?.let { tracks ->
+            if (tracks.isEmpty()) {
+                binding.recyclerviewSongsPlaylist.visibility = View.GONE
+                Toast.makeText(requireContext(), "В этом плейлисте нет треков", Toast.LENGTH_SHORT).show()
+            } else {
+                binding.recyclerviewSongsPlaylist.visibility = View.VISIBLE
             }
         }
     }
@@ -206,15 +234,41 @@ class PlaylistInfoFragment : Fragment() {
         return String.format("%02d:%02d", minutes, seconds)
     }
 
+    private fun formatDurationInMinutes(duration: String): String {
+        val minutes = duration.toInt()
+        val beforeLastDigit = minutes % 100 / 10
+        val lastDigit = minutes % 10
+
+        return when {
+            beforeLastDigit == 1 -> "$minutes минут"
+            lastDigit == 1 -> "$minutes минута"
+            lastDigit in 2..4 -> "$minutes минуты"
+            else -> "$minutes минут"
+        }
+    }
+
+    private fun formatTrackCount(trackCount: Int): String {
+        val beforeLastDigit = trackCount % 100 / 10
+        val lastDigit = trackCount % 10
+
+        return when {
+            beforeLastDigit == 1 -> "$trackCount треков"
+            lastDigit == 1 -> "$trackCount трек"
+            lastDigit in 2..4 -> "$trackCount трека"
+            else -> "$trackCount треков"
+        }
+    }
+
     private fun showDeletePlaylistDialog() {
+        menuBottomSheetBehavior.state = BottomSheetBehavior.STATE_HIDDEN
         MaterialAlertDialogBuilder(requireContext(), R.style.MaterialAlertDialog_Center)
             .setTitle("Удалить плейлист")
-            .setMessage("Хотите удалить плейлист?")
-            .setPositiveButton("Да") { _, _ ->
+            .setMessage("Вы уверены, что хотите удалить этот плейлист?")
+            .setPositiveButton("Удалить") { _, _ ->
                 viewModel.deletePlaylist(playlistId)
                 findNavController().navigateUp()
             }
-            .setNegativeButton("Нет") { dialog, _ ->
+            .setNegativeButton("Отмена") { dialog, _ ->
                 dialog.dismiss()
             }
             .show()
@@ -224,6 +278,7 @@ class PlaylistInfoFragment : Fragment() {
         Glide.with(this)
             .load(binding.songImage.drawable)
             .transform(CenterCrop(), RoundedCorners(10))
+            .placeholder(R.drawable.placeholder_without_cover)
             .into(binding.imageMenuBottomSheet)
         binding.nameMenuBottomSheet.text = binding.playlistName.text
         binding.countMenuBottomSheet.text = binding.quantitySongs.text
@@ -234,4 +289,10 @@ class PlaylistInfoFragment : Fragment() {
         super.onDestroyView()
         _binding = null
     }
+
+    override fun onResume() {
+        super.onResume()
+        viewModel.loadPlaylistInfo(playlistId)
+    }
+
 }

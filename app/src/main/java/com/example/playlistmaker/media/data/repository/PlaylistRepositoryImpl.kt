@@ -64,6 +64,11 @@ class PlaylistRepositoryImpl(
         return convertor.map(appDatabase.playlistDao().getPlaylistById(playlistId))
     }
 
+    override suspend fun getTracksByPlaylistId(playlistId: Long): List<Song> {
+        val playlistTracks = appDatabase.playlistSongDao().getPlaylistTracks(playlistId)
+        return playlistTracks.map { convertor.map(it) }
+    }
+
     override suspend fun deleteTrackFromPlaylist(playlistId: Long, trackId: Long) {
         appDatabase.playlistSongDao().deletePlaylistTrack(playlistId, trackId)
         appDatabase.playlistDao().updateSongCount(playlistId)
@@ -77,22 +82,6 @@ class PlaylistRepositoryImpl(
         }
     }
 
-    private suspend fun cleanUpUnusedTracks(trackId: Long) {
-        val playlists = appDatabase.playlistDao().getAllPlaylistsWithTrackCounts()
-        val trackInAnyPlaylist = playlists.any { playlist ->
-            appDatabase.playlistSongDao().isTrackInPlaylist(playlist.id, trackId)
-        }
-        if (!trackInAnyPlaylist) {
-            appDatabase.playlistDao().deleteTrack(trackId)
-        }
-    }
-
-    override suspend fun getTracksByPlaylistId(playlistId: Long): List<Song> {
-        val playlistTracks = appDatabase.playlistSongDao().getPlaylistTracks(playlistId)
-        val tracks = playlistTracks.map { convertor.map(it) }
-        return tracks
-    }
-
     override suspend fun deletePlaylist(playlistId: Long) {
         appDatabase.playlistDao().deletePlaylist(playlistId)
         appDatabase.playlistDao().deletePlaylistTracks(playlistId)
@@ -102,5 +91,10 @@ class PlaylistRepositoryImpl(
         unusedTracks.forEach {
             appDatabase.songDao().deleteSong(it.trackId)
         }
+    }
+
+    override suspend fun updatePlaylist(playlist: Playlist) {
+        val playlistEntity = convertor.map(playlist)
+        appDatabase.playlistDao().insertPlaylist(playlistEntity)
     }
 }

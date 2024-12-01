@@ -10,14 +10,7 @@ import androidx.recyclerview.widget.GridLayoutManager
 import com.example.playlistmaker.R
 import com.example.playlistmaker.databinding.FragmentPlaylistBinding
 import org.koin.androidx.viewmodel.ext.android.viewModel
-import androidx.lifecycle.Observer
 import androidx.lifecycle.lifecycleScope
-import com.example.playlistmaker.Constants
-import com.example.playlistmaker.media.domain.entity.Playlist
-import com.example.playlistmaker.media.ui.favorites.FavoritesFragment
-import com.example.playlistmaker.search.domain.models.Song
-import com.example.playlistmaker.search.ui.SearchAdapter
-import com.google.gson.Gson
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 

@@ -66,11 +66,14 @@ class PlaylistsInteractorImpl(
             primaryGenreName,
             country,
             previewUrl
-
         )
     }
 
     override suspend fun deletePlaylist(playlistId: Long) {
         playlistRepository.deletePlaylist(playlistId)
+    }
+
+    override suspend fun updatePlaylist(playlist: Playlist) {
+        playlistRepository.updatePlaylist(playlist)
     }
 }

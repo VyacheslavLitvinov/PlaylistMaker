@@ -25,5 +25,6 @@ interface PlaylistRepository {
     suspend fun getTracksByPlaylistId(playlistId: Long): List<Song>
     suspend fun deleteTrackFromPlaylist(playlistId: Long, trackId: Long)
     suspend fun deletePlaylist(playlistId: Long)
+    suspend fun updatePlaylist(playlist: Playlist)
 
 }

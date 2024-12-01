@@ -20,13 +20,13 @@
             <ScrollView
                 android:id="@+id/scrollView"
                 android:layout_width="match_parent"
-                android:background="@color/grey100"
-                android:layout_height="match_parent">
+                android:layout_height="match_parent"
+                android:background="@color/grey100">
 
                 <androidx.constraintlayout.widget.ConstraintLayout
                     android:layout_width="match_parent"
-                    android:background="@color/grey100"
                     android:layout_height="wrap_content"
+                    android:background="@color/grey100"
                     android:paddingBottom="20dp">
 
                     <androidx.constraintlayout.widget.Guideline
@@ -51,45 +51,44 @@
                         app:layout_constraintGuide_end="@dimen/indent_16" />
 
                     <ImageView
-                        android:backgroundTint="@color/grey100"
                         android:id="@+id/songImage"
                         android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:src="@drawable/album_placeholder_player"
-                        app:layout_constraintBottom_toTopOf="@id/playlistName"
-                        app:layout_constraintEnd_toEndOf="parent"
-                        app:layout_constraintStart_toStartOf="parent"
-                        app:layout_constraintTop_toTopOf="parent" />
+                        android:layout_height="match_parent"
+                        android:adjustViewBounds="true"
+                        android:background="@color/grey100"
+                        android:scaleType="centerCrop"
+                        android:src="@drawable/album_placeholder_player" />
 
                     <TextView
                         android:id="@+id/playlistName"
-                        style="@style/SongsMainInfo"
-                        android:background="@color/grey100"
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
                         android:layout_marginStart="@dimen/indent_8"
                         android:layout_marginTop="24dp"
                         android:layout_marginEnd="@dimen/indent_16"
+                        android:background="@color/grey100"
                         android:ellipsize="end"
                         android:maxLines="2"
                         android:text="Название плейлиста"
+                        android:textColor="@color/black100"
                         android:textSize="24sp"
+                        android:textStyle="bold"
                         app:layout_constraintEnd_toStartOf="@id/rightBorder"
                         app:layout_constraintStart_toStartOf="@id/leftBorder"
                         app:layout_constraintTop_toBottomOf="@id/songImage" />
 
                     <TextView
                         android:id="@+id/playlistContext"
-                        android:fontFamily="@font/ys_display_regular"
-                        android:textColor="@color/black100"
                         android:layout_width="0dp"
-                        android:background="@color/grey100"
                         android:layout_height="wrap_content"
                         android:layout_marginStart="@dimen/indent_8"
                         android:layout_marginTop="12dp"
+                        android:background="@color/grey100"
                         android:ellipsize="end"
+                        android:fontFamily="@font/ys_display_regular"
                         android:maxLines="1"
                         android:text="2022"
+                        android:textColor="@color/black100"
                         android:textSize="18sp"
                         app:layout_constraintEnd_toStartOf="@id/rightBorder"
                         app:layout_constraintStart_toStartOf="@id/leftBorder"
@@ -103,67 +102,62 @@
                         android:layout_marginStart="@dimen/indent_8"
                         android:layout_marginTop="@dimen/indent_8"
                         android:background="@color/grey100"
+                        android:ellipsize="end"
+                        android:maxLines="1"
                         android:textColor="@color/black100"
+                        android:textSize="18sp"
                         app:layout_constraintStart_toStartOf="@id/leftBorder"
                         app:layout_constraintTop_toBottomOf="@id/playlistContext"
-                        tools:text="0 минут"
-                        android:textSize="18sp"
-                        android:maxLines="1"
-                        android:ellipsize="end">
-                    </TextView>
+                        tools:text="0 минут"></TextView>
 
                     <ImageView
                         android:id="@+id/playlistEllipse"
                         style="@style/Ellipse"
-                        app:tint="@color/black100"
-                        android:background="@color/grey100"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
+                        android:layout_marginTop="12dp"
+                        android:background="@color/grey100"
                         android:src="@drawable/ellipse"
                         app:layout_constraintStart_toEndOf="@id/playlistDuration"
                         app:layout_constraintTop_toBottomOf="@id/playlistContext"
-                        android:layout_marginTop="12dp">
-                    </ImageView>
+                        app:tint="@color/black100"></ImageView>
 
                     <TextView
-                        style="@style/DurationTrack"
                         android:id="@+id/quantitySongs"
-                        android:background="@color/grey100"
+                        style="@style/DurationTrack"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        tools:text="0 треков"
-                        android:textSize="18sp"
+                        android:layout_marginTop="@dimen/indent_8"
+                        android:background="@color/grey100"
                         android:textColor="@color/black100"
+                        android:textSize="18sp"
                         app:layout_constraintStart_toEndOf="@id/playlistEllipse"
                         app:layout_constraintTop_toBottomOf="@id/playlistContext"
-                        android:layout_marginTop="@dimen/indent_8">
-                    </TextView>
+                        tools:text="0 треков"></TextView>
 
                     <ImageView
-                        app:tint="@color/black100"
-                        android:backgroundTint="@color/grey100"
                         android:id="@+id/sharePlaylist"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
+                        android:layout_marginStart="@dimen/indent_8"
+                        android:layout_marginTop="@dimen/indent_16"
+                        android:backgroundTint="@color/grey100"
+                        android:src="@drawable/ic_share_playlist"
                         app:layout_constraintStart_toStartOf="@id/leftBorder"
                         app:layout_constraintTop_toBottomOf="@id/playlistDuration"
-                        android:src="@drawable/baseline_share_24"
-                        android:layout_marginTop="@dimen/indent_16"
-                        android:layout_marginStart="@dimen/indent_8"
-                        />
+                        app:tint="@color/black100" />
 
                     <ImageView
                         android:id="@+id/menuButton"
-                        app:tint="@color/black100"
-                        android:backgroundTint="@color/grey100"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
+                        android:layout_marginStart="@dimen/indent_16"
+                        android:layout_marginTop="@dimen/indent_16"
+                        android:backgroundTint="@color/grey100"
+                        android:src="@drawable/ic_playlist_menu"
                         app:layout_constraintStart_toEndOf="@id/sharePlaylist"
                         app:layout_constraintTop_toBottomOf="@id/playlistDuration"
-                        android:src="@drawable/ic_playlist_menu"
-                        android:layout_marginTop="@dimen/indent_16"
-                        android:layout_marginStart="@dimen/indent_16"
-                        />
+                        app:tint="@color/black100" />
 
                 </androidx.constraintlayout.widget.ConstraintLayout>
 
@@ -171,7 +165,6 @@
 
             <ImageView
                 android:id="@+id/backButton"
-                style="@style/BackButton"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="@dimen/indent_16"
@@ -187,62 +180,63 @@
     </androidx.constraintlayout.widget.ConstraintLayout>
 
     <LinearLayout
-        style="@style/BottomSheetPlaylists"
         android:id="@+id/playlistBottomSheet"
+        style="@style/BottomSheetPlaylists"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:orientation="vertical"
-        app:behavior_peekHeight="@dimen/bottom_sheet_peek_height"
         android:paddingHorizontal="16dp"
         app:behavior_hideable="false"
+        app:behavior_peekHeight="@dimen/bottom_sheet_peek_height"
         app:layout_behavior="com.google.android.material.bottomsheet.BottomSheetBehavior">
 
         <View
-            style="@style/RectangleBottomSheet"
             android:id="@+id/rectangleBottomSheetPlaylist"
+            style="@style/RectangleBottomSheet"
             android:layout_width="50dp"
             android:layout_height="4dp"
             android:layout_gravity="center"
             android:layout_marginTop="8dp" />
 
         <androidx.recyclerview.widget.RecyclerView
-            android:background="@color/transparent"
             android:id="@+id/recyclerviewSongsPlaylist"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:layout_marginTop="24dp"
-            tools:listitem="@layout/track_item"
-            android:layout_marginBottom="@dimen/indent_with_bottom_navigation_panel"/>
+            android:layout_marginBottom="@dimen/indent_with_bottom_navigation_panel"
+            android:background="@color/transparent"
+            tools:listitem="@layout/track_item" />
 
     </LinearLayout>
 
-    <View android:id="@+id/overlay"
+    <View
+        android:id="@+id/overlay"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:background="@color/overlay"
         android:clickable="true"
         android:focusable="true"
-        android:visibility="gone"/>
+        android:visibility="gone" />
 
     <LinearLayout
-        style="@style/BottomSheetPlaylists"
         android:id="@+id/menuBottomSheet"
+        style="@style/BottomSheetPlaylists"
         android:layout_width="match_parent"
         android:layout_height="383dp"
         android:orientation="vertical"
         android:paddingHorizontal="16dp"
-        app:behavior_hideable="true"
         android:visibility="gone"
+        app:behavior_hideable="true"
         app:layout_behavior="com.google.android.material.bottomsheet.BottomSheetBehavior">
 
         <View
-            style="@style/RectangleBottomSheet"
             android:id="@+id/rectangleBottomSheetMenu"
+            style="@style/RectangleBottomSheet"
             android:layout_width="50dp"
             android:layout_height="4dp"
             android:layout_gravity="center"
             android:layout_marginTop="8dp" />
-        
+
         <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -252,70 +246,59 @@
                 android:id="@+id/imageMenuBottomSheet"
                 android:layout_width="45dp"
                 android:layout_height="45dp"
+                android:src="@drawable/placeholder_without_cover"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent"
-                android:src="@drawable/placeholder_without_cover" />
+                app:layout_constraintTop_toTopOf="parent" />
 
             <TextView
                 android:id="@+id/nameMenuBottomSheet"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:textSize="16sp"
-                android:fontFamily="@font/ys_display_regular"
-                android:layout_marginTop="6dp"
                 android:layout_marginStart="@dimen/indent_8"
-                app:layout_constraintStart_toEndOf="@id/imageMenuBottomSheet"
-                app:layout_constraintTop_toTopOf="@id/imageMenuBottomSheet"
+                android:layout_marginTop="6dp"
                 android:text="@string/namePlaylist"
-                />
+                app:layout_constraintStart_toEndOf="@id/imageMenuBottomSheet"
+                app:layout_constraintTop_toTopOf="@id/imageMenuBottomSheet" />
 
             <TextView
                 android:id="@+id/countMenuBottomSheet"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:textSize="11sp"
-                android:fontFamily="@font/ys_display_medium"
                 android:layout_marginStart="@dimen/indent_8"
-                app:layout_constraintStart_toEndOf="@id/imageMenuBottomSheet"
-                app:layout_constraintTop_toBottomOf="@id/nameMenuBottomSheet"
+                android:fontFamily="@font/ys_display_medium"
                 android:text="@string/empty_songs"
-                />
+                android:textSize="11sp"
+                app:layout_constraintStart_toEndOf="@id/imageMenuBottomSheet"
+                app:layout_constraintTop_toBottomOf="@id/nameMenuBottomSheet" />
 
         </androidx.constraintlayout.widget.ConstraintLayout>
 
         <TextView
-            android:textColor="@color/black100"
-            android:fontFamily="@font/ys_display_regular"
             android:id="@+id/menuShare"
+            style="@style/TextBottomSheetMenu"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Поделиться"
-            android:textSize="16sp"
-            android:layout_marginBottom="21dp"
             android:layout_marginTop="37dp"
-            />
+            android:layout_marginBottom="21dp"
+            android:text="Поделиться"/>
 
         <TextView
-            android:textColor="@color/black100"
-            android:fontFamily="@font/ys_display_regular"
             android:id="@+id/menuEdit"
+            style="@style/TextBottomSheetMenu"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Редактировать информацию"
-            android:textSize="16sp"
+            android:layout_marginTop="21dp"
             android:layout_marginBottom="21dp"
-            android:layout_marginTop="21dp"/>
+            android:text="Редактировать информацию"/>
 
         <TextView
-            android:textColor="@color/black100"
-            android:fontFamily="@font/ys_display_regular"
             android:id="@+id/menuDelete"
+            style="@style/TextBottomSheetMenu"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Удалить плейлист"
-            android:textSize="16sp"
+            android:layout_marginTop="21dp"
             android:layout_marginBottom="21dp"
-            android:layout_marginTop="21dp"/>
+            android:text="Удалить плейлист"/>
 
     </LinearLayout>
 

@@ -40,8 +40,7 @@ class PlaylistInfoAdapter(
     }
 
     fun getTrackById(trackId: Long): Song? {
-        val result = tracks.find { it.trackId == trackId }
-        return result
+        return tracks.find { it.trackId == trackId }
     }
 
     private fun showDeleteDialog(holder: PlaylistInfoViewHolder, trackId: Long) {
