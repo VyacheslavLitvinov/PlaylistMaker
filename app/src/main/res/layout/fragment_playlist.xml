@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
@@ -14,7 +15,8 @@
         android:layout_gravity="center_horizontal"
         android:layout_marginTop="24dp"
         android:text="@string/new_playlist"
-        android:textSize="14sp" />
+        android:textSize="14sp"
+        android:layout_marginBottom="@dimen/indent_8"/>
 
     <com.google.android.material.textview.MaterialTextView
         android:id="@+id/NotFoundPlaceholder"
@@ -29,10 +31,14 @@
         android:visibility="visible" />
 
     <androidx.recyclerview.widget.RecyclerView
-        android:layout_marginTop="@dimen/indent_16"
         android:id="@+id/recyclerviewGrid"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_marginBottom="@dimen/indent_with_bottom_navigation_panel"/>
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="@dimen/indent_with_bottom_navigation_panel"
+        android:paddingStart="@dimen/indent_16"
+        android:paddingEnd="@dimen/indent_8"
+        app:layoutManager="androidx.recyclerview.widget.GridLayoutManager"
+        app:spanCount="2"
+        tools:listitem="@layout/playlist_item" />
 
 </LinearLayout>

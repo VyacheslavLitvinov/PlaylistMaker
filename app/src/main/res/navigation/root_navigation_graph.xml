@@ -1,4 +1,3 @@
-<?xml version="1.0" encoding="utf-8"?>
 <navigation xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
@@ -36,6 +35,9 @@
             app:popEnterAnim="@android:anim/fade_in"
             app:popExitAnim="@android:anim/fade_out"
             app:popUpTo="@id/searchFragment" />
+        <action
+            android:id="@+id/action_mediaFragment_to_playlistInfoFragment"
+            app:destination="@id/playlistInfoFragment" />
     </fragment>
 
     <fragment
@@ -74,5 +76,30 @@
         <action
             android:id="@+id/action_playerFragment_to_searchFragment"
             app:destination="@id/searchFragment" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/playlistInfoFragment"
+        android:name="com.example.playlistmaker.media.ui.PlaylistInfoFragment"
+        android:label="PlaylistInfoFragment"
+        tools:layout="@layout/fragment_info_playlist">
+        <argument
+            android:name="playlistId"
+            app:argType="long" />
+        <action
+            android:id="@+id/action_playlistInfoFragment_to_playerFragment"
+            app:destination="@id/playerFragment" />
+        <action
+            android:id="@+id/action_playlistInfoFragment_to_editPlaylistFragment"
+            app:destination="@id/editPlaylistFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/editPlaylistFragment"
+        android:name="com.example.playlistmaker.media.ui.playlists.edit.EditPlaylistFragment"
+        android:label="Edit Playlist"
+        tools:layout="@layout/fragment_create_playlist">
+        <argument
+            android:name="playlistId"
+            app:argType="long" />
     </fragment>
 </navigation>

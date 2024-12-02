@@ -8,7 +8,8 @@ import com.example.playlistmaker.media.domain.interactor.PlaylistsInteractor
 import kotlinx.coroutines.launch
 
 class CreatePlaylistViewModel(
-    private val interactor: PlaylistsInteractor
+    private val interactor: PlaylistsInteractor,
+    private val playlistId: Long? = null
 ) : ViewModel() {
 
     private val _playlistCreationStatus = MutableLiveData<Boolean>()

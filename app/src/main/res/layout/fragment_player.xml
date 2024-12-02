@@ -311,7 +311,7 @@
         android:visibility="gone"/>
 
     <LinearLayout
-        android:id="@+id/playlists_bottom_sheet"
+        android:id="@+id/playlistsBottomSheet"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:background="@color/transparent"
@@ -333,7 +333,7 @@
 
             <View
                 style="@style/RectangleBottomSheet"
-                android:id="@+id/rectangle_bottom_sheet"
+                android:id="@+id/rectangleBottomSheetMenu"
                 android:layout_width="50dp"
                 android:layout_height="4dp"
                 android:layout_gravity="center"

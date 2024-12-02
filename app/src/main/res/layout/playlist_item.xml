@@ -5,14 +5,19 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:layout_gravity="center_horizontal"
+    android:layout_marginEnd="@dimen/indent_8"
+    android:layout_marginBottom="@dimen/indent_16"
     android:foreground="?attr/selectableItemBackground">
 
     <androidx.cardview.widget.CardView
-        android:layout_marginTop="@dimen/indent_16"
         android:id="@+id/playlistCover"
-        android:layout_width="@dimen/layout_playlist_grid"
-        android:layout_height="@dimen/layout_playlist_grid"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:layout_marginBottom="4dp"
+        app:contentPadding="-3dp"
         app:cardCornerRadius="8dp"
+        android:backgroundTint="@color/transparent"
+        app:layout_constraintDimensionRatio="h,1:1"
         app:cardElevation="0dp"
         app:cardUseCompatPadding="false"
         app:layout_constraintBottom_toTopOf="@id/playlistName"
@@ -22,8 +27,8 @@
 
         <ImageView
             android:id="@+id/playlistImage"
-            android:layout_width="@dimen/layout_playlist_grid"
-            android:layout_height="@dimen/layout_playlist_grid"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
             android:layout_marginBottom="8dp"
             android:scaleType="centerCrop"
             tools:src="@drawable/placeholder_without_cover"/>
