@@ -8,7 +8,7 @@ import com.example.playlistmaker.media.data.db.entity.PlaylistSongEntity
 
 @Dao
 interface PlaylistSongDao {
-    @Query("SELECT * FROM playlist_songs WHERE playlistId = :playlistId ORDER BY timeAdd ASC")
+    @Query("SELECT * FROM playlist_songs WHERE playlistId = :playlistId ORDER BY timeAdd DESC")
     suspend fun getPlaylistTracks(playlistId: Long): List<PlaylistSongEntity>
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)

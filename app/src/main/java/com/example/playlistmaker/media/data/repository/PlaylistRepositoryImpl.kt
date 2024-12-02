@@ -66,7 +66,7 @@ class PlaylistRepositoryImpl(
 
     override suspend fun getTracksByPlaylistId(playlistId: Long): List<Song> {
         val playlistTracks = appDatabase.playlistSongDao().getPlaylistTracks(playlistId)
-        return playlistTracks.map { convertor.map(it) }.reversed()
+        return playlistTracks.map { convertor.map(it) }
     }
 
     override suspend fun deleteTrackFromPlaylist(playlistId: Long, trackId: Long) {
