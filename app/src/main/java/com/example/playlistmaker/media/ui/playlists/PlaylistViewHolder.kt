@@ -22,7 +22,7 @@ class PlaylistViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
 
         if (playlist.coverImagePath.isNullOrEmpty()) {
             Glide.with(itemView.context)
-                .load(R.drawable.placeholder_without_cover)
+                .load(R.drawable.album_placeholder_player)
                 .diskCacheStrategy(DiskCacheStrategy.ALL)
                 .transform(CenterCrop(), RoundedCorners(16))
                 .into(imageView)
@@ -31,8 +31,7 @@ class PlaylistViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
                 .load(playlist.coverImagePath)
                 .diskCacheStrategy(DiskCacheStrategy.ALL)
                 .transform(CenterCrop(), RoundedCorners(16))
-                .placeholder(R.drawable.placeholder_without_cover)
-                .error(R.drawable.placeholder_without_cover)
+                .placeholder(R.drawable.album_placeholder_player)
                 .into(imageView)
         }
 

@@ -175,9 +175,33 @@ class PlayerViewModel(
         }
     }
 
-    fun addTrackToPlaylist(playlistId: Long, trackId: Long) {
+    fun addTrackToPlaylist(
+        playlistId: Long,
+        trackId: Long,
+        trackName: String,
+        artistName: String,
+        trackTimeMillis: Int,
+        artworkUrl100: String,
+        collectionName: String,
+        releaseDate: String,
+        primaryGenreName: String,
+        country: String,
+        previewUrl: String
+    ) {
         viewModelScope.launch(Dispatchers.IO) {
-            playlistRepository.addTrackToPlaylist(playlistId, trackId)
+            playlistRepository.addTrackToPlaylist(
+                playlistId,
+                trackId,
+                trackName,
+                artistName,
+                trackTimeMillis,
+                artworkUrl100,
+                collectionName,
+                releaseDate,
+                primaryGenreName,
+                country,
+                previewUrl
+            )
         }
     }
 }

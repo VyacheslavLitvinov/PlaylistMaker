@@ -62,7 +62,19 @@ class PlayerFragment : Fragment() {
                 if (isInPlaylist) {
                     Toast.makeText(requireContext(), "Трек уже добавлен в плейлист ${playlist.name}", Toast.LENGTH_SHORT).show()
                 } else {
-                    viewModel.addTrackToPlaylist(playlist.id, song.trackId)
+                    viewModel.addTrackToPlaylist(
+                        playlist.id,
+                        song.trackId,
+                        song.trackName ?: "",
+                        song.artistName ?: "",
+                        song.trackTimeMillis,
+                        song.artworkUrl100 ?: "",
+                        song.collectionName ?: "",
+                        song.releaseDate ?: "",
+                        song.primaryGenreName ?: "",
+                        song.country ?: "",
+                        song.previewUrl ?: ""
+                    )
                     Toast.makeText(requireContext(), "Добавлено в плейлист ${playlist.name}", Toast.LENGTH_SHORT).show()
                     bottomSheetBehavior.state = BottomSheetBehavior.STATE_HIDDEN
                 }

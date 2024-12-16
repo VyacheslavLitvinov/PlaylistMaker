@@ -1,4 +1,4 @@
-package com.example.playlistmaker.media.ui.playlists.create
+package com.example.playlistmaker.media.ui.playlists.edit
 
 import android.Manifest
 import android.content.pm.PackageManager
@@ -18,14 +18,13 @@ import androidx.core.content.ContextCompat
 import androidx.core.view.isVisible
 import androidx.core.widget.addTextChangedListener
 import androidx.fragment.app.Fragment
+import androidx.lifecycle.Observer
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import com.bumptech.glide.Glide
 import com.bumptech.glide.load.resource.bitmap.CenterCrop
 import com.bumptech.glide.load.resource.bitmap.RoundedCorners
-import com.example.playlistmaker.R
 import com.example.playlistmaker.databinding.FragmentCreatePlaylistBinding
-import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
@@ -34,28 +33,10 @@ import org.koin.core.parameter.parametersOf
 import java.io.File
 import java.io.FileOutputStream
 
-class CreatePlaylistFragment : Fragment() {
+class EditPlaylistFragment : Fragment() {
 
-    protected val viewModel: CreatePlaylistViewModel by viewModel { parametersOf(playlistId) }
-    private var playlistId: Long? = null
-
-    val dialog by lazy {
-        MaterialAlertDialogBuilder(requireContext(), R.style.MaterialAlertDialog_Center)
-            .setTitle(requireActivity().getString(R.string.new_playlist_alert_tittle))
-            .setMessage(requireActivity().getString(R.string.new_playlist_alert_message))
-            .setNegativeButton(
-                requireActivity().getString(R.string.new_playlist_alert_negative_button)
-            ) { dialog, which ->
-            }
-            .setPositiveButton(
-                requireActivity().getString(R.string.new_playlist_alert_positive_button)
-            ) { dialog, which ->
-                findNavController().navigateUp()
-            }
-    }
-    companion object {
-        private const val STORAGE_PERMISSION_REQUEST_CODE = 1001
-    }
+    private val viewModel: EditPlaylistViewModel by viewModel { parametersOf(playlistId) }
+    private var playlistId: Long = 0
 
     private var _binding: FragmentCreatePlaylistBinding? = null
     private val binding get() = _binding!!
@@ -76,7 +57,10 @@ class CreatePlaylistFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        playlistId = arguments?.getLong("playlistId")
+        playlistId = arguments?.getLong("playlistId") ?: 0
+
+        binding.toolbarText.text = "Редактировать"
+        binding.createPlaylistButton.text = "Сохранить"
 
         val pickMedia = registerForActivityResult(ActivityResultContracts.PickVisualMedia()) { uri ->
             if (uri != null) {
@@ -95,22 +79,12 @@ class CreatePlaylistFragment : Fragment() {
         }
 
         binding.backButton.setOnClickListener {
-            if (isEditText) {
-                dialog.show()
-            } else {
-                findNavController().navigateUp()
-            }
+            findNavController().navigateUp()
         }
 
         requireActivity().onBackPressedDispatcher.addCallback(viewLifecycleOwner, object : OnBackPressedCallback(true) {
             override fun handleOnBackPressed() {
-                if (isEditText) {
-                    if (isAdded && isVisible) {
-                        dialog.show()
-                    }
-                } else {
-                    findNavController().navigateUp()
-                }
+                findNavController().navigateUp()
             }
         })
 
@@ -138,19 +112,25 @@ class CreatePlaylistFragment : Fragment() {
             val description = binding.editContextPlaylist.editText?.text.toString()
 
             lifecycleScope.launch {
-                val coverImagePath = withContext(Dispatchers.IO) {
-                    selectedImageUri?.let { uri ->
-                        uriToBitmap(uri)?.let { bitmap ->
-                            saveImageToPrivateStorage(bitmap)
-                        } ?: ""
-                    } ?: ""
-                }
-
-                viewModel.createPlaylist(name, description, coverImagePath)
+                val coverImagePath = saveImageToPrivateStorage(selectedImageUri)
+                viewModel.updatePlaylist(name, description, coverImagePath)
                 findNavController().navigateUp()
-                Toast.makeText(requireContext(), "Плейлист $name создан", Toast.LENGTH_SHORT).show()
             }
         }
+
+        viewModel.playlist.observe(viewLifecycleOwner, Observer { playlist ->
+            playlist?.let {
+                binding.editNamePlaylist.editText?.setText(it.name)
+                binding.editContextPlaylist.editText?.setText(it.description)
+                if (it.coverImagePath != null) {
+                    Glide.with(this)
+                        .load(it.coverImagePath)
+                        .transform(CenterCrop(), RoundedCorners(20))
+                        .into(binding.placeholderImageLarge)
+                    binding.placeholderImageSmall.isVisible = false
+                }
+            }
+        })
     }
 
     override fun onDestroyView() {
@@ -184,29 +164,22 @@ class CreatePlaylistFragment : Fragment() {
         }
     }
 
-    private suspend fun saveImageToPrivateStorage(bitmap: Bitmap): String {
-        val filename = "playlist_cover_${System.currentTimeMillis()}.jpg"
-        val file = File(requireContext().filesDir, filename)
+    private suspend fun saveImageToPrivateStorage(uri: Uri?): String? {
         return withContext(Dispatchers.IO) {
-            try {
+            uri?.let {
+                val inputStream = requireContext().contentResolver.openInputStream(it)
+                val bitmap = BitmapFactory.decodeStream(inputStream)
+                val filename = "playlist_cover_${System.currentTimeMillis()}.jpg"
+                val file = File(requireContext().filesDir, filename)
                 FileOutputStream(file).use { out ->
                     bitmap.compress(Bitmap.CompressFormat.JPEG, 100, out)
                 }
                 file.absolutePath
-            } catch (e: Exception) {
-                e.printStackTrace()
-                ""
-            }
+            } ?: viewModel.playlist.value?.coverImagePath
         }
     }
 
-    private fun uriToBitmap(uri: Uri): Bitmap? {
-        return try {
-            val inputStream = requireContext().contentResolver.openInputStream(uri)
-            BitmapFactory.decodeStream(inputStream)
-        } catch (e: Exception) {
-            e.printStackTrace()
-            null
-        }
+    companion object {
+        private const val STORAGE_PERMISSION_REQUEST_CODE = 1001
     }
 }
